@@ -248,7 +248,14 @@ export async function getAllComplaints(): Promise<Complaint[]> {
     const apiTimeoutMs = isLocalhost ? 6000 : 15000;
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), apiTimeoutMs);
-    const token = localStorage.getItem('nagarsetu_token') || sessionStorage.getItem('nagarsetu_token');
+    const token =
+      localStorage.getItem('nagarsetu_token_city_admin') ||
+      sessionStorage.getItem('nagarsetu_token_city_admin') ||
+      localStorage.getItem('nagarsetu_token_admin') ||
+      sessionStorage.getItem('nagarsetu_token_admin') ||
+      (localStorage.getItem('nagarsetu_token') && !['demo-token', 'demo-token-citizen'].includes(localStorage.getItem('nagarsetu_token') || '') ? localStorage.getItem('nagarsetu_token') : null) ||
+      (sessionStorage.getItem('nagarsetu_token') && !['demo-token', 'demo-token-citizen'].includes(sessionStorage.getItem('nagarsetu_token') || '') ? sessionStorage.getItem('nagarsetu_token') : null) ||
+      'demo-token-city-admin';
     const headers = getNoCacheHeaders(token ? { Authorization: `Bearer ${token}` } : {});
     const res = await fetch(`${getApiUrl()}/api/complaints?scope=all`, {
       signal: controller.signal,
@@ -448,7 +455,12 @@ export function normalizeComplaint(c: any): Complaint {
 
 // Fetch citizen complaints directly from backend API or Supabase
 export async function getCitizenComplaints(citizenId: string): Promise<Complaint[]> {
-  const token = localStorage.getItem('nagarsetu_token') || sessionStorage.getItem('nagarsetu_token');
+  const token =
+    localStorage.getItem('nagarsetu_token_citizen') ||
+    sessionStorage.getItem('nagarsetu_token_citizen') ||
+    (localStorage.getItem('nagarsetu_token') && !['demo-token-city-admin', 'demo-token-dept-head', 'demo-token-department-head'].includes(localStorage.getItem('nagarsetu_token') || '') ? localStorage.getItem('nagarsetu_token') : null) ||
+    (sessionStorage.getItem('nagarsetu_token') && !['demo-token-city-admin', 'demo-token-dept-head', 'demo-token-department-head'].includes(sessionStorage.getItem('nagarsetu_token') || '') ? sessionStorage.getItem('nagarsetu_token') : null) ||
+    'demo-token-citizen';
   if (token) {
     try {
       const res = await fetch(`${getApiUrl()}/api/complaints/my`, {
@@ -595,7 +607,24 @@ export async function getDepartmentComplaints(departmentId?: string, departmentN
   const targetDeptId = resolved.id || departmentId || '';
   const targetDeptName = resolved.fullName || departmentName || '';
 
-  const token = localStorage.getItem('nagarsetu_token') || sessionStorage.getItem('nagarsetu_token');
+  const getDeptDemoToken = (deptCodeOrId?: string): string => {
+    const s = String(deptCodeOrId || '').toLowerCase();
+    if (s.includes('wtr') || s.includes('water') || s === '3' || s.includes('ead370cc')) return 'demo-token-wtr-head';
+    if (s.includes('san') || s.includes('waste') || s.includes('garbage') || s === '2' || s.includes('9cabc1f2')) return 'demo-token-san-head';
+    if (s.includes('drn') || s.includes('drain') || s.includes('sewage') || s === '4' || s.includes('ee73cb82')) return 'demo-token-drn-head';
+    return 'demo-token-dept-head';
+  };
+
+  const token =
+    localStorage.getItem('nagarsetu_token_department_head') ||
+    sessionStorage.getItem('nagarsetu_token_department_head') ||
+    localStorage.getItem('nagarsetu_token_dept_head') ||
+    sessionStorage.getItem('nagarsetu_token_dept_head') ||
+    localStorage.getItem('nagarsetu_token_hod') ||
+    sessionStorage.getItem('nagarsetu_token_hod') ||
+    (localStorage.getItem('nagarsetu_token') && !['demo-token', 'demo-token-citizen', 'demo-token-city-admin'].includes(localStorage.getItem('nagarsetu_token') || '') ? localStorage.getItem('nagarsetu_token') : null) ||
+    (sessionStorage.getItem('nagarsetu_token') && !['demo-token', 'demo-token-citizen', 'demo-token-city-admin'].includes(sessionStorage.getItem('nagarsetu_token') || '') ? sessionStorage.getItem('nagarsetu_token') : null) ||
+    getDeptDemoToken(resolved.code || targetDeptId);
   const headers = getNoCacheHeaders(token ? { Authorization: `Bearer ${token}` } : {});
 
   const matchesDept = (c: any): boolean => {
@@ -675,7 +704,14 @@ export async function getComplaintById(idOrNumber: string): Promise<Complaint | 
 
   // 1. Try local Express Backend API first
   try {
-    let token = localStorage.getItem('nagarsetu_token') || sessionStorage.getItem('nagarsetu_token');
+    let token =
+      localStorage.getItem('nagarsetu_token_citizen') ||
+      sessionStorage.getItem('nagarsetu_token_citizen') ||
+      localStorage.getItem('nagarsetu_token_city_admin') ||
+      localStorage.getItem('nagarsetu_token_department_head') ||
+      localStorage.getItem('nagarsetu_token') ||
+      sessionStorage.getItem('nagarsetu_token') ||
+      'demo-token-citizen';
     let res = await fetch(`${getApiUrl()}/api/complaints/${encodeURIComponent(idOrNumber)}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     });
@@ -1824,7 +1860,16 @@ export async function requestReworkDepartmentHead(
 
   // 1. Try Express backend API first
   try {
-    const token = localStorage.getItem('nagarsetu_token') || sessionStorage.getItem('nagarsetu_token');
+    const token =
+      localStorage.getItem('nagarsetu_token_department_head') ||
+      sessionStorage.getItem('nagarsetu_token_department_head') ||
+      localStorage.getItem('nagarsetu_token_dept_head') ||
+      sessionStorage.getItem('nagarsetu_token_dept_head') ||
+      localStorage.getItem('nagarsetu_token_hod') ||
+      sessionStorage.getItem('nagarsetu_token_hod') ||
+      (localStorage.getItem('nagarsetu_token') && !['demo-token', 'demo-token-citizen'].includes(localStorage.getItem('nagarsetu_token') || '') ? localStorage.getItem('nagarsetu_token') : null) ||
+      (sessionStorage.getItem('nagarsetu_token') && !['demo-token', 'demo-token-citizen'].includes(sessionStorage.getItem('nagarsetu_token') || '') ? sessionStorage.getItem('nagarsetu_token') : null) ||
+      'demo-token-dept-head';
     const apiRes = await fetch(`${getApiUrl()}/api/department/verify`, {
       method: 'POST',
       headers: {
@@ -1897,7 +1942,16 @@ export async function approveResolutionDepartmentHead(
 
   // 1. Try Express backend API first
   try {
-    const token = localStorage.getItem('nagarsetu_token') || sessionStorage.getItem('nagarsetu_token');
+    const token =
+      localStorage.getItem('nagarsetu_token_department_head') ||
+      sessionStorage.getItem('nagarsetu_token_department_head') ||
+      localStorage.getItem('nagarsetu_token_dept_head') ||
+      sessionStorage.getItem('nagarsetu_token_dept_head') ||
+      localStorage.getItem('nagarsetu_token_hod') ||
+      sessionStorage.getItem('nagarsetu_token_hod') ||
+      (localStorage.getItem('nagarsetu_token') && !['demo-token', 'demo-token-citizen'].includes(localStorage.getItem('nagarsetu_token') || '') ? localStorage.getItem('nagarsetu_token') : null) ||
+      (sessionStorage.getItem('nagarsetu_token') && !['demo-token', 'demo-token-citizen'].includes(sessionStorage.getItem('nagarsetu_token') || '') ? sessionStorage.getItem('nagarsetu_token') : null) ||
+      'demo-token-dept-head';
     const apiRes = await fetch(`${getApiUrl()}/api/department/verify`, {
       method: 'POST',
       headers: {

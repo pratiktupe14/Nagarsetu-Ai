@@ -1,0 +1,9 @@
+# NAGARSETU 3.1 Road Damage Dataset Configuration
+path: d:/NAGARSETU/NAGARSETU 3.1/ai_service/training/road_damage_v2
+train: images/train
+val: images/val
+test: images/test
+
+# Classes
+names:
+  0: Pothole

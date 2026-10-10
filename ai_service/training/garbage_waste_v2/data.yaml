@@ -1,0 +1,13 @@
+# NAGARSETU 3.1 Garbage & Waste AI Dataset Configuration
+path: d:/NAGARSETU/NAGARSETU 3.1/ai_service/training/garbage_waste_v2
+train: images/train
+val: images/val
+test: images/test
+
+names:
+  0: BIODEGRADABLE
+  1: CARDBOARD
+  2: GLASS
+  3: METAL
+  4: PAPER
+  5: PLASTIC

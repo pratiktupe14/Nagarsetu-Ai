@@ -16,6 +16,7 @@ const notificationRoutes = require('./routes/notification.routes');
 const announcementRoutes = require('./routes/announcement.routes');
 const mapsRoutes = require('./routes/maps.routes');
 const aiRoutes = require('./routes/ai.routes');
+const superAdminRoutes = require('./routes/superAdmin.routes');
 
 const app = express();
 
@@ -138,6 +139,7 @@ app.use('/api/departments', authedRateLimiter || authenticatedRateLimiter, depar
 app.use('/api/department', authedRateLimiter || authenticatedRateLimiter, departmentRoutes);
 app.use('/api/notifications', authedRateLimiter || authenticatedRateLimiter, notificationRoutes);
 app.use('/api/announcements', authedRateLimiter || authenticatedRateLimiter, announcementRoutes);
+app.use('/api/super-admin', superAdminRoutes);
 
 // Centralized Error Handling Middleware (Prevents stack trace / information leakage)
 app.use(errorHandler);

@@ -1,0 +1,4476 @@
+{
+  "dataset_path": "D:\\NAGARSETU\\garbage waste",
+  "total_images": 30,
+  "valid_images": 30,
+  "corrupted_images": 0,
+  "exact_duplicates": [],
+  "classes_in_model": {
+    "0": "BIODEGRADABLE",
+    "1": "CARDBOARD",
+    "2": "GLASS",
+    "3": "METAL",
+    "4": "PAPER",
+    "5": "PLASTIC"
+  },
+  "split_counts": {
+    "train": 21,
+    "val": 5,
+    "test": 4
+  },
+  "detection_audit": {
+    "confident_detections_count": 10,
+    "marginal_detections_count": 19,
+    "zero_detections_count": 1,
+    "total_provisional_boxes": 222
+  },
+  "zero_detection_images": [
+    "Screenshot 2026-10-01 073203.png"
+  ],
+  "inventory": [
+    {
+      "index": 1,
+      "filename": "Screenshot 2026-10-01 073203.png",
+      "rel_path": "Screenshot 2026-10-01 073203.png",
+      "group": "session_screenshots",
+      "split": "val",
+      "width": 593,
+      "height": 432,
+      "out_img_name": "Screenshot_2026-10-01_073203.png",
+      "rel_img_url": "images/val/Screenshot_2026-10-01_073203.png",
+      "provisional_boxes_count": 0,
+      "provisional_boxes": [],
+      "max_confidence": 0.0
+    },
+    {
+      "index": 2,
+      "filename": "Screenshot 2026-10-01 073443.png",
+      "rel_path": "Screenshot 2026-10-01 073443.png",
+      "group": "session_screenshots",
+      "split": "val",
+      "width": 281,
+      "height": 193,
+      "out_img_name": "Screenshot_2026-10-01_073443.png",
+      "rel_img_url": "images/val/Screenshot_2026-10-01_073443.png",
+      "provisional_boxes_count": 2,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3339,
+          "xywh_normalized": [
+            0.896465,
+            0.235596,
+            0.095517,
+            0.211473
+          ],
+          "xyxy_pixels": [
+            238.5,
+            25.1,
+            265.3,
+            65.9
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2182,
+          "xywh_normalized": [
+            0.364967,
+            0.667695,
+            0.242193,
+            0.270935
+          ],
+          "xyxy_pixels": [
+            68.5,
+            102.7,
+            136.6,
+            155.0
+          ]
+        }
+      ],
+      "max_confidence": 0.3339
+    },
+    {
+      "index": 3,
+      "filename": "WhatsApp Image 2026-09-30 at 1.34.52 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-09-30 at 1.34.52 AM.jpeg",
+      "group": "session_sept30_whatsapp",
+      "split": "train",
+      "width": 598,
+      "height": 542,
+      "out_img_name": "WhatsApp_Image_2026-09-30_at_1.34.52_AM.jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-09-30_at_1.34.52_AM.jpg",
+      "provisional_boxes_count": 7,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3434,
+          "xywh_normalized": [
+            0.513848,
+            0.53108,
+            0.972304,
+            0.937841
+          ],
+          "xyxy_pixels": [
+            16.6,
+            33.7,
+            598.0,
+            542.0
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3352,
+          "xywh_normalized": [
+            0.687871,
+            0.055181,
+            0.617226,
+            0.110362
+          ],
+          "xyxy_pixels": [
+            226.8,
+            0.0,
+            595.9,
+            59.8
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3333,
+          "xywh_normalized": [
+            0.187485,
+            0.134335,
+            0.316324,
+            0.227923
+          ],
+          "xyxy_pixels": [
+            17.5,
+            11.0,
+            206.7,
+            134.6
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2998,
+          "xywh_normalized": [
+            0.664776,
+            0.185866,
+            0.669607,
+            0.128494
+          ],
+          "xyxy_pixels": [
+            197.3,
+            65.9,
+            597.7,
+            135.6
+          ]
+        },
+        {
+          "id": 5,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2215,
+          "xywh_normalized": [
+            0.052473,
+            0.743968,
+            0.102087,
+            0.047997
+          ],
+          "xyxy_pixels": [
+            0.9,
+            390.2,
+            61.9,
+            416.2
+          ]
+        },
+        {
+          "id": 6,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2144,
+          "xywh_normalized": [
+            0.198538,
+            0.072683,
+            0.352963,
+            0.145366
+          ],
+          "xyxy_pixels": [
+            13.2,
+            0.0,
+            224.3,
+            78.8
+          ]
+        },
+        {
+          "id": 7,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2122,
+          "xywh_normalized": [
+            0.163122,
+            0.978389,
+            0.114924,
+            0.039416
+          ],
+          "xyxy_pixels": [
+            63.2,
+            519.6,
+            131.9,
+            541.0
+          ]
+        }
+      ],
+      "max_confidence": 0.3434
+    },
+    {
+      "index": 4,
+      "filename": "WhatsApp Image 2026-09-30 at 1.34.53 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-09-30 at 1.34.53 AM.jpeg",
+      "group": "session_sept30_whatsapp",
+      "split": "train",
+      "width": 585,
+      "height": 715,
+      "out_img_name": "WhatsApp_Image_2026-09-30_at_1.34.53_AM.jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-09-30_at_1.34.53_AM.jpg",
+      "provisional_boxes_count": 2,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2946,
+          "xywh_normalized": [
+            0.506576,
+            0.781746,
+            0.971027,
+            0.435917
+          ],
+          "xyxy_pixels": [
+            12.3,
+            403.1,
+            580.4,
+            714.8
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.217,
+          "xywh_normalized": [
+            0.830526,
+            0.459837,
+            0.223467,
+            0.077578
+          ],
+          "xyxy_pixels": [
+            420.5,
+            301.0,
+            551.2,
+            356.5
+          ]
+        }
+      ],
+      "max_confidence": 0.2946
+    },
+    {
+      "index": 5,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.15 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.15 AM.jpeg",
+      "group": "session_oct10_burst_part1",
+      "split": "train",
+      "width": 480,
+      "height": 853,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.15_AM.jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.15_AM.jpg",
+      "provisional_boxes_count": 4,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2698,
+          "xywh_normalized": [
+            0.557706,
+            0.574001,
+            0.270563,
+            0.087763
+          ],
+          "xyxy_pixels": [
+            202.8,
+            452.2,
+            332.6,
+            527.1
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2679,
+          "xywh_normalized": [
+            0.14109,
+            0.501752,
+            0.175893,
+            0.050099
+          ],
+          "xyxy_pixels": [
+            25.5,
+            406.6,
+            109.9,
+            449.4
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2307,
+          "xywh_normalized": [
+            0.680283,
+            0.485929,
+            0.166249,
+            0.112287
+          ],
+          "xyxy_pixels": [
+            286.6,
+            366.6,
+            366.4,
+            462.4
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2267,
+          "xywh_normalized": [
+            0.525772,
+            0.433242,
+            0.144844,
+            0.098262
+          ],
+          "xyxy_pixels": [
+            217.6,
+            327.6,
+            287.1,
+            411.5
+          ]
+        }
+      ],
+      "max_confidence": 0.2698
+    },
+    {
+      "index": 6,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.16 AM (1).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.16 AM (1).jpeg",
+      "group": "session_oct10_burst_part1",
+      "split": "train",
+      "width": 1280,
+      "height": 720,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.16_AM_(1).jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.16_AM_(1).jpg",
+      "provisional_boxes_count": 7,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.4013,
+          "xywh_normalized": [
+            0.798163,
+            0.779045,
+            0.05636,
+            0.060496
+          ],
+          "xyxy_pixels": [
+            985.6,
+            539.1,
+            1057.7,
+            582.7
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2809,
+          "xywh_normalized": [
+            0.796864,
+            0.56808,
+            0.056098,
+            0.048637
+          ],
+          "xyxy_pixels": [
+            984.1,
+            391.5,
+            1055.9,
+            426.5
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2713,
+          "xywh_normalized": [
+            0.337208,
+            0.849462,
+            0.086595,
+            0.115439
+          ],
+          "xyxy_pixels": [
+            376.2,
+            570.1,
+            487.0,
+            653.2
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.252,
+          "xywh_normalized": [
+            0.863286,
+            0.76681,
+            0.054069,
+            0.101358
+          ],
+          "xyxy_pixels": [
+            1070.4,
+            515.6,
+            1139.6,
+            588.6
+          ]
+        },
+        {
+          "id": 5,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2469,
+          "xywh_normalized": [
+            0.853353,
+            0.445578,
+            0.291922,
+            0.281186
+          ],
+          "xyxy_pixels": [
+            905.5,
+            219.6,
+            1279.1,
+            422.0
+          ]
+        },
+        {
+          "id": 6,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2191,
+          "xywh_normalized": [
+            0.925291,
+            0.552949,
+            0.066758,
+            0.046986
+          ],
+          "xyxy_pixels": [
+            1141.6,
+            381.2,
+            1227.1,
+            415.0
+          ]
+        },
+        {
+          "id": 7,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.202,
+          "xywh_normalized": [
+            0.298035,
+            0.645652,
+            0.590622,
+            0.463352
+          ],
+          "xyxy_pixels": [
+            3.5,
+            298.1,
+            759.5,
+            631.7
+          ]
+        }
+      ],
+      "max_confidence": 0.4013
+    },
+    {
+      "index": 7,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.16 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.16 AM.jpeg",
+      "group": "session_oct10_burst_part1",
+      "split": "train",
+      "width": 1200,
+      "height": 900,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.16_AM.jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.16_AM.jpg",
+      "provisional_boxes_count": 4,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.5445,
+          "xywh_normalized": [
+            0.507459,
+            0.498043,
+            0.985082,
+            0.748672
+          ],
+          "xyxy_pixels": [
+            17.9,
+            111.3,
+            1200.0,
+            785.1
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3428,
+          "xywh_normalized": [
+            0.918361,
+            0.83282,
+            0.161495,
+            0.084178
+          ],
+          "xyxy_pixels": [
+            1005.1,
+            711.7,
+            1198.9,
+            787.4
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2482,
+          "xywh_normalized": [
+            0.807196,
+            0.232775,
+            0.065003,
+            0.210495
+          ],
+          "xyxy_pixels": [
+            929.6,
+            114.8,
+            1007.6,
+            304.2
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2099,
+          "xywh_normalized": [
+            0.959971,
+            0.938821,
+            0.07921,
+            0.118974
+          ],
+          "xyxy_pixels": [
+            1104.4,
+            791.4,
+            1199.5,
+            898.5
+          ]
+        }
+      ],
+      "max_confidence": 0.5445
+    },
+    {
+      "index": 8,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.18 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.18 AM.jpeg",
+      "group": "session_oct10_burst_part1",
+      "split": "train",
+      "width": 800,
+      "height": 600,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.18_AM.jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.18_AM.jpg",
+      "provisional_boxes_count": 4,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.4335,
+          "xywh_normalized": [
+            0.599955,
+            0.778423,
+            0.156326,
+            0.105102
+          ],
+          "xyxy_pixels": [
+            417.4,
+            435.5,
+            542.5,
+            498.6
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3727,
+          "xywh_normalized": [
+            0.382807,
+            0.174917,
+            0.741862,
+            0.349833
+          ],
+          "xyxy_pixels": [
+            9.5,
+            0.0,
+            603.0,
+            209.9
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2625,
+          "xywh_normalized": [
+            0.196808,
+            0.732052,
+            0.114695,
+            0.08221
+          ],
+          "xyxy_pixels": [
+            111.6,
+            414.6,
+            203.3,
+            463.9
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2538,
+          "xywh_normalized": [
+            0.204933,
+            0.246577,
+            0.409867,
+            0.493154
+          ],
+          "xyxy_pixels": [
+            0.0,
+            0.0,
+            327.9,
+            295.9
+          ]
+        }
+      ],
+      "max_confidence": 0.4335
+    },
+    {
+      "index": 9,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.19 AM (1).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.19 AM (1).jpeg",
+      "group": "session_oct10_burst_part1",
+      "split": "train",
+      "width": 1200,
+      "height": 1600,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.19_AM_(1).jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.19_AM_(1).jpg",
+      "provisional_boxes_count": 12,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.4814,
+          "xywh_normalized": [
+            0.945632,
+            0.874509,
+            0.104062,
+            0.059346
+          ],
+          "xyxy_pixels": [
+            1072.3,
+            1351.7,
+            1197.2,
+            1446.7
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.4548,
+          "xywh_normalized": [
+            0.095097,
+            0.952929,
+            0.172906,
+            0.094142
+          ],
+          "xyxy_pixels": [
+            10.4,
+            1449.4,
+            217.9,
+            1600.0
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.361,
+          "xywh_normalized": [
+            0.712976,
+            0.880445,
+            0.104774,
+            0.071284
+          ],
+          "xyxy_pixels": [
+            792.7,
+            1351.7,
+            918.4,
+            1465.7
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3298,
+          "xywh_normalized": [
+            0.316487,
+            0.872605,
+            0.143776,
+            0.087473
+          ],
+          "xyxy_pixels": [
+            293.5,
+            1326.2,
+            466.1,
+            1466.1
+          ]
+        },
+        {
+          "id": 5,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3015,
+          "xywh_normalized": [
+            0.639944,
+            0.799161,
+            0.087513,
+            0.047708
+          ],
+          "xyxy_pixels": [
+            715.4,
+            1240.5,
+            820.4,
+            1316.8
+          ]
+        },
+        {
+          "id": 6,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3,
+          "xywh_normalized": [
+            0.228929,
+            0.844975,
+            0.172388,
+            0.083521
+          ],
+          "xyxy_pixels": [
+            171.3,
+            1285.1,
+            378.1,
+            1418.8
+          ]
+        },
+        {
+          "id": 7,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2442,
+          "xywh_normalized": [
+            0.151829,
+            0.697062,
+            0.106279,
+            0.059041
+          ],
+          "xyxy_pixels": [
+            118.4,
+            1068.1,
+            246.0,
+            1162.5
+          ]
+        },
+        {
+          "id": 8,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2336,
+          "xywh_normalized": [
+            0.148907,
+            0.953502,
+            0.297179,
+            0.092996
+          ],
+          "xyxy_pixels": [
+            0.4,
+            1451.2,
+            357.0,
+            1600.0
+          ]
+        },
+        {
+          "id": 9,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2336,
+          "xywh_normalized": [
+            0.722748,
+            0.955754,
+            0.102201,
+            0.072208
+          ],
+          "xyxy_pixels": [
+            806.0,
+            1471.4,
+            928.6,
+            1587.0
+          ]
+        },
+        {
+          "id": 10,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2228,
+          "xywh_normalized": [
+            0.04063,
+            0.841136,
+            0.073768,
+            0.080268
+          ],
+          "xyxy_pixels": [
+            4.5,
+            1281.6,
+            93.0,
+            1410.0
+          ]
+        },
+        {
+          "id": 11,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2071,
+          "xywh_normalized": [
+            0.106692,
+            0.784387,
+            0.096724,
+            0.082033
+          ],
+          "xyxy_pixels": [
+            70.0,
+            1189.4,
+            186.1,
+            1320.6
+          ]
+        },
+        {
+          "id": 12,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2064,
+          "xywh_normalized": [
+            0.20497,
+            0.769478,
+            0.135168,
+            0.087211
+          ],
+          "xyxy_pixels": [
+            164.9,
+            1161.4,
+            327.1,
+            1300.9
+          ]
+        }
+      ],
+      "max_confidence": 0.4814
+    },
+    {
+      "index": 10,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.19 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.19 AM.jpeg",
+      "group": "session_oct10_burst_part1",
+      "split": "train",
+      "width": 1200,
+      "height": 1600,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.19_AM.jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.19_AM.jpg",
+      "provisional_boxes_count": 7,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3364,
+          "xywh_normalized": [
+            0.497821,
+            0.691089,
+            0.995642,
+            0.617821
+          ],
+          "xyxy_pixels": [
+            0.0,
+            611.5,
+            1194.8,
+            1600.0
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3294,
+          "xywh_normalized": [
+            0.272432,
+            0.08494,
+            0.44875,
+            0.168034
+          ],
+          "xyxy_pixels": [
+            57.7,
+            1.5,
+            596.2,
+            270.3
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2766,
+          "xywh_normalized": [
+            0.745916,
+            0.058063,
+            0.506231,
+            0.11588
+          ],
+          "xyxy_pixels": [
+            591.4,
+            0.2,
+            1198.8,
+            185.6
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2622,
+          "xywh_normalized": [
+            0.178491,
+            0.252304,
+            0.356229,
+            0.150141
+          ],
+          "xyxy_pixels": [
+            0.5,
+            283.6,
+            427.9,
+            523.8
+          ]
+        },
+        {
+          "id": 5,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.252,
+          "xywh_normalized": [
+            0.166458,
+            0.031454,
+            0.332917,
+            0.062704
+          ],
+          "xyxy_pixels": [
+            0.0,
+            0.2,
+            399.5,
+            100.5
+          ]
+        },
+        {
+          "id": 6,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2326,
+          "xywh_normalized": [
+            0.802106,
+            0.751366,
+            0.047853,
+            0.040713
+          ],
+          "xyxy_pixels": [
+            933.8,
+            1169.6,
+            991.2,
+            1234.8
+          ]
+        },
+        {
+          "id": 7,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2221,
+          "xywh_normalized": [
+            0.498808,
+            0.161244,
+            0.986843,
+            0.321283
+          ],
+          "xyxy_pixels": [
+            6.5,
+            1.0,
+            1190.7,
+            515.0
+          ]
+        }
+      ],
+      "max_confidence": 0.3364
+    },
+    {
+      "index": 11,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.20 AM (1).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.20 AM (1).jpeg",
+      "group": "session_oct10_burst_part1",
+      "split": "train",
+      "width": 1280,
+      "height": 960,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.20_AM_(1).jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.20_AM_(1).jpg",
+      "provisional_boxes_count": 3,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.4165,
+          "xywh_normalized": [
+            0.478562,
+            0.661977,
+            0.957125,
+            0.676047
+          ],
+          "xyxy_pixels": [
+            0.0,
+            311.0,
+            1225.1,
+            960.0
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2896,
+          "xywh_normalized": [
+            0.338055,
+            0.661638,
+            0.676109,
+            0.676724
+          ],
+          "xyxy_pixels": [
+            0.0,
+            310.3,
+            865.4,
+            960.0
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2024,
+          "xywh_normalized": [
+            0.531512,
+            0.517559,
+            0.936977,
+            0.964881
+          ],
+          "xyxy_pixels": [
+            80.7,
+            33.7,
+            1280.0,
+            960.0
+          ]
+        }
+      ],
+      "max_confidence": 0.4165
+    },
+    {
+      "index": 12,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.20 AM (2).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.20 AM (2).jpeg",
+      "group": "session_oct10_burst_part1",
+      "split": "train",
+      "width": 1600,
+      "height": 1200,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.20_AM_(2).jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.20_AM_(2).jpg",
+      "provisional_boxes_count": 5,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3144,
+          "xywh_normalized": [
+            0.331858,
+            0.098392,
+            0.179499,
+            0.192208
+          ],
+          "xyxy_pixels": [
+            387.4,
+            2.7,
+            674.6,
+            233.4
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3122,
+          "xywh_normalized": [
+            0.254436,
+            0.784803,
+            0.508871,
+            0.430393
+          ],
+          "xyxy_pixels": [
+            0.0,
+            683.5,
+            814.2,
+            1200.0
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2199,
+          "xywh_normalized": [
+            0.082489,
+            0.344627,
+            0.164607,
+            0.459254
+          ],
+          "xyxy_pixels": [
+            0.3,
+            138.0,
+            263.7,
+            689.1
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2123,
+          "xywh_normalized": [
+            0.048534,
+            0.358061,
+            0.091253,
+            0.333438
+          ],
+          "xyxy_pixels": [
+            4.7,
+            229.6,
+            150.7,
+            629.7
+          ]
+        },
+        {
+          "id": 5,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2055,
+          "xywh_normalized": [
+            0.056751,
+            0.338234,
+            0.111283,
+            0.413195
+          ],
+          "xyxy_pixels": [
+            1.8,
+            158.0,
+            179.8,
+            653.8
+          ]
+        }
+      ],
+      "max_confidence": 0.3144
+    },
+    {
+      "index": 13,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.20 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.20 AM.jpeg",
+      "group": "session_oct10_burst_part1",
+      "split": "train",
+      "width": 1600,
+      "height": 1200,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.20_AM.jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.20_AM.jpg",
+      "provisional_boxes_count": 16,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.6886,
+          "xywh_normalized": [
+            0.628728,
+            0.472636,
+            0.112248,
+            0.129179
+          ],
+          "xyxy_pixels": [
+            916.2,
+            489.7,
+            1095.8,
+            644.7
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.6218,
+          "xywh_normalized": [
+            0.88983,
+            0.746167,
+            0.114004,
+            0.116644
+          ],
+          "xyxy_pixels": [
+            1332.5,
+            825.4,
+            1514.9,
+            965.4
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.5333,
+          "xywh_normalized": [
+            0.896666,
+            0.518123,
+            0.158933,
+            0.088054
+          ],
+          "xyxy_pixels": [
+            1307.5,
+            568.9,
+            1561.8,
+            674.6
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.4759,
+          "xywh_normalized": [
+            0.752712,
+            0.731411,
+            0.061817,
+            0.090709
+          ],
+          "xyxy_pixels": [
+            1154.9,
+            823.3,
+            1253.8,
+            932.1
+          ]
+        },
+        {
+          "id": 5,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.4704,
+          "xywh_normalized": [
+            0.846285,
+            0.43469,
+            0.085291,
+            0.093197
+          ],
+          "xyxy_pixels": [
+            1285.8,
+            465.7,
+            1422.3,
+            577.5
+          ]
+        },
+        {
+          "id": 6,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.4306,
+          "xywh_normalized": [
+            0.559404,
+            0.691909,
+            0.189136,
+            0.129883
+          ],
+          "xyxy_pixels": [
+            743.7,
+            752.4,
+            1046.4,
+            908.2
+          ]
+        },
+        {
+          "id": 7,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.3131,
+          "xywh_normalized": [
+            0.617002,
+            0.486938,
+            0.086308,
+            0.093673
+          ],
+          "xyxy_pixels": [
+            918.2,
+            528.1,
+            1056.2,
+            640.5
+          ]
+        },
+        {
+          "id": 8,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.312,
+          "xywh_normalized": [
+            0.690127,
+            0.680859,
+            0.063652,
+            0.070953
+          ],
+          "xyxy_pixels": [
+            1053.3,
+            774.5,
+            1155.1,
+            859.6
+          ]
+        },
+        {
+          "id": 9,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2918,
+          "xywh_normalized": [
+            0.520252,
+            0.524182,
+            0.106257,
+            0.144949
+          ],
+          "xyxy_pixels": [
+            747.4,
+            542.0,
+            917.4,
+            716.0
+          ]
+        },
+        {
+          "id": 10,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2834,
+          "xywh_normalized": [
+            0.772076,
+            0.273139,
+            0.069363,
+            0.08087
+          ],
+          "xyxy_pixels": [
+            1179.8,
+            279.2,
+            1290.8,
+            376.3
+          ]
+        },
+        {
+          "id": 11,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2738,
+          "xywh_normalized": [
+            0.739574,
+            0.285965,
+            0.090212,
+            0.06362
+          ],
+          "xyxy_pixels": [
+            1111.1,
+            305.0,
+            1255.5,
+            381.3
+          ]
+        },
+        {
+          "id": 12,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.265,
+          "xywh_normalized": [
+            0.630831,
+            0.37367,
+            0.110031,
+            0.14701
+          ],
+          "xyxy_pixels": [
+            921.3,
+            360.2,
+            1097.4,
+            536.6
+          ]
+        },
+        {
+          "id": 13,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2461,
+          "xywh_normalized": [
+            0.792556,
+            0.604415,
+            0.052893,
+            0.075618
+          ],
+          "xyxy_pixels": [
+            1225.8,
+            679.9,
+            1310.4,
+            770.7
+          ]
+        },
+        {
+          "id": 14,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.228,
+          "xywh_normalized": [
+            0.628081,
+            0.439947,
+            0.112308,
+            0.192147
+          ],
+          "xyxy_pixels": [
+            915.1,
+            412.6,
+            1094.8,
+            643.2
+          ]
+        },
+        {
+          "id": 15,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2117,
+          "xywh_normalized": [
+            0.628398,
+            0.402938,
+            0.11234,
+            0.206843
+          ],
+          "xyxy_pixels": [
+            915.6,
+            359.4,
+            1095.3,
+            607.6
+          ]
+        },
+        {
+          "id": 16,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2002,
+          "xywh_normalized": [
+            0.910954,
+            0.747636,
+            0.069476,
+            0.111646
+          ],
+          "xyxy_pixels": [
+            1401.9,
+            830.2,
+            1513.1,
+            964.2
+          ]
+        }
+      ],
+      "max_confidence": 0.6886
+    },
+    {
+      "index": 14,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.21 AM (1).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.21 AM (1).jpeg",
+      "group": "session_oct10_burst_part1",
+      "split": "train",
+      "width": 1600,
+      "height": 1200,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.21_AM_(1).jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.21_AM_(1).jpg",
+      "provisional_boxes_count": 2,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.4869,
+          "xywh_normalized": [
+            0.753849,
+            0.535132,
+            0.213856,
+            0.568818
+          ],
+          "xyxy_pixels": [
+            1035.1,
+            300.9,
+            1377.2,
+            983.4
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2128,
+          "xywh_normalized": [
+            0.315488,
+            0.414953,
+            0.630976,
+            0.829907
+          ],
+          "xyxy_pixels": [
+            0.0,
+            0.0,
+            1009.6,
+            995.9
+          ]
+        }
+      ],
+      "max_confidence": 0.4869
+    },
+    {
+      "index": 15,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.21 AM (2).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.21 AM (2).jpeg",
+      "group": "session_oct10_burst_part1",
+      "split": "train",
+      "width": 1600,
+      "height": 1062,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.21_AM_(2).jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.21_AM_(2).jpg",
+      "provisional_boxes_count": 1,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2419,
+          "xywh_normalized": [
+            0.526403,
+            0.5,
+            0.947195,
+            1.0
+          ],
+          "xyxy_pixels": [
+            84.5,
+            0.0,
+            1600.0,
+            1062.0
+          ]
+        }
+      ],
+      "max_confidence": 0.2419
+    },
+    {
+      "index": 16,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.21 AM (3).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.21 AM (3).jpeg",
+      "group": "session_oct10_burst_part1",
+      "split": "train",
+      "width": 1600,
+      "height": 1200,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.21_AM_(3).jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.21_AM_(3).jpg",
+      "provisional_boxes_count": 4,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2616,
+          "xywh_normalized": [
+            0.055112,
+            0.863329,
+            0.11009,
+            0.098367
+          ],
+          "xyxy_pixels": [
+            0.1,
+            977.0,
+            176.3,
+            1095.0
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2571,
+          "xywh_normalized": [
+            0.78946,
+            0.303775,
+            0.12985,
+            0.172386
+          ],
+          "xyxy_pixels": [
+            1159.3,
+            261.1,
+            1367.0,
+            468.0
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2446,
+          "xywh_normalized": [
+            0.169703,
+            0.80219,
+            0.107322,
+            0.075264
+          ],
+          "xyxy_pixels": [
+            185.7,
+            917.5,
+            357.4,
+            1007.8
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 1,
+          "class_name": "CARDBOARD",
+          "confidence": 0.2267,
+          "xywh_normalized": [
+            0.091101,
+            0.58172,
+            0.172427,
+            0.171137
+          ],
+          "xyxy_pixels": [
+            7.8,
+            595.4,
+            283.7,
+            800.7
+          ]
+        }
+      ],
+      "max_confidence": 0.2616
+    },
+    {
+      "index": 17,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.21 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.21 AM.jpeg",
+      "group": "session_oct10_burst_part1",
+      "split": "train",
+      "width": 1200,
+      "height": 1600,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.21_AM.jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.21_AM.jpg",
+      "provisional_boxes_count": 1,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3402,
+          "xywh_normalized": [
+            0.49805,
+            0.501672,
+            0.996099,
+            0.996656
+          ],
+          "xyxy_pixels": [
+            0.0,
+            5.4,
+            1195.3,
+            1600.0
+          ]
+        }
+      ],
+      "max_confidence": 0.3402
+    },
+    {
+      "index": 18,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.22 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.22 AM.jpeg",
+      "group": "session_oct10_burst_part2",
+      "split": "train",
+      "width": 1280,
+      "height": 720,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.22_AM.jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.22_AM.jpg",
+      "provisional_boxes_count": 1,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2169,
+          "xywh_normalized": [
+            0.777846,
+            0.085679,
+            0.092945,
+            0.162013
+          ],
+          "xyxy_pixels": [
+            936.2,
+            3.4,
+            1055.1,
+            120.0
+          ]
+        }
+      ],
+      "max_confidence": 0.2169
+    },
+    {
+      "index": 19,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.23 AM (1).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.23 AM (1).jpeg",
+      "group": "session_oct10_burst_part2",
+      "split": "train",
+      "width": 1440,
+      "height": 970,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.23_AM_(1).jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.23_AM_(1).jpg",
+      "provisional_boxes_count": 15,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3487,
+          "xywh_normalized": [
+            0.17783,
+            0.113114,
+            0.130466,
+            0.226229
+          ],
+          "xyxy_pixels": [
+            162.1,
+            0.0,
+            350.0,
+            219.4
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.3067,
+          "xywh_normalized": [
+            0.114825,
+            0.291667,
+            0.077429,
+            0.218066
+          ],
+          "xyxy_pixels": [
+            109.6,
+            177.2,
+            221.1,
+            388.7
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2891,
+          "xywh_normalized": [
+            0.970887,
+            0.402433,
+            0.05801,
+            0.235695
+          ],
+          "xyxy_pixels": [
+            1356.3,
+            276.0,
+            1439.8,
+            504.7
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2673,
+          "xywh_normalized": [
+            0.926262,
+            0.894893,
+            0.147476,
+            0.20147
+          ],
+          "xyxy_pixels": [
+            1227.6,
+            770.3,
+            1440.0,
+            965.8
+          ]
+        },
+        {
+          "id": 5,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.26,
+          "xywh_normalized": [
+            0.909174,
+            0.405117,
+            0.180648,
+            0.282682
+          ],
+          "xyxy_pixels": [
+            1179.1,
+            255.9,
+            1439.3,
+            530.1
+          ]
+        },
+        {
+          "id": 6,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2501,
+          "xywh_normalized": [
+            0.842278,
+            0.378686,
+            0.031575,
+            0.204607
+          ],
+          "xyxy_pixels": [
+            1190.1,
+            268.1,
+            1235.6,
+            466.6
+          ]
+        },
+        {
+          "id": 7,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.248,
+          "xywh_normalized": [
+            0.762139,
+            0.738883,
+            0.060875,
+            0.09004
+          ],
+          "xyxy_pixels": [
+            1053.6,
+            673.0,
+            1141.3,
+            760.4
+          ]
+        },
+        {
+          "id": 8,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2472,
+          "xywh_normalized": [
+            0.307037,
+            0.085664,
+            0.170308,
+            0.170058
+          ],
+          "xyxy_pixels": [
+            319.5,
+            0.6,
+            564.8,
+            165.6
+          ]
+        },
+        {
+          "id": 9,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2356,
+          "xywh_normalized": [
+            0.715691,
+            0.324038,
+            0.025873,
+            0.084257
+          ],
+          "xyxy_pixels": [
+            1012.0,
+            273.5,
+            1049.2,
+            355.2
+          ]
+        },
+        {
+          "id": 10,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2348,
+          "xywh_normalized": [
+            0.829374,
+            0.721963,
+            0.093894,
+            0.102003
+          ],
+          "xyxy_pixels": [
+            1126.7,
+            650.8,
+            1261.9,
+            749.8
+          ]
+        },
+        {
+          "id": 11,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2333,
+          "xywh_normalized": [
+            0.648773,
+            0.717572,
+            0.079285,
+            0.092525
+          ],
+          "xyxy_pixels": [
+            877.1,
+            651.2,
+            991.3,
+            740.9
+          ]
+        },
+        {
+          "id": 12,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2251,
+          "xywh_normalized": [
+            0.828021,
+            0.722084,
+            0.094539,
+            0.103875
+          ],
+          "xyxy_pixels": [
+            1124.3,
+            650.0,
+            1260.4,
+            750.8
+          ]
+        },
+        {
+          "id": 13,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2242,
+          "xywh_normalized": [
+            0.713718,
+            0.706373,
+            0.055557,
+            0.10851
+          ],
+          "xyxy_pixels": [
+            987.8,
+            632.6,
+            1067.8,
+            737.8
+          ]
+        },
+        {
+          "id": 14,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2149,
+          "xywh_normalized": [
+            0.83961,
+            0.388897,
+            0.043278,
+            0.223291
+          ],
+          "xyxy_pixels": [
+            1177.9,
+            268.9,
+            1240.2,
+            485.5
+          ]
+        },
+        {
+          "id": 15,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2022,
+          "xywh_normalized": [
+            0.122385,
+            0.492149,
+            0.031317,
+            0.229801
+          ],
+          "xyxy_pixels": [
+            153.7,
+            365.9,
+            198.8,
+            588.8
+          ]
+        }
+      ],
+      "max_confidence": 0.3487
+    },
+    {
+      "index": 20,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.23 AM (2).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.23 AM (2).jpeg",
+      "group": "session_oct10_burst_part2",
+      "split": "train",
+      "width": 1600,
+      "height": 1200,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.23_AM_(2).jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.23_AM_(2).jpg",
+      "provisional_boxes_count": 2,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.4571,
+          "xywh_normalized": [
+            0.409983,
+            0.604079,
+            0.092614,
+            0.188074
+          ],
+          "xyxy_pixels": [
+            581.9,
+            612.1,
+            730.1,
+            837.7
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2259,
+          "xywh_normalized": [
+            0.480561,
+            0.499818,
+            0.961122,
+            0.999636
+          ],
+          "xyxy_pixels": [
+            0.0,
+            0.0,
+            1537.8,
+            1199.6
+          ]
+        }
+      ],
+      "max_confidence": 0.4571
+    },
+    {
+      "index": 21,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.23 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.23 AM.jpeg",
+      "group": "session_oct10_burst_part2",
+      "split": "train",
+      "width": 335,
+      "height": 597,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.23_AM.jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.23_AM.jpg",
+      "provisional_boxes_count": 3,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2736,
+          "xywh_normalized": [
+            0.777704,
+            0.366272,
+            0.429,
+            0.133982
+          ],
+          "xyxy_pixels": [
+            188.7,
+            178.7,
+            332.4,
+            258.7
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2519,
+          "xywh_normalized": [
+            0.507066,
+            0.714526,
+            0.985869,
+            0.568003
+          ],
+          "xyxy_pixels": [
+            4.7,
+            257.0,
+            335.0,
+            596.1
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2463,
+          "xywh_normalized": [
+            0.84655,
+            0.484697,
+            0.302104,
+            0.112501
+          ],
+          "xyxy_pixels": [
+            233.0,
+            255.8,
+            334.2,
+            322.9
+          ]
+        }
+      ],
+      "max_confidence": 0.2736
+    },
+    {
+      "index": 22,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.24 AM (1).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.24 AM (1).jpeg",
+      "group": "session_oct10_burst_part2",
+      "split": "train",
+      "width": 395,
+      "height": 480,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.24_AM_(1).jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.24_AM_(1).jpg",
+      "provisional_boxes_count": 20,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.6283,
+          "xywh_normalized": [
+            0.053561,
+            0.807538,
+            0.102863,
+            0.064018
+          ],
+          "xyxy_pixels": [
+            0.8,
+            372.3,
+            41.5,
+            403.0
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.4506,
+          "xywh_normalized": [
+            0.175107,
+            0.702247,
+            0.12554,
+            0.107938
+          ],
+          "xyxy_pixels": [
+            44.4,
+            311.2,
+            94.0,
+            363.0
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.4279,
+          "xywh_normalized": [
+            0.241231,
+            0.750402,
+            0.078922,
+            0.094746
+          ],
+          "xyxy_pixels": [
+            79.7,
+            337.5,
+            110.9,
+            382.9
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.4258,
+          "xywh_normalized": [
+            0.223914,
+            0.837988,
+            0.13016,
+            0.087807
+          ],
+          "xyxy_pixels": [
+            62.7,
+            381.2,
+            114.2,
+            423.3
+          ]
+        },
+        {
+          "id": 5,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3823,
+          "xywh_normalized": [
+            0.094292,
+            0.866779,
+            0.119647,
+            0.083553
+          ],
+          "xyxy_pixels": [
+            13.6,
+            396.0,
+            60.9,
+            436.1
+          ]
+        },
+        {
+          "id": 6,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3437,
+          "xywh_normalized": [
+            0.025486,
+            0.861456,
+            0.04881,
+            0.058427
+          ],
+          "xyxy_pixels": [
+            0.4,
+            399.5,
+            19.7,
+            427.5
+          ]
+        },
+        {
+          "id": 7,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3238,
+          "xywh_normalized": [
+            0.120521,
+            0.945535,
+            0.079054,
+            0.063285
+          ],
+          "xyxy_pixels": [
+            32.0,
+            438.7,
+            63.2,
+            469.0
+          ]
+        },
+        {
+          "id": 8,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3085,
+          "xywh_normalized": [
+            0.051156,
+            0.961295,
+            0.07512,
+            0.067031
+          ],
+          "xyxy_pixels": [
+            5.4,
+            445.3,
+            35.0,
+            477.5
+          ]
+        },
+        {
+          "id": 9,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2588,
+          "xywh_normalized": [
+            0.073695,
+            0.625112,
+            0.143863,
+            0.087643
+          ],
+          "xyxy_pixels": [
+            0.7,
+            279.0,
+            57.5,
+            321.1
+          ]
+        },
+        {
+          "id": 10,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2566,
+          "xywh_normalized": [
+            0.248611,
+            0.621226,
+            0.140174,
+            0.104477
+          ],
+          "xyxy_pixels": [
+            70.5,
+            273.1,
+            125.9,
+            323.3
+          ]
+        },
+        {
+          "id": 11,
+          "class_id": 1,
+          "class_name": "CARDBOARD",
+          "confidence": 0.2472,
+          "xywh_normalized": [
+            0.253571,
+            0.167665,
+            0.478915,
+            0.334766
+          ],
+          "xyxy_pixels": [
+            5.6,
+            0.1,
+            194.7,
+            160.8
+          ]
+        },
+        {
+          "id": 12,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2389,
+          "xywh_normalized": [
+            0.675289,
+            0.05206,
+            0.158268,
+            0.10412
+          ],
+          "xyxy_pixels": [
+            235.5,
+            0.0,
+            298.0,
+            50.0
+          ]
+        },
+        {
+          "id": 13,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2382,
+          "xywh_normalized": [
+            0.533265,
+            0.508102,
+            0.088383,
+            0.088637
+          ],
+          "xyxy_pixels": [
+            193.2,
+            222.6,
+            228.1,
+            265.2
+          ]
+        },
+        {
+          "id": 14,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2348,
+          "xywh_normalized": [
+            0.061552,
+            0.71825,
+            0.119923,
+            0.120713
+          ],
+          "xyxy_pixels": [
+            0.6,
+            315.8,
+            48.0,
+            373.7
+          ]
+        },
+        {
+          "id": 15,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2308,
+          "xywh_normalized": [
+            0.247745,
+            0.746782,
+            0.066043,
+            0.086586
+          ],
+          "xyxy_pixels": [
+            84.8,
+            337.7,
+            110.9,
+            379.2
+          ]
+        },
+        {
+          "id": 16,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.22,
+          "xywh_normalized": [
+            0.145181,
+            0.794817,
+            0.093873,
+            0.085619
+          ],
+          "xyxy_pixels": [
+            38.8,
+            361.0,
+            75.9,
+            402.1
+          ]
+        },
+        {
+          "id": 17,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2177,
+          "xywh_normalized": [
+            0.355015,
+            0.70957,
+            0.088709,
+            0.068958
+          ],
+          "xyxy_pixels": [
+            122.7,
+            324.0,
+            157.8,
+            357.1
+          ]
+        },
+        {
+          "id": 18,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2159,
+          "xywh_normalized": [
+            0.074099,
+            0.618401,
+            0.142848,
+            0.09985
+          ],
+          "xyxy_pixels": [
+            1.1,
+            272.9,
+            57.5,
+            320.8
+          ]
+        },
+        {
+          "id": 19,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2052,
+          "xywh_normalized": [
+            0.250466,
+            0.621883,
+            0.135946,
+            0.107444
+          ],
+          "xyxy_pixels": [
+            72.1,
+            272.7,
+            125.8,
+            324.3
+          ]
+        },
+        {
+          "id": 20,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2001,
+          "xywh_normalized": [
+            0.44782,
+            0.453849,
+            0.131577,
+            0.067846
+          ],
+          "xyxy_pixels": [
+            150.9,
+            201.6,
+            202.9,
+            234.1
+          ]
+        }
+      ],
+      "max_confidence": 0.6283
+    },
+    {
+      "index": 23,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.24 AM (2).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.24 AM (2).jpeg",
+      "group": "session_oct10_burst_part2",
+      "split": "train",
+      "width": 715,
+      "height": 429,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.24_AM_(2).jpg",
+      "rel_img_url": "images/train/WhatsApp_Image_2026-10-10_at_1.41.24_AM_(2).jpg",
+      "provisional_boxes_count": 7,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.3948,
+          "xywh_normalized": [
+            0.307261,
+            0.334549,
+            0.151268,
+            0.401105
+          ],
+          "xyxy_pixels": [
+            165.6,
+            57.5,
+            273.8,
+            229.6
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3782,
+          "xywh_normalized": [
+            0.228196,
+            0.700283,
+            0.063889,
+            0.077284
+          ],
+          "xyxy_pixels": [
+            140.3,
+            283.8,
+            186.0,
+            317.0
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3224,
+          "xywh_normalized": [
+            0.104701,
+            0.407469,
+            0.209094,
+            0.525423
+          ],
+          "xyxy_pixels": [
+            0.1,
+            62.1,
+            149.6,
+            287.5
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2521,
+          "xywh_normalized": [
+            0.924172,
+            0.262362,
+            0.15104,
+            0.523524
+          ],
+          "xyxy_pixels": [
+            606.8,
+            0.3,
+            714.8,
+            224.8
+          ]
+        },
+        {
+          "id": 5,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2313,
+          "xywh_normalized": [
+            0.029108,
+            0.944414,
+            0.057375,
+            0.084844
+          ],
+          "xyxy_pixels": [
+            0.3,
+            387.0,
+            41.3,
+            423.4
+          ]
+        },
+        {
+          "id": 6,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2256,
+          "xywh_normalized": [
+            0.863777,
+            0.304574,
+            0.089746,
+            0.331803
+          ],
+          "xyxy_pixels": [
+            585.5,
+            59.5,
+            649.7,
+            201.8
+          ]
+        },
+        {
+          "id": 7,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2231,
+          "xywh_normalized": [
+            0.229334,
+            0.873089,
+            0.096792,
+            0.127841
+          ],
+          "xyxy_pixels": [
+            129.4,
+            347.1,
+            198.6,
+            402.0
+          ]
+        }
+      ],
+      "max_confidence": 0.3948
+    },
+    {
+      "index": 24,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.24 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.24 AM.jpeg",
+      "group": "session_oct10_burst_part3",
+      "split": "val",
+      "width": 1600,
+      "height": 1200,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.24_AM.jpg",
+      "rel_img_url": "images/val/WhatsApp_Image_2026-10-10_at_1.41.24_AM.jpg",
+      "provisional_boxes_count": 4,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.5179,
+          "xywh_normalized": [
+            0.421904,
+            0.49967,
+            0.843808,
+            0.999339
+          ],
+          "xyxy_pixels": [
+            0.0,
+            0.0,
+            1350.1,
+            1199.2
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2474,
+          "xywh_normalized": [
+            0.823068,
+            0.822855,
+            0.279886,
+            0.273326
+          ],
+          "xyxy_pixels": [
+            1093.0,
+            823.4,
+            1540.8,
+            1151.4
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2186,
+          "xywh_normalized": [
+            0.709942,
+            0.114224,
+            0.076535,
+            0.202676
+          ],
+          "xyxy_pixels": [
+            1074.7,
+            15.5,
+            1197.1,
+            258.7
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2068,
+          "xywh_normalized": [
+            0.893209,
+            0.823213,
+            0.151158,
+            0.266855
+          ],
+          "xyxy_pixels": [
+            1308.2,
+            827.7,
+            1550.1,
+            1148.0
+          ]
+        }
+      ],
+      "max_confidence": 0.5179
+    },
+    {
+      "index": 25,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.25 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.25 AM.jpeg",
+      "group": "session_oct10_burst_part3",
+      "split": "val",
+      "width": 1600,
+      "height": 1200,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.25_AM.jpg",
+      "rel_img_url": "images/val/WhatsApp_Image_2026-10-10_at_1.41.25_AM.jpg",
+      "provisional_boxes_count": 12,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.4858,
+          "xywh_normalized": [
+            0.364754,
+            0.277018,
+            0.108879,
+            0.255107
+          ],
+          "xyxy_pixels": [
+            496.5,
+            179.4,
+            670.7,
+            485.5
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.4846,
+          "xywh_normalized": [
+            0.184308,
+            0.725307,
+            0.131618,
+            0.227783
+          ],
+          "xyxy_pixels": [
+            189.6,
+            733.7,
+            400.2,
+            1007.0
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3952,
+          "xywh_normalized": [
+            0.148261,
+            0.128976,
+            0.296521,
+            0.197847
+          ],
+          "xyxy_pixels": [
+            0.0,
+            36.1,
+            474.4,
+            273.5
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3919,
+          "xywh_normalized": [
+            0.049557,
+            0.655998,
+            0.099114,
+            0.40017
+          ],
+          "xyxy_pixels": [
+            0.0,
+            547.1,
+            158.6,
+            1027.3
+          ]
+        },
+        {
+          "id": 5,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3878,
+          "xywh_normalized": [
+            0.27139,
+            0.413345,
+            0.047312,
+            0.229554
+          ],
+          "xyxy_pixels": [
+            396.4,
+            358.3,
+            472.1,
+            633.7
+          ]
+        },
+        {
+          "id": 6,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.342,
+          "xywh_normalized": [
+            0.586902,
+            0.5,
+            0.826196,
+            1.0
+          ],
+          "xyxy_pixels": [
+            278.1,
+            0.0,
+            1600.0,
+            1200.0
+          ]
+        },
+        {
+          "id": 7,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3316,
+          "xywh_normalized": [
+            0.15573,
+            0.263536,
+            0.311459,
+            0.117929
+          ],
+          "xyxy_pixels": [
+            0.0,
+            245.5,
+            498.3,
+            387.0
+          ]
+        },
+        {
+          "id": 8,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3265,
+          "xywh_normalized": [
+            0.22571,
+            0.459091,
+            0.039148,
+            0.29532
+          ],
+          "xyxy_pixels": [
+            329.8,
+            373.7,
+            392.5,
+            728.1
+          ]
+        },
+        {
+          "id": 9,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2908,
+          "xywh_normalized": [
+            0.244807,
+            0.094563,
+            0.078551,
+            0.189126
+          ],
+          "xyxy_pixels": [
+            328.9,
+            0.0,
+            454.5,
+            227.0
+          ]
+        },
+        {
+          "id": 10,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2511,
+          "xywh_normalized": [
+            0.101297,
+            0.580455,
+            0.201507,
+            0.531497
+          ],
+          "xyxy_pixels": [
+            0.9,
+            377.6,
+            323.3,
+            1015.4
+          ]
+        },
+        {
+          "id": 11,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2442,
+          "xywh_normalized": [
+            0.048248,
+            0.579098,
+            0.096495,
+            0.23981
+          ],
+          "xyxy_pixels": [
+            0.0,
+            551.0,
+            154.4,
+            838.8
+          ]
+        },
+        {
+          "id": 12,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2282,
+          "xywh_normalized": [
+            0.364424,
+            0.050289,
+            0.123873,
+            0.100578
+          ],
+          "xyxy_pixels": [
+            484.0,
+            0.0,
+            682.2,
+            120.7
+          ]
+        }
+      ],
+      "max_confidence": 0.4858
+    },
+    {
+      "index": 26,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.27 AM (1).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.27 AM (1).jpeg",
+      "group": "session_oct10_burst_test",
+      "split": "test",
+      "width": 1600,
+      "height": 1200,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.27_AM_(1).jpg",
+      "rel_img_url": "images/test/WhatsApp_Image_2026-10-10_at_1.41.27_AM_(1).jpg",
+      "provisional_boxes_count": 4,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.4866,
+          "xywh_normalized": [
+            0.516235,
+            0.330657,
+            0.083308,
+            0.141629
+          ],
+          "xyxy_pixels": [
+            759.3,
+            311.8,
+            892.6,
+            481.8
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2547,
+          "xywh_normalized": [
+            0.953245,
+            0.109386,
+            0.092576,
+            0.176329
+          ],
+          "xyxy_pixels": [
+            1451.1,
+            25.5,
+            1599.3,
+            237.1
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2155,
+          "xywh_normalized": [
+            0.12061,
+            0.66961,
+            0.241127,
+            0.446694
+          ],
+          "xyxy_pixels": [
+            0.1,
+            535.5,
+            385.9,
+            1071.5
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2016,
+          "xywh_normalized": [
+            0.952505,
+            0.294515,
+            0.094237,
+            0.154068
+          ],
+          "xyxy_pixels": [
+            1448.6,
+            261.0,
+            1599.4,
+            445.9
+          ]
+        }
+      ],
+      "max_confidence": 0.4866
+    },
+    {
+      "index": 27,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.27 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.27 AM.jpeg",
+      "group": "session_oct10_burst_test",
+      "split": "test",
+      "width": 1600,
+      "height": 1200,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.27_AM.jpg",
+      "rel_img_url": "images/test/WhatsApp_Image_2026-10-10_at_1.41.27_AM.jpg",
+      "provisional_boxes_count": 61,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.6251,
+          "xywh_normalized": [
+            0.12137,
+            0.327475,
+            0.077753,
+            0.106291
+          ],
+          "xyxy_pixels": [
+            132.0,
+            329.2,
+            256.4,
+            456.7
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.5099,
+          "xywh_normalized": [
+            0.83583,
+            0.835189,
+            0.057548,
+            0.117697
+          ],
+          "xyxy_pixels": [
+            1291.3,
+            931.6,
+            1383.4,
+            1072.8
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.5075,
+          "xywh_normalized": [
+            0.672269,
+            0.68465,
+            0.06248,
+            0.091514
+          ],
+          "xyxy_pixels": [
+            1025.6,
+            766.7,
+            1125.6,
+            876.5
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.4829,
+          "xywh_normalized": [
+            0.162347,
+            0.502098,
+            0.125868,
+            0.115531
+          ],
+          "xyxy_pixels": [
+            159.1,
+            533.2,
+            360.4,
+            671.8
+          ]
+        },
+        {
+          "id": 5,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.453,
+          "xywh_normalized": [
+            0.101052,
+            0.628281,
+            0.140477,
+            0.084697
+          ],
+          "xyxy_pixels": [
+            49.3,
+            703.1,
+            274.1,
+            804.8
+          ]
+        },
+        {
+          "id": 6,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.447,
+          "xywh_normalized": [
+            0.701288,
+            0.41626,
+            0.066261,
+            0.092136
+          ],
+          "xyxy_pixels": [
+            1069.1,
+            444.2,
+            1175.1,
+            554.8
+          ]
+        },
+        {
+          "id": 7,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.4406,
+          "xywh_normalized": [
+            0.342033,
+            0.690745,
+            0.08811,
+            0.071362
+          ],
+          "xyxy_pixels": [
+            476.8,
+            786.1,
+            617.7,
+            871.7
+          ]
+        },
+        {
+          "id": 8,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.4292,
+          "xywh_normalized": [
+            0.079646,
+            0.5177,
+            0.133649,
+            0.122234
+          ],
+          "xyxy_pixels": [
+            20.5,
+            547.9,
+            234.4,
+            694.6
+          ]
+        },
+        {
+          "id": 9,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3815,
+          "xywh_normalized": [
+            0.78111,
+            0.680651,
+            0.082637,
+            0.12135
+          ],
+          "xyxy_pixels": [
+            1183.7,
+            744.0,
+            1315.9,
+            889.6
+          ]
+        },
+        {
+          "id": 10,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.375,
+          "xywh_normalized": [
+            0.977282,
+            0.782261,
+            0.045031,
+            0.061983
+          ],
+          "xyxy_pixels": [
+            1527.6,
+            901.5,
+            1599.7,
+            975.9
+          ]
+        },
+        {
+          "id": 11,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3497,
+          "xywh_normalized": [
+            0.104014,
+            0.513973,
+            0.182175,
+            0.126512
+          ],
+          "xyxy_pixels": [
+            20.7,
+            540.9,
+            312.2,
+            692.7
+          ]
+        },
+        {
+          "id": 12,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3496,
+          "xywh_normalized": [
+            0.021398,
+            0.275454,
+            0.042609,
+            0.036409
+          ],
+          "xyxy_pixels": [
+            0.1,
+            308.7,
+            68.3,
+            352.4
+          ]
+        },
+        {
+          "id": 13,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3495,
+          "xywh_normalized": [
+            0.921906,
+            0.774141,
+            0.079933,
+            0.109369
+          ],
+          "xyxy_pixels": [
+            1411.1,
+            863.3,
+            1539.0,
+            994.6
+          ]
+        },
+        {
+          "id": 14,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3444,
+          "xywh_normalized": [
+            0.846351,
+            0.719197,
+            0.066541,
+            0.119438
+          ],
+          "xyxy_pixels": [
+            1300.9,
+            791.4,
+            1407.4,
+            934.7
+          ]
+        },
+        {
+          "id": 15,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3415,
+          "xywh_normalized": [
+            0.125682,
+            0.635532,
+            0.094876,
+            0.069213
+          ],
+          "xyxy_pixels": [
+            125.2,
+            721.1,
+            277.0,
+            804.2
+          ]
+        },
+        {
+          "id": 16,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3308,
+          "xywh_normalized": [
+            0.187785,
+            0.689127,
+            0.057813,
+            0.08938
+          ],
+          "xyxy_pixels": [
+            254.2,
+            773.3,
+            346.7,
+            880.6
+          ]
+        },
+        {
+          "id": 17,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3293,
+          "xywh_normalized": [
+            0.902429,
+            0.46462,
+            0.059407,
+            0.072988
+          ],
+          "xyxy_pixels": [
+            1396.4,
+            513.8,
+            1491.4,
+            601.3
+          ]
+        },
+        {
+          "id": 18,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3238,
+          "xywh_normalized": [
+            0.718872,
+            0.609803,
+            0.072757,
+            0.110479
+          ],
+          "xyxy_pixels": [
+            1092.0,
+            665.5,
+            1208.4,
+            798.1
+          ]
+        },
+        {
+          "id": 19,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3231,
+          "xywh_normalized": [
+            0.685589,
+            0.761891,
+            0.061967,
+            0.086827
+          ],
+          "xyxy_pixels": [
+            1047.4,
+            862.2,
+            1146.5,
+            966.4
+          ]
+        },
+        {
+          "id": 20,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3228,
+          "xywh_normalized": [
+            0.773448,
+            0.813512,
+            0.060341,
+            0.106988
+          ],
+          "xyxy_pixels": [
+            1189.2,
+            912.0,
+            1285.8,
+            1040.4
+          ]
+        },
+        {
+          "id": 21,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3224,
+          "xywh_normalized": [
+            0.044656,
+            0.426975,
+            0.089287,
+            0.075872
+          ],
+          "xyxy_pixels": [
+            0.0,
+            466.8,
+            142.9,
+            557.9
+          ]
+        },
+        {
+          "id": 22,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3206,
+          "xywh_normalized": [
+            0.253481,
+            0.289374,
+            0.088076,
+            0.079581
+          ],
+          "xyxy_pixels": [
+            335.1,
+            299.5,
+            476.0,
+            395.0
+          ]
+        },
+        {
+          "id": 23,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3152,
+          "xywh_normalized": [
+            0.020694,
+            0.502409,
+            0.041185,
+            0.10779
+          ],
+          "xyxy_pixels": [
+            0.2,
+            538.2,
+            66.1,
+            667.6
+          ]
+        },
+        {
+          "id": 24,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3039,
+          "xywh_normalized": [
+            0.073524,
+            0.756449,
+            0.147049,
+            0.158122
+          ],
+          "xyxy_pixels": [
+            0.0,
+            812.9,
+            235.3,
+            1002.6
+          ]
+        },
+        {
+          "id": 25,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3021,
+          "xywh_normalized": [
+            0.214718,
+            0.236029,
+            0.059822,
+            0.053951
+          ],
+          "xyxy_pixels": [
+            295.7,
+            250.9,
+            391.4,
+            315.6
+          ]
+        },
+        {
+          "id": 26,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3021,
+          "xywh_normalized": [
+            0.746234,
+            0.338257,
+            0.106017,
+            0.086789
+          ],
+          "xyxy_pixels": [
+            1109.2,
+            353.8,
+            1278.8,
+            458.0
+          ]
+        },
+        {
+          "id": 27,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3015,
+          "xywh_normalized": [
+            0.356623,
+            0.430839,
+            0.08323,
+            0.09258
+          ],
+          "xyxy_pixels": [
+            504.0,
+            461.5,
+            637.2,
+            572.6
+          ]
+        },
+        {
+          "id": 28,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2959,
+          "xywh_normalized": [
+            0.513627,
+            0.481389,
+            0.972747,
+            0.961897
+          ],
+          "xyxy_pixels": [
+            43.6,
+            0.5,
+            1600.0,
+            1154.8
+          ]
+        },
+        {
+          "id": 29,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2905,
+          "xywh_normalized": [
+            0.510376,
+            0.719358,
+            0.073738,
+            0.090736
+          ],
+          "xyxy_pixels": [
+            757.6,
+            808.8,
+            875.6,
+            917.7
+          ]
+        },
+        {
+          "id": 30,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2851,
+          "xywh_normalized": [
+            0.048411,
+            0.627444,
+            0.086692,
+            0.096781
+          ],
+          "xyxy_pixels": [
+            8.1,
+            694.9,
+            146.8,
+            811.0
+          ]
+        },
+        {
+          "id": 31,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2805,
+          "xywh_normalized": [
+            0.112707,
+            0.701706,
+            0.088831,
+            0.072316
+          ],
+          "xyxy_pixels": [
+            109.3,
+            798.7,
+            251.4,
+            885.4
+          ]
+        },
+        {
+          "id": 32,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2799,
+          "xywh_normalized": [
+            0.159123,
+            0.567003,
+            0.027408,
+            0.051729
+          ],
+          "xyxy_pixels": [
+            232.7,
+            649.4,
+            276.5,
+            711.4
+          ]
+        },
+        {
+          "id": 33,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.271,
+          "xywh_normalized": [
+            0.971235,
+            0.53445,
+            0.057134,
+            0.128521
+          ],
+          "xyxy_pixels": [
+            1508.3,
+            564.2,
+            1599.7,
+            718.5
+          ]
+        },
+        {
+          "id": 34,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2708,
+          "xywh_normalized": [
+            0.668887,
+            0.547585,
+            0.109702,
+            0.173434
+          ],
+          "xyxy_pixels": [
+            982.5,
+            553.0,
+            1158.0,
+            761.2
+          ]
+        },
+        {
+          "id": 35,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.265,
+          "xywh_normalized": [
+            0.674515,
+            0.872186,
+            0.050942,
+            0.077533
+          ],
+          "xyxy_pixels": [
+            1038.5,
+            1000.1,
+            1120.0,
+            1093.1
+          ]
+        },
+        {
+          "id": 36,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2647,
+          "xywh_normalized": [
+            0.775109,
+            0.453524,
+            0.111144,
+            0.144977
+          ],
+          "xyxy_pixels": [
+            1151.3,
+            457.2,
+            1329.1,
+            631.2
+          ]
+        },
+        {
+          "id": 37,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.263,
+          "xywh_normalized": [
+            0.076214,
+            0.921541,
+            0.055662,
+            0.046882
+          ],
+          "xyxy_pixels": [
+            77.4,
+            1077.7,
+            166.5,
+            1134.0
+          ]
+        },
+        {
+          "id": 38,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.26,
+          "xywh_normalized": [
+            0.072946,
+            0.759101,
+            0.144218,
+            0.157562
+          ],
+          "xyxy_pixels": [
+            1.3,
+            816.4,
+            232.1,
+            1005.5
+          ]
+        },
+        {
+          "id": 39,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2582,
+          "xywh_normalized": [
+            0.025121,
+            0.788365,
+            0.049628,
+            0.095086
+          ],
+          "xyxy_pixels": [
+            0.5,
+            889.0,
+            79.9,
+            1003.1
+          ]
+        },
+        {
+          "id": 40,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2574,
+          "xywh_normalized": [
+            0.192462,
+            0.906776,
+            0.033362,
+            0.043577
+          ],
+          "xyxy_pixels": [
+            281.2,
+            1062.0,
+            334.6,
+            1114.3
+          ]
+        },
+        {
+          "id": 41,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.257,
+          "xywh_normalized": [
+            0.599677,
+            0.654548,
+            0.086498,
+            0.184349
+          ],
+          "xyxy_pixels": [
+            890.3,
+            674.8,
+            1028.7,
+            896.1
+          ]
+        },
+        {
+          "id": 42,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2503,
+          "xywh_normalized": [
+            0.206161,
+            0.737754,
+            0.089145,
+            0.091154
+          ],
+          "xyxy_pixels": [
+            258.5,
+            830.6,
+            401.2,
+            940.0
+          ]
+        },
+        {
+          "id": 43,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2501,
+          "xywh_normalized": [
+            0.510368,
+            0.87959,
+            0.091961,
+            0.081172
+          ],
+          "xyxy_pixels": [
+            743.0,
+            1006.8,
+            890.2,
+            1104.2
+          ]
+        },
+        {
+          "id": 44,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2392,
+          "xywh_normalized": [
+            0.025258,
+            0.788226,
+            0.050515,
+            0.094648
+          ],
+          "xyxy_pixels": [
+            0.0,
+            889.1,
+            80.8,
+            1002.7
+          ]
+        },
+        {
+          "id": 45,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2368,
+          "xywh_normalized": [
+            0.944253,
+            0.148254,
+            0.111042,
+            0.288943
+          ],
+          "xyxy_pixels": [
+            1422.0,
+            4.5,
+            1599.6,
+            351.3
+          ]
+        },
+        {
+          "id": 46,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2367,
+          "xywh_normalized": [
+            0.025271,
+            0.789249,
+            0.050542,
+            0.094688
+          ],
+          "xyxy_pixels": [
+            0.0,
+            890.3,
+            80.9,
+            1003.9
+          ]
+        },
+        {
+          "id": 47,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2352,
+          "xywh_normalized": [
+            0.618135,
+            0.840795,
+            0.066622,
+            0.110563
+          ],
+          "xyxy_pixels": [
+            935.7,
+            942.6,
+            1042.3,
+            1075.3
+          ]
+        },
+        {
+          "id": 48,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2351,
+          "xywh_normalized": [
+            0.303454,
+            0.642679,
+            0.073063,
+            0.105567
+          ],
+          "xyxy_pixels": [
+            427.1,
+            707.9,
+            544.0,
+            834.6
+          ]
+        },
+        {
+          "id": 49,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2341,
+          "xywh_normalized": [
+            0.535053,
+            0.545341,
+            0.091676,
+            0.10461
+          ],
+          "xyxy_pixels": [
+            782.7,
+            591.6,
+            929.4,
+            717.2
+          ]
+        },
+        {
+          "id": 50,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2315,
+          "xywh_normalized": [
+            0.113691,
+            0.703153,
+            0.09108,
+            0.072225
+          ],
+          "xyxy_pixels": [
+            109.0,
+            800.4,
+            254.8,
+            887.1
+          ]
+        },
+        {
+          "id": 51,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2314,
+          "xywh_normalized": [
+            0.067665,
+            0.92308,
+            0.039826,
+            0.041934
+          ],
+          "xyxy_pixels": [
+            76.4,
+            1082.5,
+            140.1,
+            1132.9
+          ]
+        },
+        {
+          "id": 52,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2282,
+          "xywh_normalized": [
+            0.034035,
+            0.721263,
+            0.068069,
+            0.088643
+          ],
+          "xyxy_pixels": [
+            0.0,
+            812.3,
+            108.9,
+            918.7
+          ]
+        },
+        {
+          "id": 53,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2266,
+          "xywh_normalized": [
+            0.772158,
+            0.822797,
+            0.059648,
+            0.087401
+          ],
+          "xyxy_pixels": [
+            1187.7,
+            934.9,
+            1283.2,
+            1039.8
+          ]
+        },
+        {
+          "id": 54,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2252,
+          "xywh_normalized": [
+            0.926399,
+            0.62287,
+            0.089149,
+            0.103745
+          ],
+          "xyxy_pixels": [
+            1410.9,
+            685.2,
+            1553.6,
+            809.7
+          ]
+        },
+        {
+          "id": 55,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.225,
+          "xywh_normalized": [
+            0.546422,
+            0.393788,
+            0.101875,
+            0.099768
+          ],
+          "xyxy_pixels": [
+            792.8,
+            412.7,
+            955.8,
+            532.4
+          ]
+        },
+        {
+          "id": 56,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2225,
+          "xywh_normalized": [
+            0.012317,
+            0.574014,
+            0.024345,
+            0.056408
+          ],
+          "xyxy_pixels": [
+            0.2,
+            655.0,
+            39.2,
+            722.7
+          ]
+        },
+        {
+          "id": 57,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2225,
+          "xywh_normalized": [
+            0.348,
+            0.584189,
+            0.078718,
+            0.099988
+          ],
+          "xyxy_pixels": [
+            493.8,
+            641.0,
+            619.8,
+            761.0
+          ]
+        },
+        {
+          "id": 58,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2109,
+          "xywh_normalized": [
+            0.010878,
+            0.207569,
+            0.021396,
+            0.058047
+          ],
+          "xyxy_pixels": [
+            0.3,
+            214.3,
+            34.5,
+            283.9
+          ]
+        },
+        {
+          "id": 59,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.208,
+          "xywh_normalized": [
+            0.36038,
+            0.793522,
+            0.090859,
+            0.132184
+          ],
+          "xyxy_pixels": [
+            503.9,
+            872.9,
+            649.3,
+            1031.5
+          ]
+        },
+        {
+          "id": 60,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2063,
+          "xywh_normalized": [
+            0.930564,
+            0.912688,
+            0.137879,
+            0.123101
+          ],
+          "xyxy_pixels": [
+            1378.6,
+            1021.4,
+            1599.2,
+            1169.1
+          ]
+        },
+        {
+          "id": 61,
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2015,
+          "xywh_normalized": [
+            0.428583,
+            0.81069,
+            0.041506,
+            0.056482
+          ],
+          "xyxy_pixels": [
+            652.5,
+            938.9,
+            718.9,
+            1006.7
+          ]
+        }
+      ],
+      "max_confidence": 0.6251
+    },
+    {
+      "index": 28,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.28 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.28 AM.jpeg",
+      "group": "session_oct10_burst_test",
+      "split": "test",
+      "width": 1600,
+      "height": 1200,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.28_AM.jpg",
+      "rel_img_url": "images/test/WhatsApp_Image_2026-10-10_at_1.41.28_AM.jpg",
+      "provisional_boxes_count": 7,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.4107,
+          "xywh_normalized": [
+            0.437199,
+            0.737685,
+            0.094236,
+            0.092342
+          ],
+          "xyxy_pixels": [
+            624.1,
+            829.8,
+            774.9,
+            940.6
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3353,
+          "xywh_normalized": [
+            0.501996,
+            0.813843,
+            0.076524,
+            0.0956
+          ],
+          "xyxy_pixels": [
+            742.0,
+            919.3,
+            864.4,
+            1034.0
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2688,
+          "xywh_normalized": [
+            0.526408,
+            0.5,
+            0.947183,
+            1.0
+          ],
+          "xyxy_pixels": [
+            84.5,
+            0.0,
+            1600.0,
+            1200.0
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2646,
+          "xywh_normalized": [
+            0.066552,
+            0.345948,
+            0.13287,
+            0.691896
+          ],
+          "xyxy_pixels": [
+            0.2,
+            0.0,
+            212.8,
+            830.3
+          ]
+        },
+        {
+          "id": 5,
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2501,
+          "xywh_normalized": [
+            0.246117,
+            0.129567,
+            0.161453,
+            0.247727
+          ],
+          "xyxy_pixels": [
+            264.6,
+            6.8,
+            522.9,
+            304.1
+          ]
+        },
+        {
+          "id": 6,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2447,
+          "xywh_normalized": [
+            0.161354,
+            0.951224,
+            0.070135,
+            0.091624
+          ],
+          "xyxy_pixels": [
+            202.1,
+            1086.5,
+            314.3,
+            1196.4
+          ]
+        },
+        {
+          "id": 7,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2055,
+          "xywh_normalized": [
+            0.621892,
+            0.941026,
+            0.086034,
+            0.090074
+          ],
+          "xyxy_pixels": [
+            926.2,
+            1075.2,
+            1063.9,
+            1183.3
+          ]
+        }
+      ],
+      "max_confidence": 0.4107
+    },
+    {
+      "index": 29,
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.30 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.30 AM.jpeg",
+      "group": "session_oct10_burst_test",
+      "split": "test",
+      "width": 1600,
+      "height": 1200,
+      "out_img_name": "WhatsApp_Image_2026-10-10_at_1.41.30_AM.jpg",
+      "rel_img_url": "images/test/WhatsApp_Image_2026-10-10_at_1.41.30_AM.jpg",
+      "provisional_boxes_count": 1,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2013,
+          "xywh_normalized": [
+            0.451868,
+            0.878802,
+            0.08558,
+            0.060209
+          ],
+          "xyxy_pixels": [
+            654.5,
+            1018.4,
+            791.5,
+            1090.7
+          ]
+        }
+      ],
+      "max_confidence": 0.2013
+    },
+    {
+      "index": 30,
+      "filename": "images.jpg",
+      "rel_path": "images.jpg",
+      "group": "session_web_image",
+      "split": "val",
+      "width": 392,
+      "height": 280,
+      "out_img_name": "images.jpg",
+      "rel_img_url": "images/val/images.jpg",
+      "provisional_boxes_count": 4,
+      "provisional_boxes": [
+        {
+          "id": 1,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.3616,
+          "xywh_normalized": [
+            0.094761,
+            0.308842,
+            0.095221,
+            0.367979
+          ],
+          "xyxy_pixels": [
+            18.5,
+            35.0,
+            55.8,
+            138.0
+          ]
+        },
+        {
+          "id": 2,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.3569,
+          "xywh_normalized": [
+            0.861939,
+            0.595447,
+            0.275409,
+            0.284282
+          ],
+          "xyxy_pixels": [
+            283.9,
+            126.9,
+            391.9,
+            206.5
+          ]
+        },
+        {
+          "id": 3,
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3417,
+          "xywh_normalized": [
+            0.547966,
+            0.126318,
+            0.087169,
+            0.238384
+          ],
+          "xyxy_pixels": [
+            197.7,
+            2.0,
+            231.9,
+            68.7
+          ]
+        },
+        {
+          "id": 4,
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2456,
+          "xywh_normalized": [
+            0.894024,
+            0.40778,
+            0.211951,
+            0.122044
+          ],
+          "xyxy_pixels": [
+            308.9,
+            97.1,
+            392.0,
+            131.3
+          ]
+        }
+      ],
+      "max_confidence": 0.3616
+    }
+  ]
+}

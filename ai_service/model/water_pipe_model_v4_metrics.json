@@ -1,0 +1,195 @@
+{
+  "test_metrics": {
+    "accuracy": 0.8667,
+    "macro_f1": 0.8611,
+    "confusion_matrix": {
+      "TN": 5,
+      "FP": 0,
+      "FN": 2,
+      "TP": 8,
+      "matrix_2x2": [
+        [
+          5,
+          0
+        ],
+        [
+          2,
+          8
+        ]
+      ]
+    },
+    "leak_metrics": {
+      "precision": 1.0,
+      "recall": 0.8,
+      "f1": 0.8889,
+      "support": 10
+    },
+    "normal_metrics": {
+      "precision": 0.7143,
+      "recall": 1.0,
+      "f1": 0.8333,
+      "false_positive_rate": 0.0,
+      "support": 5
+    }
+  },
+  "subgroups": {
+    "thin_spray_leaks": {
+      "total": 1,
+      "correct": 0,
+      "accuracy": 0.0,
+      "samples": [
+        {
+          "filename": "WhatsApp Image 2026-10-09 at 12.19.20 AM (1).jpeg",
+          "predicted": 0,
+          "correct": false
+        }
+      ]
+    },
+    "wide_angle_pipe_photographs": {
+      "total": 1,
+      "correct": 0,
+      "accuracy": 0.0,
+      "samples": [
+        {
+          "filename": "WhatsApp Image 2026-10-09 at 12.20.51 AM.jpeg",
+          "predicted": 0,
+          "correct": false
+        }
+      ]
+    },
+    "rusted_normal_pipes": {
+      "total": 1,
+      "correct": 1,
+      "accuracy": 1.0,
+      "samples": [
+        {
+          "filename": "blue-industrial-water-pipe-system-with-visible-rust-near-a-corrugated-metal-wall-in-an-outdoor-setting-photo.jpg",
+          "predicted": 0,
+          "correct": true
+        }
+      ]
+    },
+    "obvious_large_leaks": {
+      "total": 3,
+      "correct": 3,
+      "accuracy": 1.0,
+      "samples": [
+        {
+          "filename": "broken-water-pipe-leaking-out-soil-underground-leak-274565016.webp",
+          "predicted": 1,
+          "correct": true
+        },
+        {
+          "filename": "Screenshot 2026-10-09 003238.png",
+          "predicted": 1,
+          "correct": true
+        },
+        {
+          "filename": "sentinelassam-english_2025-12-03_mru07lxm_Water-pipeline-leakage-at-Silpukhuri.avif",
+          "predicted": 1,
+          "correct": true
+        }
+      ]
+    }
+  },
+  "baseline_test_comparison": {
+    "accuracy": 0.8667,
+    "macro_f1": 0.8611,
+    "confusion_matrix": {
+      "TN": 5,
+      "FP": 0,
+      "FN": 2,
+      "TP": 8,
+      "matrix_2x2": [
+        [
+          5,
+          0
+        ],
+        [
+          2,
+          8
+        ]
+      ]
+    },
+    "leak_metrics": {
+      "precision": 1.0,
+      "recall": 0.8,
+      "f1": 0.8889,
+      "support": 10
+    },
+    "normal_metrics": {
+      "precision": 0.7143,
+      "recall": 1.0,
+      "f1": 0.8333,
+      "false_positive_rate": 0.0,
+      "support": 5
+    }
+  },
+  "v2_test_comparison": {
+    "accuracy": 0.8667,
+    "macro_f1": 0.8611,
+    "confusion_matrix": {
+      "TN": 5,
+      "FP": 0,
+      "FN": 2,
+      "TP": 8,
+      "matrix_2x2": [
+        [
+          5,
+          0
+        ],
+        [
+          2,
+          8
+        ]
+      ]
+    },
+    "leak_metrics": {
+      "precision": 1.0,
+      "recall": 0.8,
+      "f1": 0.8889,
+      "support": 10
+    },
+    "normal_metrics": {
+      "precision": 0.7143,
+      "recall": 1.0,
+      "f1": 0.8333,
+      "false_positive_rate": 0.0,
+      "support": 5
+    }
+  },
+  "v3_test_comparison": {
+    "accuracy": 0.8,
+    "macro_f1": 0.7847,
+    "confusion_matrix": {
+      "TN": 4,
+      "FP": 1,
+      "FN": 2,
+      "TP": 8,
+      "matrix_2x2": [
+        [
+          4,
+          1
+        ],
+        [
+          2,
+          8
+        ]
+      ]
+    },
+    "leak_metrics": {
+      "precision": 0.8889,
+      "recall": 0.8,
+      "f1": 0.8421,
+      "support": 10
+    },
+    "normal_metrics": {
+      "precision": 0.6667,
+      "recall": 0.8,
+      "f1": 0.7273,
+      "false_positive_rate": 0.2,
+      "support": 5
+    }
+  },
+  "cpu_inference_latency_ms": 7.54
+}

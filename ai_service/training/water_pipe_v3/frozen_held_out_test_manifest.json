@@ -1,0 +1,122 @@
+[
+  {
+    "filename": "blue-industrial-water-pipe-system-with-visible-rust-near-a-corrugated-metal-wall-in-an-outdoor-setting-photo.jpg",
+    "path": "D:\\NAGARSETU\\normal pipe images\\blue-industrial-water-pipe-system-with-visible-rust-near-a-corrugated-metal-wall-in-an-outdoor-setting-photo.jpg",
+    "label": 0,
+    "class_name": "normal_pipe",
+    "group": "normal_standalone_blue-industrial-water-pipe-system-with-visible-rust-near-a-corrugated-metal-wall-in-an-outdoor-setting-photo.jpg",
+    "sha256": "1bb822961d54e40f95e0585b1933951422c3b0f3913497c3a55f81903b131fa5"
+  },
+  {
+    "filename": "WhatsApp Image 2026-10-09 at 12.20.51 AM.jpeg",
+    "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.20.51 AM.jpeg",
+    "label": 1,
+    "class_name": "damaged_or_leaking_pipe",
+    "group": "leak_whatsapp_12_20",
+    "sha256": "ae57b902075cd7821acc51f4df4f9972f2ec4a8853db82d0c19119d1e7aa995f"
+  },
+  {
+    "filename": "WhatsApp Image 2026-10-09 at 12.19.20 AM (1).jpeg",
+    "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.19.20 AM (1).jpeg",
+    "label": 1,
+    "class_name": "damaged_or_leaking_pipe",
+    "group": "leak_whatsapp_12_19_20",
+    "sha256": "c43649a751a0e6fd46397af0c520b4658fe4c97bb5c796958c9987347a765805"
+  },
+  {
+    "filename": "istockphoto-478577114-612x612.jpg",
+    "path": "D:\\NAGARSETU\\normal pipe images\\istockphoto-478577114-612x612.jpg",
+    "label": 0,
+    "class_name": "normal_pipe",
+    "group": "normal_istock",
+    "sha256": "4ed08febe29b21c5d93b3d0bb0ce6531889f00f49b83d7e2ee29dba958c97ff0"
+  },
+  {
+    "filename": "WhatsApp Image 2026-10-09 at 12.20.50 AM (1).jpeg",
+    "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.20.50 AM (1).jpeg",
+    "label": 1,
+    "class_name": "damaged_or_leaking_pipe",
+    "group": "leak_whatsapp_12_20",
+    "sha256": "5ac5d5dfd57d9f6269c5943360d662996dc9f69cecae5ac275bc23cf8290f453"
+  },
+  {
+    "filename": "istockphoto-1410643227-612x612.jpg",
+    "path": "D:\\NAGARSETU\\normal pipe images\\istockphoto-1410643227-612x612.jpg",
+    "label": 0,
+    "class_name": "normal_pipe",
+    "group": "normal_istock",
+    "sha256": "7ab2c8e93cdb45c5c6be61054ad9e10dd17e530a70365739c916558cfd2bae18"
+  },
+  {
+    "filename": "istockphoto-1275396599-612x612.jpg",
+    "path": "D:\\NAGARSETU\\normal pipe images\\istockphoto-1275396599-612x612.jpg",
+    "label": 0,
+    "class_name": "normal_pipe",
+    "group": "normal_istock",
+    "sha256": "4b9ab730e77c8379fd9631cfa3fa42e61a74508bb5f601110da35d0a0248741c"
+  },
+  {
+    "filename": "WhatsApp Image 2026-10-09 at 12.19.20 AM (2).jpeg",
+    "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.19.20 AM (2).jpeg",
+    "label": 1,
+    "class_name": "damaged_or_leaking_pipe",
+    "group": "leak_whatsapp_12_19_20",
+    "sha256": "126a05ca7e428752634c6b35e2162b8b20a301d342bd0b448168be9303838b61"
+  },
+  {
+    "filename": "broken-water-pipe-leaking-out-soil-underground-leak-274565016.webp",
+    "path": "D:\\NAGARSETU\\leaking pipes\\broken-water-pipe-leaking-out-soil-underground-leak-274565016.webp",
+    "label": 1,
+    "class_name": "damaged_or_leaking_pipe",
+    "group": "leak_standalone_broken-water-pipe-leaking-out-soil-underground-leak-274565016.webp",
+    "sha256": "1d3a0d32597307059dc5a7daf8f48c07a47c5b1fda99f88084062ea9f03378aa"
+  },
+  {
+    "filename": "WhatsApp Image 2026-10-09 at 12.20.49 AM.jpeg",
+    "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.20.49 AM.jpeg",
+    "label": 1,
+    "class_name": "damaged_or_leaking_pipe",
+    "group": "leak_whatsapp_12_20",
+    "sha256": "28b5f76f82cf75b93a1d1645261d20e4743703589a645eb8d0e4b4f93c60f8f2"
+  },
+  {
+    "filename": "WhatsApp Image 2026-10-09 at 12.19.20 AM.jpeg",
+    "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.19.20 AM.jpeg",
+    "label": 1,
+    "class_name": "damaged_or_leaking_pipe",
+    "group": "leak_whatsapp_12_19_20",
+    "sha256": "999187644c00028f6dcfecbaff54cebde1a3b4853f9827ac972c201b68bf8d97"
+  },
+  {
+    "filename": "sentinelassam-english_2025-12-03_mru07lxm_Water-pipeline-leakage-at-Silpukhuri.avif",
+    "path": "D:\\NAGARSETU\\leaking pipes\\sentinelassam-english_2025-12-03_mru07lxm_Water-pipeline-leakage-at-Silpukhuri.avif",
+    "label": 1,
+    "class_name": "damaged_or_leaking_pipe",
+    "group": "leak_standalone_sentinelassam-english_2025-12-03_mru07lxm_Water-pipeline-leakage-at-Silpukhuri.avif",
+    "sha256": "3a1ccb40b727c91ff59c7e8ca3e812277587e2f305bd9ded060588da2577949b"
+  },
+  {
+    "filename": "Screenshot 2026-10-09 003238.png",
+    "path": "D:\\NAGARSETU\\leaking pipes\\Screenshot 2026-10-09 003238.png",
+    "label": 1,
+    "class_name": "damaged_or_leaking_pipe",
+    "group": "leak_standalone_Screenshot 2026-10-09 003238.png",
+    "sha256": "989fcaa53f793dd099320809bdbd989405e3b0e6e25a070eb7b1f06f4dd8f13e"
+  },
+  {
+    "filename": "WhatsApp Image 2026-10-09 at 12.20.50 AM.jpeg",
+    "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.20.50 AM.jpeg",
+    "label": 1,
+    "class_name": "damaged_or_leaking_pipe",
+    "group": "leak_whatsapp_12_20",
+    "sha256": "74c8955a15d9d4004964ddf6460002f8a556c995bbaf70c188d4ee5fd9f48db8"
+  },
+  {
+    "filename": "istockphoto-157590055-612x612.jpg",
+    "path": "D:\\NAGARSETU\\normal pipe images\\istockphoto-157590055-612x612.jpg",
+    "label": 0,
+    "class_name": "normal_pipe",
+    "group": "normal_istock",
+    "sha256": "1e2bb058b5c8eb3152fea938758dee9d7822bb69dbe448989fc2f0d5650abeb5"
+  }
+]

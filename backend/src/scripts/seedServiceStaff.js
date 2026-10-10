@@ -124,14 +124,12 @@ async function seedServiceStaff() {
 
   // Summary per department verification
   console.log('\n--- VERIFICATION OF SERVICE STAFF COUNTS PER DEPARTMENT ---');
-  for (let d = 1; d <= 7; d++) {
+  for (const d of (deptsRes.rows || [])) {
     const res = await query(
-      `SELECT COUNT(*) as count FROM users WHERE (role = 'service_staff' OR role = 'staff') AND department_id = $1 AND LOWER(COALESCE(status, 'active')) = 'active'`,
-      [d]
+      `SELECT COUNT(*) as count FROM users WHERE (role = 'service_staff' OR role = 'staff') AND (department_id = $1 OR CAST(department_id AS TEXT) = $1) AND LOWER(COALESCE(status, 'active')) = 'active'`,
+      [d.id]
     );
-    const deptNameRes = await query(`SELECT name FROM departments WHERE id = $1`, [d]);
-    const deptName = deptNameRes.rows[0]?.name || `Dept ${d}`;
-    console.log(`Dept ${d} (${deptName}): ${res.rows[0].count} Active Staff`);
+    console.log(`${d.code || 'Dept'} (${d.name}): ${res.rows[0]?.count || 0} Active Staff`);
   }
 
   console.log(`\nSeeding completed cleanly! Created: ${createdCount}, Updated: ${updatedCount}`);

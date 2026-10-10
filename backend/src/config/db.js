@@ -110,9 +110,12 @@ async function createTablesPostgres() {
   try {
     await pgPool.query(`
       CREATE TABLE IF NOT EXISTS departments (
-        id SERIAL PRIMARY KEY,
-        name TEXT NOT NULL UNIQUE,
+        id TEXT PRIMARY KEY,
+        code TEXT UNIQUE NOT NULL,
+        name TEXT NOT NULL,
         description TEXT,
+        status TEXT DEFAULT 'active',
+        registry_id INTEGER,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
@@ -201,6 +204,11 @@ async function createTablesPostgres() {
     await pgPool.query(`ALTER TABLE complaints ADD COLUMN IF NOT EXISTS additional_notes TEXT;`).catch(() => {});
     await pgPool.query(`ALTER TABLE complaints ADD COLUMN IF NOT EXISTS resolved_at TIMESTAMP;`).catch(() => {});
     await pgPool.query(`ALTER TABLE complaints ADD COLUMN IF NOT EXISTS primary_image_hash TEXT;`).catch(() => {});
+    await pgPool.query(`ALTER TABLE complaints ADD COLUMN IF NOT EXISTS ai_model TEXT DEFAULT 'civiclens-yolov8';`).catch(() => {});
+    await pgPool.query(`ALTER TABLE complaints ADD COLUMN IF NOT EXISTS ai_confidence REAL;`).catch(() => {});
+    await pgPool.query(`ALTER TABLE complaints ADD COLUMN IF NOT EXISTS ai_status TEXT;`).catch(() => {});
+    await pgPool.query(`ALTER TABLE complaints ADD COLUMN IF NOT EXISTS ai_detected_class TEXT;`).catch(() => {});
+    await pgPool.query(`ALTER TABLE complaints ADD COLUMN IF NOT EXISTS ai_reason TEXT;`).catch(() => {});
 
     await pgPool.query(`
       CREATE TABLE IF NOT EXISTS assignments (
@@ -282,6 +290,57 @@ async function createTablesPostgres() {
         read_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         UNIQUE(announcement_id, user_id)
       );
+    `);
+
+    await pgPool.query(`
+      CREATE TABLE IF NOT EXISTS recurring_issue_links (
+        id SERIAL PRIMARY KEY,
+        current_complaint_id INTEGER NOT NULL REFERENCES complaints(id) ON DELETE CASCADE,
+        previous_complaint_id INTEGER NOT NULL REFERENCES complaints(id) ON DELETE CASCADE,
+        status TEXT NOT NULL DEFAULT 'Potential',
+        distance_meters NUMERIC,
+        department_id TEXT,
+        detected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        reviewed_by TEXT,
+        reviewed_at TIMESTAMP,
+        review_notes TEXT,
+        UNIQUE(current_complaint_id, previous_complaint_id)
+      );
+      CREATE INDEX IF NOT EXISTS idx_recurring_current ON recurring_issue_links(current_complaint_id);
+      CREATE INDEX IF NOT EXISTS idx_recurring_previous ON recurring_issue_links(previous_complaint_id);
+
+      CREATE TABLE IF NOT EXISTS super_admin_audit_logs (
+        id SERIAL PRIMARY KEY,
+        admin_id TEXT NOT NULL,
+        admin_email TEXT NOT NULL,
+        action TEXT NOT NULL,
+        target_type TEXT NOT NULL,
+        target_id TEXT,
+        changes_json TEXT,
+        reason TEXT,
+        ip_address TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+      CREATE INDEX IF NOT EXISTS idx_audit_admin ON super_admin_audit_logs(admin_id);
+      CREATE INDEX IF NOT EXISTS idx_audit_target ON super_admin_audit_logs(target_type, target_id);
+      CREATE INDEX IF NOT EXISTS idx_audit_created ON super_admin_audit_logs(created_at);
+
+      CREATE TABLE IF NOT EXISTS complaint_evidence_versions (
+        id SERIAL PRIMARY KEY,
+        complaint_id INTEGER NOT NULL REFERENCES complaints(id) ON DELETE CASCADE,
+        version_number INTEGER NOT NULL DEFAULT 1,
+        photo_before_url TEXT,
+        photo_after_url TEXT,
+        photo_front_url TEXT,
+        replacement_reason TEXT,
+        replaced_by TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+      CREATE INDEX IF NOT EXISTS idx_evidence_complaint ON complaint_evidence_versions(complaint_id);
+
+      ALTER TABLE complaints ADD COLUMN IF NOT EXISTS is_archived BOOLEAN DEFAULT false;
+      ALTER TABLE complaints ADD COLUMN IF NOT EXISTS archived_at TIMESTAMP;
+      ALTER TABLE complaints ADD COLUMN IF NOT EXISTS archived_by TEXT;
     `);
 
     const deptCheck = await pgPool.query('SELECT COUNT(*) as count FROM departments');
@@ -397,9 +456,12 @@ function createTablesSqlite() {
 
       sqliteDb.run(`
         CREATE TABLE IF NOT EXISTS departments (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id TEXT PRIMARY KEY,
+          code TEXT UNIQUE NOT NULL,
           name TEXT NOT NULL,
-          description TEXT
+          description TEXT,
+          status TEXT DEFAULT 'active',
+          registry_id INTEGER
         );
       `);
 
@@ -556,6 +618,11 @@ function createTablesSqlite() {
       safeAddSqliteColumn('complaints', 'additional_notes TEXT');
       safeAddSqliteColumn('complaints', 'resolved_at DATETIME');
       safeAddSqliteColumn('complaints', 'primary_image_hash TEXT');
+      safeAddSqliteColumn('complaints', "ai_model TEXT DEFAULT 'civiclens-yolov8'");
+      safeAddSqliteColumn('complaints', 'ai_confidence REAL');
+      safeAddSqliteColumn('complaints', 'ai_status TEXT');
+      safeAddSqliteColumn('complaints', 'ai_detected_class TEXT');
+      safeAddSqliteColumn('complaints', 'ai_reason TEXT');
       safeAddSqliteColumn('departments', 'code TEXT');
 
       sqliteDb.run(`
@@ -569,27 +636,77 @@ function createTablesSqlite() {
         );
       `);
 
+      sqliteDb.run(`
+        CREATE TABLE IF NOT EXISTS recurring_issue_links (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          current_complaint_id INTEGER NOT NULL,
+          previous_complaint_id INTEGER NOT NULL,
+          status TEXT NOT NULL DEFAULT 'Potential',
+          distance_meters REAL,
+          department_id TEXT,
+          detected_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          reviewed_by TEXT,
+          reviewed_at DATETIME,
+          review_notes TEXT,
+          UNIQUE(current_complaint_id, previous_complaint_id),
+          FOREIGN KEY (current_complaint_id) REFERENCES complaints(id) ON DELETE CASCADE,
+          FOREIGN KEY (previous_complaint_id) REFERENCES complaints(id) ON DELETE CASCADE
+        );
+      `);
+      sqliteDb.run(`CREATE INDEX IF NOT EXISTS idx_recurring_current ON recurring_issue_links(current_complaint_id);`);
+      sqliteDb.run(`CREATE INDEX IF NOT EXISTS idx_recurring_previous ON recurring_issue_links(previous_complaint_id);`);
+
+      safeAddSqliteColumn('complaints', 'is_archived INTEGER DEFAULT 0');
+      safeAddSqliteColumn('complaints', 'archived_at DATETIME');
+      safeAddSqliteColumn('complaints', 'archived_by TEXT');
+
+      sqliteDb.run(`
+        CREATE TABLE IF NOT EXISTS super_admin_audit_logs (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          admin_id TEXT NOT NULL,
+          admin_email TEXT NOT NULL,
+          action TEXT NOT NULL,
+          target_type TEXT NOT NULL,
+          target_id TEXT,
+          changes_json TEXT,
+          reason TEXT,
+          ip_address TEXT,
+          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+      `);
+      sqliteDb.run(`CREATE INDEX IF NOT EXISTS idx_audit_admin ON super_admin_audit_logs(admin_id);`);
+      sqliteDb.run(`CREATE INDEX IF NOT EXISTS idx_audit_target ON super_admin_audit_logs(target_type, target_id);`);
+      sqliteDb.run(`CREATE INDEX IF NOT EXISTS idx_audit_created ON super_admin_audit_logs(created_at);`);
+
+      sqliteDb.run(`
+        CREATE TABLE IF NOT EXISTS complaint_evidence_versions (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          complaint_id INTEGER NOT NULL,
+          version_number INTEGER NOT NULL DEFAULT 1,
+          photo_before_url TEXT,
+          photo_after_url TEXT,
+          photo_front_url TEXT,
+          replacement_reason TEXT,
+          replaced_by TEXT,
+          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (complaint_id) REFERENCES complaints(id) ON DELETE CASCADE
+        );
+      `);
+      sqliteDb.run(`CREATE INDEX IF NOT EXISTS idx_evidence_complaint ON complaint_evidence_versions(complaint_id);`);
+
       // Seed initial default departments if empty
+      const { CANONICAL_DEPARTMENTS } = require('../services/departmentService');
       sqliteDb.get("SELECT COUNT(*) as count FROM departments", (err, row) => {
         if (!err && row && row.count === 0) {
-          const stmt = sqliteDb.prepare("INSERT OR IGNORE INTO departments (id, name, description, code) VALUES (?, ?, ?, ?)");
-          stmt.run(1, "Public Works Department (PWD)", "Road repairs, potholes, and asphalt infrastructure", "PWD");
-          stmt.run(2, "Sanitation & Waste Management", "Garbage pickup, trash overflow, and public cleanliness", "SAN");
-          stmt.run(3, "Water Supply & Sewerage Board", "Pipeline leakages, drainage overflows, and water supply", "WTR");
-          stmt.run(4, "Electrical & Street Lighting", "Streetlight repair, electrical poles, and public lighting", "ELE");
-          stmt.run(5, "Traffic Management Department", "Traffic signal repairs, road signage, and junction issues", "TRF");
-          stmt.run(6, "Maintenance Department", "General civic facility repairs, building maintenance, and public asset upkeep", "MNT");
-          stmt.run(7, "Drainage & Sewage Department", "Drainage blockage, sewage overflow, open drains, and culverts", "DRN");
+          const stmt = sqliteDb.prepare("INSERT OR REPLACE INTO departments (id, code, name, description, status, registry_id) VALUES (?, ?, ?, ?, ?, ?)");
+          for (const d of CANONICAL_DEPARTMENTS) {
+            stmt.run(d.id, d.code, d.name, d.description, d.status, d.registry_id);
+          }
           stmt.finalize();
         } else {
-          // Ensure codes exist on existing rows
-          sqliteDb.run("UPDATE departments SET code = 'PWD' WHERE id = 1 AND (code IS NULL OR code = '')", () => {});
-          sqliteDb.run("UPDATE departments SET code = 'SAN' WHERE id = 2 AND (code IS NULL OR code = '')", () => {});
-          sqliteDb.run("UPDATE departments SET code = 'WTR' WHERE id = 3 AND (code IS NULL OR code = '')", () => {});
-          sqliteDb.run("UPDATE departments SET code = 'ELE' WHERE id = 4 AND (code IS NULL OR code = '')", () => {});
-          sqliteDb.run("UPDATE departments SET code = 'TRF' WHERE id = 5 AND (code IS NULL OR code = '')", () => {});
-          sqliteDb.run("UPDATE departments SET code = 'MNT' WHERE id = 6 AND (code IS NULL OR code = '')", () => {});
-          sqliteDb.run("UPDATE departments SET code = 'DRN' WHERE id = 7 AND (code IS NULL OR code = '')", () => {});
+          for (const d of CANONICAL_DEPARTMENTS) {
+            sqliteDb.run("UPDATE departments SET code = ?, name = ?, status = 'active' WHERE id = ?", [d.code, d.name, d.id], () => {});
+          }
         }
         resolve();
       });

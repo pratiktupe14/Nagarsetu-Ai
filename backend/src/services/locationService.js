@@ -376,11 +376,17 @@ async function checkCitizenAngleInvariantDuplicate({
   const newHash = computeImageHash(primaryPhoto);
 
   for (const { cand, dist } of limited) {
+    // A different category (e.g. Garbage vs Pothole) cannot be the same physical issue
+    if (category && cand.category && normalizeCategory(category) !== normalizeCategory(cand.category)) {
+      continue;
+    }
+
     const candPhoto = cand.photo_front_url || cand.photo_before_url || cand.photo_url;
 
-    // Layer 1: Exact Hash Match
+    // Layer 1: Exact Hash Match (ignore fallback default placeholder)
+    const isDefaultPhoto = (primaryPhoto && primaryPhoto.includes('civic-default.jpg')) || (candPhoto && candPhoto.includes('civic-default.jpg'));
     const candHash = cand.primary_image_hash || (candPhoto ? computeImageHash(candPhoto) : '');
-    if (newHash && candHash && newHash === candHash) {
+    if (!isDefaultPhoto && newHash && candHash && newHash === candHash) {
       return {
         isDuplicate: true,
         match_type: 'exact',

@@ -1,0 +1,225 @@
+{
+  "model_metadata": {
+    "version": "v3",
+    "base_checkpoint": "civicmodel.pt",
+    "candidate_path": "d:\\NAGARSETU\\NAGARSETU 3.1\\ai_service\\model\\road_damage_model_v3.pt",
+    "candidate_sha256": "26f73ee899f41f1d840d5dbc1bcfea1091377d9b9ec3f3f1f0d5f61a19672256",
+    "original_civicmodel_path": "d:\\NAGARSETU\\NAGARSETU 3.1\\ai_service\\model\\civicmodel.pt",
+    "original_civicmodel_sha256": "1067a09d37e4e9081164e6d6da337ad66d8ec7a884a6a194e58703beee804aa2",
+    "original_preserved": true
+  },
+  "dataset_summary": {
+    "train_images": 39,
+    "val_images": 8,
+    "held_out_test_images": 9,
+    "total_approved_boxes": 487,
+    "excluded_unannotated_images": 3
+  },
+  "training_execution": {
+    "epochs_target": 30,
+    "patience": 7,
+    "imgsz": 640,
+    "batch_size": 4,
+    "device": "cpu",
+    "duration_seconds": 247.15
+  },
+  "held_out_evaluation_metrics": {
+    "original_civicmodel": {
+      "precision": 0.9316,
+      "recall": 0.8919,
+      "mAP50": 0.9563,
+      "mAP50_95": 0.8735,
+      "total_detections_at_045": 44,
+      "missed_potholes_estimate": 30,
+      "false_detections_estimate": 0
+    },
+    "candidate_v3": {
+      "precision": 0.9293,
+      "recall": 0.8884,
+      "mAP50": 0.9378,
+      "mAP50_95": 0.8394,
+      "total_detections_at_045": 43,
+      "missed_potholes_estimate": 31,
+      "false_detections_estimate": 0
+    }
+  },
+  "per_image_results": [
+    {
+      "image": "Screenshot_2026-10-10_014247.png",
+      "ground_truth_potholes": 18,
+      "civicmodel_detections": 13,
+      "v3_detections": 13,
+      "civicmodel_confidences": [
+        0.83,
+        0.774,
+        0.751,
+        0.749,
+        0.697,
+        0.674,
+        0.655,
+        0.652,
+        0.643,
+        0.641,
+        0.595,
+        0.586,
+        0.55
+      ],
+      "v3_confidences": [
+        0.83,
+        0.773,
+        0.756,
+        0.735,
+        0.7,
+        0.683,
+        0.663,
+        0.648,
+        0.647,
+        0.627,
+        0.599,
+        0.558,
+        0.534
+      ]
+    },
+    {
+      "image": "Screenshot_2026-10-10_014302.png",
+      "ground_truth_potholes": 19,
+      "civicmodel_detections": 13,
+      "v3_detections": 13,
+      "civicmodel_confidences": [
+        0.864,
+        0.847,
+        0.793,
+        0.777,
+        0.755,
+        0.744,
+        0.74,
+        0.727,
+        0.674,
+        0.657,
+        0.646,
+        0.636,
+        0.592
+      ],
+      "v3_confidences": [
+        0.868,
+        0.85,
+        0.8,
+        0.785,
+        0.772,
+        0.761,
+        0.745,
+        0.737,
+        0.69,
+        0.674,
+        0.671,
+        0.669,
+        0.601
+      ]
+    },
+    {
+      "image": "Screenshot_2026-10-10_014314.png",
+      "ground_truth_potholes": 4,
+      "civicmodel_detections": 2,
+      "v3_detections": 2,
+      "civicmodel_confidences": [
+        0.843,
+        0.497
+      ],
+      "v3_confidences": [
+        0.843,
+        0.479
+      ]
+    },
+    {
+      "image": "Screenshot_2026-10-10_014325.png",
+      "ground_truth_potholes": 6,
+      "civicmodel_detections": 1,
+      "v3_detections": 1,
+      "civicmodel_confidences": [
+        0.805
+      ],
+      "v3_confidences": [
+        0.799
+      ]
+    },
+    {
+      "image": "Screenshot_2026-10-10_014547.png",
+      "ground_truth_potholes": 3,
+      "civicmodel_detections": 2,
+      "v3_detections": 1,
+      "civicmodel_confidences": [
+        0.58,
+        0.55
+      ],
+      "v3_confidences": [
+        0.603
+      ]
+    },
+    {
+      "image": "Screenshot_2026-10-10_014607.png",
+      "ground_truth_potholes": 9,
+      "civicmodel_detections": 4,
+      "v3_detections": 4,
+      "civicmodel_confidences": [
+        0.75,
+        0.686,
+        0.549,
+        0.471
+      ],
+      "v3_confidences": [
+        0.759,
+        0.704,
+        0.576,
+        0.488
+      ]
+    },
+    {
+      "image": "images_(13).jpg",
+      "ground_truth_potholes": 3,
+      "civicmodel_detections": 1,
+      "v3_detections": 1,
+      "civicmodel_confidences": [
+        0.69
+      ],
+      "v3_confidences": [
+        0.713
+      ]
+    },
+    {
+      "image": "images_(14).jpg",
+      "ground_truth_potholes": 8,
+      "civicmodel_detections": 6,
+      "v3_detections": 6,
+      "civicmodel_confidences": [
+        0.88,
+        0.818,
+        0.813,
+        0.807,
+        0.737,
+        0.731
+      ],
+      "v3_confidences": [
+        0.884,
+        0.827,
+        0.813,
+        0.811,
+        0.753,
+        0.724
+      ]
+    },
+    {
+      "image": "newindianexpress_2025-05-27_0lzlmnv7_C_1_1_CH1452_10993328.jpg",
+      "ground_truth_potholes": 4,
+      "civicmodel_detections": 2,
+      "v3_detections": 2,
+      "civicmodel_confidences": [
+        0.744,
+        0.644
+      ],
+      "v3_confidences": [
+        0.749,
+        0.637
+      ]
+    }
+  ]
+}

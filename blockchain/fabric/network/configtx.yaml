@@ -1,0 +1,179 @@
+# ---------------------------------------------------------------------------
+# NAGARSETU 3.1 — Hyperledger Fabric Channel & Consortium Topology
+# ---------------------------------------------------------------------------
+# Dual Organization Endorsement: MunicipalAuthorityMSP + AuditorMSP
+# Raft Quorum: 3 Orderers (2 of 3 required for commit)
+# Channel: nagarsetu-channel
+# ---------------------------------------------------------------------------
+
+Organizations:
+  - &OrdererOrg
+    Name: OrdererOrg
+    ID: OrdererMSP
+    MSPDir: crypto-config/ordererOrganizations/nagarsetu.gov.in/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Writers:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Admins:
+        Type: Signature
+        Rule: "OR('OrdererMSP.admin')"
+    OrdererEndpoints:
+      - "orderer1.nagarsetu.gov.in:7050"
+      - "orderer2.nagarsetu.gov.in:7050"
+      - "orderer3.nagarsetu.gov.in:7050"
+
+  - &MunicipalAuthority
+    Name: MunicipalAuthorityMSP
+    ID: MunicipalAuthorityMSP
+    MSPDir: crypto-config/peerOrganizations/municipal.nagarsetu.gov.in/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('MunicipalAuthorityMSP.admin', 'MunicipalAuthorityMSP.peer', 'MunicipalAuthorityMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('MunicipalAuthorityMSP.admin', 'MunicipalAuthorityMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('MunicipalAuthorityMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('MunicipalAuthorityMSP.peer')"
+    AnchorPeers:
+      - Host: peer0.municipal.nagarsetu.gov.in
+        Port: 7051
+
+  - &AuditorOrg
+    Name: AuditorMSP
+    ID: AuditorMSP
+    MSPDir: crypto-config/peerOrganizations/auditor.nagarsetu.gov.in/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('AuditorMSP.admin', 'AuditorMSP.peer', 'AuditorMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('AuditorMSP.admin', 'AuditorMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('AuditorMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('AuditorMSP.peer')"
+    AnchorPeers:
+      - Host: peer0.auditor.nagarsetu.gov.in
+        Port: 8051
+
+Capabilities:
+  Channel: &ChannelCapabilities
+    V2_0: true
+  Orderer: &OrdererCapabilities
+    V2_0: true
+  Application: &ApplicationCapabilities
+    V2_5: true
+
+Application: &ApplicationDefaults
+  Organizations:
+  Policies:
+    LifecycleEndorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+    Endorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+  Capabilities:
+    <<: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+  OrdererType: etcdraft
+  Addresses:
+    - orderer1.nagarsetu.gov.in:7050
+    - orderer2.nagarsetu.gov.in:7050
+    - orderer3.nagarsetu.gov.in:7050
+  EtcdRaft:
+    Consenters:
+      - Host: orderer1.nagarsetu.gov.in
+        Port: 7050
+        ClientTLSCert: crypto-config/ordererOrganizations/nagarsetu.gov.in/orderers/orderer1.nagarsetu.gov.in/tls/server.crt
+        ServerTLSCert: crypto-config/ordererOrganizations/nagarsetu.gov.in/orderers/orderer1.nagarsetu.gov.in/tls/server.crt
+      - Host: orderer2.nagarsetu.gov.in
+        Port: 7050
+        ClientTLSCert: crypto-config/ordererOrganizations/nagarsetu.gov.in/orderers/orderer2.nagarsetu.gov.in/tls/server.crt
+        ServerTLSCert: crypto-config/ordererOrganizations/nagarsetu.gov.in/orderers/orderer2.nagarsetu.gov.in/tls/server.crt
+      - Host: orderer3.nagarsetu.gov.in
+        Port: 7050
+        ClientTLSCert: crypto-config/ordererOrganizations/nagarsetu.gov.in/orderers/orderer3.nagarsetu.gov.in/tls/server.crt
+        ServerTLSCert: crypto-config/ordererOrganizations/nagarsetu.gov.in/orderers/orderer3.nagarsetu.gov.in/tls/server.crt
+  BatchTimeout: 1s
+  BatchSize:
+    MaxMessageCount: 50
+    AbsoluteMaxBytes: 10 MB
+    PreferredMaxBytes: 512 KB
+  Organizations:
+    - *OrdererOrg
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    BlockValidation:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+  Capabilities:
+    <<: *OrdererCapabilities
+
+Channel: &ChannelDefaults
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+  Capabilities:
+    <<: *ChannelCapabilities
+
+Profiles:
+  NagarsetuOrdererGenesis:
+    <<: *ChannelDefaults
+    Orderer:
+      <<: *OrdererDefaults
+      Organizations:
+        - *OrdererOrg
+      Capabilities: *OrdererCapabilities
+    Consortiums:
+      NagarsetuConsortium:
+        Organizations:
+          - *MunicipalAuthority
+          - *AuditorOrg
+
+  NagarsetuChannel:
+    Consortium: NagarsetuConsortium
+    <<: *ChannelDefaults
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - *MunicipalAuthority
+        - *AuditorOrg
+      Capabilities: *ApplicationCapabilities

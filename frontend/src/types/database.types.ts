@@ -74,6 +74,33 @@ export interface AIVisionResult {
     contrast: number;
   };
   analysis_time_ms: number;
+  aiStatus?: string;
+  severity?: string;
+  transparencyNotice?: string;
+  explanation?: {
+    detectedIssue?: string;
+    confidence?: number;
+    confidenceLevel?: string;
+    visualImpact?: number;
+    reason?: string;
+    scoringDetails?: any;
+  };
+  analysis?: {
+    visualImpactScore?: number;
+    detectionCount?: number;
+    hasMultipleDetections?: boolean;
+    allDetections?: any[];
+  };
+  reviewRequired?: boolean;
+  road_condition?: 'clean' | 'defective' | 'uncertain' | 'non_road';
+  detected?: boolean;
+  detected_class?: string | null;
+  review_required?: boolean;
+  department_code?: string | null;
+  department_id?: string | number | null;
+  analysis_domain?: string | null;
+  model?: string | null;
+  ai_model?: string | null;
 }
 
 export interface UserProfile {
@@ -277,6 +304,17 @@ export interface Complaint {
   admin_rejection_reason?: string;
   rating?: number;
   feedback_comment?: string;
+  feedback_created_at?: string;
+  citizen_name?: string;
+  feedback?: {
+    rating: number;
+    review: string;
+    comment?: string;
+    created_at?: string;
+    submission_date?: string;
+    citizen_name?: string;
+    complaint_number?: string;
+  } | null;
   ai_category?: string;
   ai_specific_issue?: string;
   ai_confidence?: number;
@@ -286,6 +324,14 @@ export interface Complaint {
   ai_model?: string;
   ai_analyzed_at?: string;
   needs_manual_verification?: boolean;
+  recurring_issue?: {
+    is_recurring: boolean;
+    recurrence_status: string;
+    previous_complaint_id: string | number;
+    previous_complaint_number?: string;
+    distance_meters?: number | null;
+    links?: any[];
+  } | null;
   created_at: string;
   updated_at: string;
 }

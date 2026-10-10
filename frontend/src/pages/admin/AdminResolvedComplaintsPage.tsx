@@ -7,6 +7,7 @@ import { getAllComplaints } from '../../services/complaintService';
 import { formatSlaRemainingTime } from '../../services/adminService';
 import { exportComplaintsToCSV } from '../../services/analyticsService';
 import { Complaint } from '../../types/database.types';
+import { CitizenFeedbackCard } from '../../components/CitizenFeedbackCard';
 import { useRealtimeComplaints } from '../../hooks/useRealtimeComplaints';
 import { getValidImageUrl, DEFAULT_CIVIC_IMAGE_PLACEHOLDER } from '../../lib/supabase';
 import {
@@ -1149,34 +1150,13 @@ export const AdminResolvedComplaintsPage: React.FC = () => {
                       CITIZEN FEEDBACK & SATISFACTION
                     </h3>
 
-                    {selectedComplaint.rating ? (
-                      <div className="bg-emerald-50/60 border border-emerald-200 rounded-xl p-5 space-y-3">
-                        <div className="flex items-center justify-between border-b border-emerald-200/60 pb-3">
-                          <div className="space-y-0.5">
-                            <span className="text-xs font-bold text-emerald-900 block">Citizen Rating</span>
-                            {renderStars(selectedComplaint.rating)}
-                          </div>
-                          <span className="px-3 py-1 bg-emerald-600 text-white rounded-full text-xs font-extrabold font-mono">
-                            Verified
-                          </span>
-                        </div>
-
-                        <div className="space-y-1">
-                          <span className="text-xs font-bold text-gray-700 block">Citizen Comment</span>
-                          <p className="text-xs italic text-gray-800 bg-white p-3 rounded-lg border border-emerald-200/80">
-                            "{selectedComplaint.feedback_comment || 'Road repair was completed properly.'}"
-                          </p>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="p-8 text-center border border-gray-200 rounded-xl bg-gray-50 space-y-2">
-                        <MessageSquare className="w-8 h-8 text-gray-400 mx-auto" />
-                        <p className="text-xs font-bold text-gray-700">No citizen feedback submitted yet.</p>
-                        <p className="text-[11px] text-gray-500">
-                          The citizen will receive a notification to rate the completed work.
-                        </p>
-                      </div>
-                    )}
+                    <CitizenFeedbackCard
+                      citizenName={selectedComplaint.citizen_name || (selectedComplaint as any).feedback?.citizen_name || 'Citizen'}
+                      complaintNumber={selectedComplaint.complaint_number}
+                      rating={selectedComplaint.rating || (selectedComplaint as any).feedback?.rating}
+                      review={selectedComplaint.feedback_comment || (selectedComplaint as any).feedback?.review || (selectedComplaint as any).feedback?.comment}
+                      submissionDate={selectedComplaint.feedback_created_at || (selectedComplaint as any).feedback?.created_at || (selectedComplaint as any).feedback?.submission_date}
+                    />
                   </div>
                 )}
 

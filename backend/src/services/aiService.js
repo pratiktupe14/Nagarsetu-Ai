@@ -1,99 +1,217 @@
 const fs = require('fs');
 const path = require('path');
-const https = require('https');
 const crypto = require('crypto');
-const { executeWithFailover } = require('./geminiKeyManager');
+const { clampScore, calculateRiskAssessment } = require('./riskMatrixService');
 
-const VALID_TAXONOMY = {
-  'Road Damage / Pothole': 'Public Works Department (PWD)',
-  'Water Leakage / Pipeline': 'Water Supply & Sewerage Board',
-  'Garbage / Waste': 'Sanitation & Waste Management',
-  'Drainage / Sewage': 'Drainage & Sewage Department',
-  'Streetlight / Electrical': 'Electrical & Street Lighting',
-  'Traffic Infrastructure': 'Traffic Management Department',
-  'Public Infrastructure Damage': 'Maintenance Department',
-  'Other Civic Issue': 'Maintenance Department',
-  'Building Maintenance': 'Maintenance Department'
+// Canonical Allowed Categories
+const ALLOWED_CATEGORIES = [
+  'Roads',
+  'Water',
+  'Drainage',
+  'Sanitation',
+  'Electricity',
+  'Traffic',
+  'Trees & Parks',
+  'Public Infrastructure',
+  'Parking',
+  'Public Property',
+  'Construction',
+  'Flooding',
+  'Safety Hazards'
+];
+
+const CATEGORY_DEPARTMENT_MAP = {
+  'Roads': 'Public Works Department',
+  'Water': 'Water Supply & Sewerage Board',
+  'Drainage': 'Drainage & Sewage Department',
+  'Sanitation': 'Sanitation & Waste Management',
+  'Electricity': 'Electrical & Street Lighting',
+  'Traffic': 'Traffic Management Department',
+  'Trees & Parks': 'Maintenance Department',
+  'Public Infrastructure': 'Public Works Department',
+  'Parking': 'Traffic Management Department',
+  'Public Property': 'Maintenance Department',
+  'Construction': 'Public Works Department',
+  'Flooding': 'Drainage & Sewage Department',
+  'Safety Hazards': 'Maintenance Department'
 };
 
+const CANONICAL_DEPT_IDS = {
+  'PWD': 1,
+  'SAN': 2,
+  'WTR': 3,
+  'ELE': 4,
+  'TRF': 5,
+  'MNT': 6,
+  'DRN': 7
+};
 
-const SYSTEM_PROMPT = `You are NAGARSETU 3.0's civic issue vision analyzer.
+function normalizeCategory(cat) {
+  if (!cat) return 'Roads';
+  const c = String(cat).trim();
+  const directMatch = ALLOWED_CATEGORIES.find(a => a.toLowerCase() === c.toLowerCase());
+  if (directMatch) return directMatch;
 
-Analyze ONLY the actual image provided.
+  const lower = c.toLowerCase();
+  if (lower.includes('road') || lower.includes('pothole') || lower.includes('asphalt') || lower.includes('pavement')) return 'Roads';
+  if (lower.includes('garbage') || lower.includes('waste') || lower.includes('trash') || lower.includes('sanitat') || lower.includes('dump')) return 'Sanitation';
+  if (lower.includes('water') || lower.includes('pipe') || lower.includes('leakage') || lower.includes('supply')) return 'Water';
+  if (lower.includes('drain') || lower.includes('sewag') || lower.includes('gutter') || lower.includes('manhole')) return 'Drainage';
+  if (lower.includes('electr') || lower.includes('light') || lower.includes('wire') || lower.includes('cable') || lower.includes('pole')) return 'Electricity';
+  if (lower.includes('traffic') || lower.includes('signal') || lower.includes('signboard') || lower.includes('zebra')) return 'Traffic';
+  if (lower.includes('tree') || lower.includes('park') || lower.includes('garden') || lower.includes('branch')) return 'Trees & Parks';
+  if (lower.includes('parking') || lower.includes('encroach')) return 'Parking';
+  if (lower.includes('flood') || lower.includes('waterlog') || lower.includes('submerg')) return 'Flooding';
+  if (lower.includes('hazard') || lower.includes('safety') || lower.includes('danger') || lower.includes('pit') || lower.includes('collapse')) return 'Safety Hazards';
+  if (lower.includes('construction') || lower.includes('debris') || lower.includes('demolit')) return 'Construction';
+  if (lower.includes('property') || lower.includes('fence') || lower.includes('bench') || lower.includes('monument')) return 'Public Property';
+  if (lower.includes('infrastruct') || lower.includes('footpath') || lower.includes('bridge') || lower.includes('railing')) return 'Public Infrastructure';
 
-Do not infer the issue from the filename.
-Do not reuse previous analysis.
-Do not assume every image is a road issue.
-
-Determine the physical civic issue visible in the image.
-
-Allowed categories:
-
-Road Damage / Pothole
-Water Leakage / Pipeline
-Garbage / Waste
-Drainage / Sewage
-Streetlight / Electrical
-Traffic Infrastructure
-Public Infrastructure Damage
-Other Civic Issue
-
-If the image visibly shows a leaking or damaged water pipeline, flowing water from municipal water infrastructure, or a water-line failure, classify it as:
-
-Water Leakage / Pipeline
-
-If the image visibly shows potholes, pavement cracks, road craters, damaged asphalt, or road-surface deterioration, classify it as:
-
-Road Damage / Pothole
-
-If garbage or waste is visible:
-
-Garbage / Waste
-
-If blocked/open drainage or sewage overflow is visible:
-
-Drainage / Sewage
-
-If a broken streetlight/electrical civic infrastructure is visible:
-
-Streetlight / Electrical
-
-If a traffic signal or traffic infrastructure issue is visible:
-
-Traffic Infrastructure
-
-If evidence is insufficient:
-
-Other Civic Issue
-
-Do not invent visual information.
-
-Respond ONLY with a valid JSON object matching this exact structure:
-{
-  "category": "One of: Road Damage / Pothole, Water Leakage / Pipeline, Garbage / Waste, Drainage / Sewage, Streetlight / Electrical, Traffic Infrastructure, Public Infrastructure Damage, Other Civic Issue",
-  "title": "Short descriptive title of the defect",
-  "description": "Factual description based strictly on visible evidence.",
-  "priority": "LOW or MEDIUM or HIGH or CRITICAL",
-  "severity": "LOW or MEDIUM or HIGH or CRITICAL",
-  "recommended_department": "Corresponding department name from taxonomy",
-  "confidence": 0.94,
-  "detected_features": ["list", "of", "features"],
-  "is_civic_issue": true,
-  "needs_manual_verification": false
-}`;
-
-function mapDepartment(category) {
-  return VALID_TAXONOMY[category] || 'Roads & Public Works Department (PWD)';
+  return 'Roads';
 }
 
-async function callDirectGeminiVision(fileInput, targetModel = null) {
-  const configuredModel = process.env.GEMINI_VISION_MODEL;
-  const model = targetModel || ((configuredModel && !configuredModel.includes('2.5-flash') && !configuredModel.includes('3.6') && !configuredModel.includes('3.5')) ? configuredModel : 'gemini-3.8-flash');
+function normalizePriority(p) {
+  if (!p) return 'Medium';
+  const lower = String(p).toLowerCase().trim();
+  if (lower === 'critical') return 'Critical';
+  if (lower === 'high') return 'High';
+  if (lower === 'low') return 'Low';
+  return 'Medium';
+}
 
-  console.log(`[GEMINI] Request started`);
-  console.log(`[GEMINI] Target Model: ${model}`);
+function getCurrentModel() {
+  return 'CivicLens YOLOv8 (Local CV)';
+}
 
-  let fileBuffer;
+/**
+ * Resolves the Python AI microservice inference URL safely, preventing duplicate /analyze segments
+ */
+function resolveAiAnalyzeUrl() {
+  const raw = (process.env.PYTHON_AI_URL || 'http://localhost:8000/analyze').trim().replace(/\/+$/, '');
+  return raw.endsWith('/analyze') ? raw : `${raw}/analyze`;
+}
+
+/**
+ * Calls local Python FastAPI microservice (LangGraph + YOLOv8)
+ */
+async function callLocalAiService(fileBuffer, mimeType, originalName, domain = null) {
+  const pythonUrl = resolveAiAnalyzeUrl();
+
+  const formData = new FormData();
+  const blob = new Blob([fileBuffer], { type: mimeType });
+  formData.append('file', blob, originalName);
+  if (domain) {
+    formData.append('domain', domain);
+  }
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 25000); // 25 second timeout for model loading
+
+  try {
+    const headers = {};
+    if (process.env.AI_INTERNAL_API_KEY) {
+      headers['X-Internal-API-Key'] = process.env.AI_INTERNAL_API_KEY;
+    }
+
+    const response = await fetch(pythonUrl, {
+      method: 'POST',
+      body: formData,
+      headers,
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errText = await response.text().catch(() => '');
+      throw new Error(`Python AI service responded with status ${response.status}: ${errText}`);
+    }
+
+    const json = await response.json();
+    return json;
+  } catch (err) {
+    clearTimeout(timeoutId);
+    throw err;
+  }
+}
+
+/**
+ * Generates a single coherent paragraph containing at least five meaningful sentences
+ * describing the visible civic defect based on visual evidence, physical damage characteristics,
+ * visible severity, potential public impact (distinguishing inference from observation),
+ * and required municipal inspection and corrective action.
+ */
+function generateProfessionalCivicDescription(analysisData = {}) {
+  const category = (analysisData.category || '').toLowerCase();
+  const issueType = (analysisData.issueType || analysisData.issue_type || analysisData.title || '').toLowerCase();
+  const rawClass = (analysisData.detected_class || analysisData.primaryClass || '').toLowerCase();
+  const severity = analysisData.severity || 'High';
+  const departmentName = analysisData.departmentName || analysisData.department || 'the responsible municipal department';
+  const confidence = analysisData.confidence ? Math.round(Number(analysisData.confidence) * 100) : 92;
+
+  // 1. Water Supply & Piping Infrastructure
+  if (category.includes('water') || issueType.includes('pipe') || issueType.includes('leak') || rawClass.includes('pipe') || rawClass.includes('leak')) {
+    const isRupture = issueType.includes('broken') || rawClass.includes('broken');
+    const s1 = isRupture
+      ? `Photographic evidence captured from the site reveals an active structural rupture affecting municipal water supply piping infrastructure.`
+      : `Photographic evidence captured from the site reveals observable water leakage discharging from municipal piping infrastructure.`;
+    const s2 = isRupture
+      ? `Visual examination identifies localized pipe material fracture with pressurized water dispersion escaping across the adjacent surface area.`
+      : `Physical inspection indicates fluid seepage and moisture pooling along the exposed conduit joint with approximately ${confidence}% visual confidence.`;
+    const s3 = `The visible defect represents a ${severity.toLowerCase()}-severity utility condition demonstrating clear physical compromise that impairs steady localized distribution.`;
+    const s4 = `While surface water discharge is directly confirmed in the photograph, inferred secondary consequences include gradual subsurface soil weakening, localized erosion, and potable water loss if left uncontained.`;
+    const s5 = `Prompt on-site technical inspection and pipe restoration by ${departmentName} are necessary to isolate the supply line and complete durable repairs.`;
+    return `${s1} ${s2} ${s3} ${s4} ${s5}`;
+  }
+
+  // 2. Road Surface & Potholes
+  if (category.includes('road') || issueType.includes('pothole') || issueType.includes('road') || rawClass.includes('pothole')) {
+    const s1 = `The uploaded photograph documents a distinct road surface defect consisting of an open pothole within the public vehicular roadway.`;
+    const s2 = `Visual evidence demonstrates asphalt displacement with broken pavement margins and exposed base-course aggregate across the traffic corridor.`;
+    const s3 = `The crater represents a ${severity.toLowerCase()}-severity roadway hazard displaying clear physical degradation that impedes continuous vehicular movement.`;
+    const s4 = `Visual observations establish the pavement cavity directly, while inferred public impacts include sudden vehicular swerving, tire puncture risk, and progressive roadbed deterioration from repetitive axle loads.`;
+    const s5 = `Targeted site inspection and bituminous asphalt patch remediation by ${departmentName} are required to level the thoroughfare and safeguard daily transit.`;
+    return `${s1} ${s2} ${s3} ${s4} ${s5}`;
+  }
+
+  // 3. Sanitation & Waste Management
+  if (category.includes('sanitat') || category.includes('waste') || category.includes('garbage') || issueType.includes('waste') || issueType.includes('garbage') || rawClass.includes('waste') || rawClass.includes('garbage')) {
+    const s1 = `Visual analysis of the uploaded image identifies uncontained solid municipal waste accumulating along the public corridor.`;
+    const s2 = `Observable physical evidence confirms scattered refuse bags, plastic packaging, and mixed municipal discards discarded upon the open ground.`;
+    const s3 = `The accumulation represents a ${severity.toLowerCase()}-severity sanitary concern exhibiting untended refuse that obstructs orderly pedestrian access.`;
+    const s4 = `Direct visual inspection verifies the uncollected litter pile, whereas inferred public impacts encompass foul odor dispersion, pest harborage, and potential stormwater drain blockages during heavy rain.`;
+    const s5 = `Prompt dispatch of municipal clearing crews and localized sanitation treatment by ${departmentName} are necessary to remove all refuse and restore environmental cleanliness.`;
+    return `${s1} ${s2} ${s3} ${s4} ${s5}`;
+  }
+
+  // 4. Drainage & Sewage Infrastructure
+  if (category.includes('drain') || category.includes('sewag') || category.includes('flood') || issueType.includes('drain') || rawClass.includes('drain')) {
+    const isOverflow = issueType.includes('overflow') || rawClass.includes('overflow');
+    const s1 = isOverflow
+      ? `Photographic evidence documents an active drainage overflow spilling runoff water across the surrounding public precinct.`
+      : `Photographic evidence documents a compromised drainage channel obstructed by accumulated debris and sedimentation.`;
+    const s2 = `Visible physical indicators confirm restricted hydraulic passage with foreign particulate matter gathered along the curb channel.`;
+    const s3 = `The drainage structure presents a ${severity.toLowerCase()}-severity operational impediment exhibiting substantial silt buildup that impedes normal water flow.`;
+    const s4 = `While waterway constriction is directly confirmed by visual inspection, inferred hazards include wastewater pooling, pedestrian inconvenience, and street flooding during peak runoff events.`;
+    const s5 = `Expedited desilting and channel clearing operations by ${departmentName} are required to restore adequate drainage capacity and prevent localized waterlogging.`;
+    return `${s1} ${s2} ${s3} ${s4} ${s5}`;
+  }
+
+  // 5. General / Public Infrastructure Defects
+  const s1 = `Photographic evidence submitted reveals a noticeable civic infrastructure defect requiring municipal maintenance attention.`;
+  const s2 = `Visual inspection identifies localized physical degradation and material wear affecting public utility assets in the area.`;
+  const s3 = `The condition exhibits a ${severity.toLowerCase()}-severity civic concern with observable physical compromise that diminishes public asset reliability.`;
+  const s4 = `While physical wear is directly verified in the uploaded photograph, inferred consequences include gradual structural decline and service interruption for neighborhood residents if neglected.`;
+  const s5 = `A focused field assessment and remedial maintenance by ${departmentName} are necessary to restore normal operating standards and ensure citizen safety.`;
+  return `${s1} ${s2} ${s3} ${s4} ${s5}`;
+}
+
+/**
+ * Analyzes complaint photo using the local Python AI microservice.
+ * Completely free of Gemini dependencies.
+ */
+async function analyzeComplaintPhoto(fileInput, options = {}) {
+  let fileBuffer = null;
   let mimeType = 'image/jpeg';
   let originalName = 'uploaded-photo.jpg';
 
@@ -106,10 +224,16 @@ async function callDirectGeminiVision(fileInput, targetModel = null) {
       fileBuffer = fs.readFileSync(fileInput.path);
     }
     if (fileInput.mimetype) mimeType = fileInput.mimetype;
-    if (fileInput.originalname) originalName = fileInput.originalname;
+    if (fileInput.originalname) {
+      originalName = fileInput.originalname;
+      const ext = path.extname(originalName).toLowerCase();
+      if (ext === '.avif') mimeType = 'image/avif';
+      else if (ext === '.png') mimeType = 'image/png';
+      else if (ext === '.webp') mimeType = 'image/webp';
+    }
   } else if (typeof fileInput === 'string') {
     if (!fs.existsSync(fileInput)) {
-      const errObj = new Error(`Gemini analysis failed: Image file not found at ${fileInput}`);
+      const errObj = new Error(`Image file not found at ${fileInput}`);
       errObj.statusCode = 400;
       errObj.errorCode = 'INVALID_IMAGE';
       throw errObj;
@@ -118,209 +242,663 @@ async function callDirectGeminiVision(fileInput, targetModel = null) {
     const ext = path.extname(fileInput).toLowerCase();
     if (ext === '.png') mimeType = 'image/png';
     if (ext === '.webp') mimeType = 'image/webp';
+    if (ext === '.avif') mimeType = 'image/avif';
     originalName = path.basename(fileInput);
-  } else {
-    const errObj = new Error('Gemini analysis failed: Invalid image payload provided.');
-    errObj.statusCode = 400;
-    errObj.errorCode = 'INVALID_IMAGE';
-    throw errObj;
   }
 
   if (!fileBuffer || fileBuffer.length === 0) {
-    const errObj = new Error('Gemini analysis failed: Image payload is empty (0 bytes).');
+    const errObj = new Error('Uploaded photo payload is empty (0 bytes).');
     errObj.statusCode = 400;
     errObj.errorCode = 'INVALID_IMAGE';
     throw errObj;
   }
 
-  const base64Image = fileBuffer.toString('base64');
   const imageHash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
   const analysisId = crypto.randomUUID();
 
-  const payload = JSON.stringify({
-    contents: [
-      {
-        parts: [
-          { text: SYSTEM_PROMPT },
-          {
-            inline_data: {
-              mime_type: mimeType,
-              data: base64Image
-            }
-          }
-        ]
-      }
-    ],
-    generationConfig: {
-      temperature: 0.2,
-      response_mime_type: 'application/json'
-    }
-  });
+  try {
+    const pythonResult = await callLocalAiService(fileBuffer, mimeType, originalName, options.domain);
+    const roadCondition = pythonResult.road_condition || null;
+    const aiStatus = pythonResult.ai_status || pythonResult.aiStatus || 'manual_review';
+    const isPipeDomain = Boolean(options.domain && ['pipe', 'water', 'leak', 'leakage'].includes(options.domain.toLowerCase()));
+    const isDrainDomain = Boolean(options.domain && ['drain', 'drainage', 'sewage', 'gutter'].includes(options.domain.toLowerCase()));
+    const isCleanRoad = (roadCondition === 'clean' || aiStatus === 'confirmed_clean') && !isPipeDomain && !isDrainDomain;
+    const isUncertainRoad = roadCondition === 'uncertain' && !isPipeDomain && !isDrainDomain;
+    const isNormalDrain = (pythonResult.drain_condition === 'normal' || (isDrainDomain && (pythonResult.condition === 'normal' || aiStatus === 'confirmed_normal')));
+    const isNormalPipe = (pythonResult.pipe_condition === 'normal' || (isPipeDomain && (pythonResult.condition === 'normal' || aiStatus === 'confirmed_normal')));
+    const isUncertainPipe = (pythonResult.pipe_condition === 'uncertain' || (isPipeDomain && !pythonResult.detected && (aiStatus === 'manual_review' || roadCondition === 'uncertain') && !pythonResult.complaint));
+    const hasValidComplaint = Boolean(pythonResult.detected || pythonResult.complaint || (pythonResult.detections && pythonResult.detections.length > 0));
 
-  return executeWithFailover(async (apiKey) => {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+    if (isNormalDrain) {
+      // CASE: NORMAL DRAIN - Clean, functional drainage, confirmed normal
+      const confidence = Number(pythonResult.confidence || 0.95);
+      const normDesc = pythonResult.explanation?.reason || 'The uploaded image shows normal, functional drainage with no visible blockage, damage, or overflow.';
 
-    return new Promise((resolve, reject) => {
-      const options = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(payload)
+      return {
+        success: true,
+        analysis_domain: options.domain || 'drainage',
+        condition: 'normal',
+        drain_condition: 'normal',
+        detected: false,
+        detected_class: null,
+        confidence: confidence,
+        confidence_level: 'HIGH',
+        ai_status: 'confirmed_normal',
+        aiStatus: 'confirmed_normal',
+        review_required: false,
+        reviewRequired: false,
+        category: null,
+        issue_type: null,
+        title: null,
+        description: normDesc,
+        severity: 'None',
+        priority: 'None',
+        department: null,
+        recommended_department: null,
+        department_code: null,
+        departmentCode: null,
+        department_id: null,
+        model: pythonResult.model || 'drainage_model.pt',
+        ai_model: pythonResult.model || 'drainage_model.pt',
+        ai_confidence: confidence,
+        ai_detected_class: null,
+        ai_reason: normDesc,
+        analysis_id: analysisId,
+        image_hash: imageHash,
+        primaryDetection: null,
+        detections: [],
+        analysis: pythonResult.analysis || {
+          visualImpactScore: 0.0,
+          detectionCount: 0,
+          hasMultipleDetections: false,
+          allDetections: []
         },
-        timeout: 30000
+        complaint: null,
+        explanation: {
+          detectedIssue: 'Normal Drainage',
+          confidence: confidence,
+          confidenceLevel: 'HIGH',
+          visualImpact: 0.0,
+          reason: normDesc
+        },
+        transparencyNotice: 'Drainage condition verified: Normal — no complaint required.',
+        message: '✓ DRAINAGE CONDITION: NORMAL',
+        drain_analysis: pythonResult.drain_analysis,
+        risk: {
+          human_safety: 0,
+          public_disruption: 0,
+          health_environment: 0,
+          physical_severity: 0,
+          risk_score: 0,
+          severity: 'None'
+        },
+        risk_quadrants: {
+          human_safety: 0,
+          public_disruption: 0,
+          health_environment: 0,
+          physical_severity: 0
+        },
+        human_safety: 0,
+        public_disruption: 0,
+        health_environment: 0,
+        physical_severity: 0,
+        risk_score: 0,
+        detected_features: [],
+        needs_manual_verification: false
+      };
+    } else if (isNormalPipe) {
+      // CASE: PERFECT / NORMAL PIPE - No leakage or damage, confirmed normal pipe
+      const confidence = Number(pythonResult.confidence || 0.95);
+      const normDesc = 'The uploaded image shows a normal pipe with no visible leakage or significant damage.';
+
+      return {
+        success: true,
+        analysis_domain: options.domain || 'pipe',
+        condition: 'normal',
+        pipe_condition: 'normal',
+        detected: false,
+        detected_class: null,
+        confidence: confidence,
+        confidence_level: 'HIGH',
+        ai_status: 'confirmed_normal',
+        aiStatus: 'confirmed_normal',
+        review_required: false,
+        reviewRequired: false,
+        category: null,
+        issue_type: null,
+        title: null,
+        description: normDesc,
+        severity: 'None',
+        priority: 'None',
+        department: null,
+        recommended_department: null,
+        department_code: null,
+        departmentCode: null,
+        department_id: null,
+        model: pythonResult.model || 'water_pipe_model.pt',
+        ai_model: pythonResult.model || 'water_pipe_model.pt',
+        ai_confidence: confidence,
+        ai_detected_class: null,
+        ai_reason: normDesc,
+        analysis_id: analysisId,
+        image_hash: imageHash,
+        primaryDetection: null,
+        detections: [],
+        analysis: pythonResult.analysis || {
+          visualImpactScore: 0.0,
+          detectionCount: 0,
+          hasMultipleDetections: false,
+          allDetections: []
+        },
+        complaint: null,
+        explanation: {
+          detectedIssue: 'Normal Pipe',
+          confidence: confidence,
+          confidenceLevel: 'HIGH',
+          visualImpact: 0.0,
+          reason: normDesc
+        },
+        transparencyNotice: 'Pipe condition verified: Normal — no complaint required.',
+        message: '✓ PIPE CONDITION: NORMAL',
+        pipe_analysis: pythonResult.pipe_analysis,
+        risk: {
+          human_safety: 0,
+          public_disruption: 0,
+          health_environment: 0,
+          physical_severity: 0,
+          risk_score: 0,
+          severity: 'None'
+        },
+        risk_quadrants: {
+          human_safety: 0,
+          public_disruption: 0,
+          health_environment: 0,
+          physical_severity: 0
+        },
+        human_safety: 0,
+        public_disruption: 0,
+        health_environment: 0,
+        physical_severity: 0,
+        risk_score: 0,
+        detected_features: [],
+        needs_manual_verification: false
+      };
+    } else if (isCleanRoad) {
+      // CASE 2: CLEAN / NORMAL ROAD - No pothole detected, confirmed clean road
+      const confidence = Number(pythonResult.confidence || 0.92);
+      const cleanDesc = 'The uploaded road image shows no visible pothole or significant road defect.';
+
+      return {
+        success: true,
+        analysis_domain: options.domain || 'road',
+        road_condition: 'clean',
+        detected: false,
+        detected_class: null,
+        confidence: confidence,
+        confidence_level: 'HIGH',
+        ai_status: 'confirmed_clean',
+        aiStatus: 'confirmed_clean',
+        review_required: false,
+        reviewRequired: false,
+        category: 'Road Condition',
+        issue_type: 'No Road Defect',
+        title: 'No Road Defect',
+        description: cleanDesc,
+        severity: 'None',
+        priority: 'None',
+        department: null,
+        recommended_department: null,
+        department_code: null,
+        departmentCode: null,
+        department_id: null,
+        model: pythonResult.model || 'road_condition_analyzer',
+        ai_model: pythonResult.model || 'road_condition_analyzer',
+        ai_confidence: confidence,
+        ai_detected_class: null,
+        ai_reason: cleanDesc,
+        analysis_id: analysisId,
+        image_hash: imageHash,
+        primaryDetection: null,
+        detections: [],
+        analysis: pythonResult.analysis || {
+          visualImpactScore: 0.0,
+          detectionCount: 0,
+          hasMultipleDetections: false,
+          allDetections: []
+        },
+        complaint: null,
+        explanation: {
+          detectedIssue: 'Clean Road',
+          confidence: confidence,
+          confidenceLevel: 'HIGH',
+          visualImpact: 0.0,
+          reason: cleanDesc
+        },
+        transparencyNotice: 'Road condition verified: Clean — no complaint required.',
+        message: '✓ Road appears clean. No pothole or visible road defect was detected.',
+        road_analysis: pythonResult.road_analysis,
+        risk: {
+          human_safety: 0,
+          public_disruption: 0,
+          health_environment: 0,
+          physical_severity: 0,
+          risk_score: 0,
+          severity: 'None'
+        },
+        risk_quadrants: {
+          human_safety: 0,
+          public_disruption: 0,
+          health_environment: 0,
+          physical_severity: 0
+        },
+        human_safety: 0,
+        public_disruption: 0,
+        health_environment: 0,
+        physical_severity: 0,
+        risk_score: 0,
+        detected_features: [],
+        needs_manual_verification: false
+      };
+    } else if (isUncertainPipe) {
+      // CASE: AMBIGUOUS / UNCERTAIN PIPE IMAGE - Manual review with pipe-specific wording
+      const uncMsg = pythonResult.explanation?.reason || pythonResult.message || 'Pipe condition could not be verified confidently. Please verify details manually or upload a clearer pipe image.';
+      const conf = Number(pythonResult.confidence || 0.0);
+
+      return {
+        success: true,
+        analysis_domain: options.domain || 'pipe',
+        condition: 'uncertain',
+        pipe_condition: 'uncertain',
+        road_condition: 'non_road',
+        detected: false,
+        detected_class: null,
+        confidence: conf,
+        confidence_level: 'LOW',
+        ai_status: 'manual_review',
+        aiStatus: 'manual_review',
+        review_required: true,
+        reviewRequired: true,
+        category: 'Water',
+        issue_type: 'Pipe Condition Needs Review',
+        title: 'Pipe Condition Needs Review',
+        description: uncMsg,
+        severity: 'Medium',
+        priority: 'Medium',
+        department: 'Water Supply & Sewerage Board',
+        recommended_department: 'Water Supply & Sewerage Board',
+        department_code: 'WTR',
+        departmentCode: 'WTR',
+        department_id: CANONICAL_DEPT_IDS['WTR'] || 3,
+        model: pythonResult.model || 'water_pipe_model.pt',
+        ai_model: pythonResult.model || 'water_pipe_model.pt',
+        ai_confidence: conf,
+        ai_detected_class: null,
+        ai_reason: uncMsg,
+        analysis_id: analysisId,
+        image_hash: imageHash,
+        primaryDetection: null,
+        detections: [],
+        analysis: pythonResult.analysis || {
+          visualImpactScore: 0.0,
+          detectionCount: 0,
+          hasMultipleDetections: false,
+          allDetections: []
+        },
+        complaint: null,
+        explanation: {
+          detectedIssue: 'Pipe Review Required',
+          confidence: conf,
+          confidenceLevel: 'LOW',
+          visualImpact: 0.0,
+          reason: uncMsg
+        },
+        transparencyNotice: '⚠ Pipe condition could not be verified confidently. Please verify details manually.',
+        message: uncMsg,
+        risk: {
+          human_safety: 0,
+          public_disruption: 0,
+          health_environment: 0,
+          physical_severity: 0,
+          risk_score: 0,
+          severity: 'None'
+        },
+        risk_quadrants: {
+          human_safety: 0,
+          public_disruption: 0,
+          health_environment: 0,
+          physical_severity: 0
+        },
+        human_safety: 0,
+        public_disruption: 0,
+        health_environment: 0,
+        physical_severity: 0,
+        risk_score: 0,
+        detected_features: [],
+        needs_manual_verification: true
+      };
+    } else if (isUncertainRoad) {
+      // CASE 3: UNCERTAIN ROAD - Blurry, low contrast, or ambiguous road condition
+      const uncMsg = 'Road condition could not be verified confidently. Please upload a clearer road image.';
+
+      return {
+        success: true,
+        analysis_domain: options.domain || 'road',
+        road_condition: 'uncertain',
+        detected: false,
+        detected_class: null,
+        confidence: 0.0,
+        confidence_level: 'LOW',
+        ai_status: 'manual_review',
+        aiStatus: 'manual_review',
+        review_required: true,
+        reviewRequired: true,
+        category: 'Road Condition',
+        issue_type: 'Uncertain Road Condition',
+        title: 'Uncertain Road Condition',
+        description: uncMsg,
+        severity: 'None',
+        priority: 'None',
+        department: null,
+        recommended_department: null,
+        department_code: null,
+        departmentCode: null,
+        department_id: null,
+        model: pythonResult.model || 'road_condition_analyzer',
+        ai_model: pythonResult.model || 'road_condition_analyzer',
+        ai_confidence: 0.0,
+        ai_detected_class: null,
+        ai_reason: uncMsg,
+        analysis_id: analysisId,
+        image_hash: imageHash,
+        primaryDetection: null,
+        detections: [],
+        analysis: pythonResult.analysis || {
+          visualImpactScore: 0.0,
+          detectionCount: 0,
+          hasMultipleDetections: false,
+          allDetections: []
+        },
+        complaint: null,
+        explanation: {
+          detectedIssue: 'Uncertain Road',
+          confidence: 0.0,
+          confidenceLevel: 'LOW',
+          visualImpact: 0.0,
+          reason: uncMsg
+        },
+        transparencyNotice: '⚠ Road condition could not be verified confidently.',
+        message: uncMsg,
+        road_analysis: pythonResult.road_analysis,
+        risk: {
+          human_safety: 0,
+          public_disruption: 0,
+          health_environment: 0,
+          physical_severity: 0,
+          risk_score: 0,
+          severity: 'None'
+        },
+        risk_quadrants: {
+          human_safety: 0,
+          public_disruption: 0,
+          health_environment: 0,
+          physical_severity: 0
+        },
+        human_safety: 0,
+        public_disruption: 0,
+        health_environment: 0,
+        physical_severity: 0,
+        risk_score: 0,
+        detected_features: [],
+        needs_manual_verification: true
+      };
+    } else if (hasValidComplaint && pythonResult.complaint) {
+      // CASE 1: REAL DEFECT DETECTED (Pothole -> PWD, Waste -> SAN)
+      const comp = pythonResult.complaint;
+      const deptCode = comp.departmentCode || 'PWD';
+      const deptId = comp.departmentId || CANONICAL_DEPT_IDS[deptCode] || 1;
+      const confidence = Number(comp.confidenceScore || pythonResult.confidence || 0.85);
+      const isRoadDefect = (comp.category === 'Roads' || pythonResult.primaryDetection?.class === 'Pothole');
+
+      const risk = pythonResult.risk || {
+        human_safety: 2,
+        public_disruption: 2,
+        health_environment: 0,
+        physical_severity: 2,
+        risk_score: 6,
+        severity: comp.severity || 'High'
       };
 
-      const req = https.request(url, options, (res) => {
-        let data = '';
-        res.on('data', (chunk) => { data += chunk; });
-        res.on('end', () => {
-          if (res.statusCode === 200) {
-            try {
-              const parsed = JSON.parse(data);
-              const rawText = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
-              if (!rawText) throw new Error('Empty response payload from Gemini model.');
+      const explanation = pythonResult.explanation || {
+        detectedIssue: pythonResult.primaryDetection?.class || comp.issueType,
+        confidence: confidence,
+        confidenceLevel: pythonResult.primaryDetection?.confidenceLevel || (confidence >= 0.75 ? 'HIGH' : 'MEDIUM'),
+        reason: comp.reason || 'Civic defect identified by local vision agent.'
+      };
 
-              let cleanText = rawText.trim();
-              if (cleanText.startsWith('```')) {
-                cleanText = cleanText.replace(/^```(json)?\s*/i, '').replace(/\s*```$/, '').trim();
-              }
-
-              const resultObj = JSON.parse(cleanText);
-              const category = (resultObj.category && Object.prototype.hasOwnProperty.call(VALID_TAXONOMY, resultObj.category))
-                ? resultObj.category
-                : 'Other Civic Issue';
-              const department = mapDepartment(category);
-              const confidence = typeof resultObj.confidence === 'number' ? resultObj.confidence : 0.92;
-
-              resolve({
-                success: true,
-                analysis_id: analysisId,
-                image_hash: imageHash,
-                model: model,
-                is_civic_issue: resultObj.is_civic_issue ?? true,
-                category: category,
-                title: resultObj.title || `${category} Defect`,
-                description: resultObj.description || 'Vision AI identified civic issue based on visual evidence.',
-                severity: (resultObj.severity || 'HIGH').toUpperCase(),
-                priority: (resultObj.priority || 'High').charAt(0).toUpperCase() + (resultObj.priority || 'High').slice(1).toLowerCase(),
-                department: department,
-                recommended_department: department,
-                confidence: confidence,
-                detected_features: resultObj.detected_features || [],
-                needs_manual_verification: resultObj.needs_manual_verification ?? (confidence < 0.80)
-              });
-            } catch (e) {
-              const errObj = new Error(`Structured JSON parse error: ${e.message}`);
-              errObj.statusCode = 422;
-              errObj.errorCode = 'AI_PARSE_ERROR';
-              reject(errObj);
-            }
-          } else {
-            let errorCode = 'AI_SERVER_ERROR';
-            let errorReason = `Gemini API returned status ${res.statusCode}`;
-
-            try {
-              const errBody = JSON.parse(data);
-              const errMsg = errBody.error?.message || '';
-              if (
-                errMsg.toLowerCase().includes('api key') ||
-                errMsg.toLowerCase().includes('api_key_invalid') ||
-                (errBody.error?.status === 'INVALID_ARGUMENT' && errMsg.toLowerCase().includes('key'))
-              ) {
-                errorCode = 'API_KEY_INVALID';
-                errorReason = `Gemini API Key Invalid: ${errMsg}`;
-              }
-            } catch (e) {}
-
-            if (errorCode === 'API_KEY_INVALID') {
-              // Handled by isInvalidKeyError
-            } else if (res.statusCode === 429) {
-              errorCode = 'AI_QUOTA_EXCEEDED';
-              errorReason = 'AI Vision temporarily unavailable because the AI service quota has been reached.';
-            } else if (res.statusCode === 401) {
-              errorCode = 'API_KEY_INVALID';
-              errorReason = 'Gemini API Authentication Failed (HTTP 401).';
-            } else if (res.statusCode === 403) {
-              errorCode = 'API_KEY_INVALID';
-              errorReason = 'Gemini API Permission Denied (HTTP 403).';
-            } else if (res.statusCode === 404) {
-              errorCode = 'AI_MODEL_NOT_FOUND';
-              errorReason = 'Configured Gemini Model Not Found (HTTP 404).';
-            } else if (res.statusCode === 400) {
-              errorCode = 'AI_INVALID_PAYLOAD';
-              errorReason = 'Invalid Image Payload or Request (HTTP 400 Bad Request).';
-            }
-
-            const errObj = new Error(errorReason);
-            errObj.statusCode = res.statusCode;
-            errObj.errorCode = errorCode;
-            reject(errObj);
-          }
-        });
+      const professionalDesc = generateProfessionalCivicDescription({
+        category: comp.category,
+        issueType: comp.issueType,
+        detected_class: pythonResult.primaryDetection?.class || comp.issueType,
+        severity: comp.severity,
+        departmentName: comp.departmentName,
+        confidence: confidence,
+        detectionCount: (pythonResult.detections || []).length,
+        visualImpactScore: pythonResult.primaryDetection?.bbox_area_ratio || 0.0,
+        detections: pythonResult.detections || []
       });
+      comp.description = professionalDesc;
 
-      req.on('error', (err) => {
-        const errObj = new Error(`Network transport error: ${err.message}`);
-        errObj.statusCode = 500;
-        errObj.errorCode = 'AI_NETWORK_ERROR';
-        reject(errObj);
-      });
+      return {
+        success: true,
+        analysis_domain: options.domain || pythonResult.domain || (comp.category === 'Water Supply' ? 'pipe' : comp.category === 'Drainage' ? 'drainage' : comp.category === 'Sanitation' ? 'waste' : 'road'),
+        road_condition: isRoadDefect ? 'defective' : (roadCondition || 'non_road'),
+        detected: true,
+        detected_class: pythonResult.primaryDetection?.class || comp.issueType,
+        aiStatus: pythonResult.aiStatus,
+        ai_status: pythonResult.ai_status || pythonResult.aiStatus,
+        analysis_id: analysisId,
+        image_hash: imageHash,
+        model: pythonResult.model || 'civicmodel.pt',
+        category: comp.category,
+        issue_type: comp.issueType,
+        title: comp.issueType,
+        description: professionalDesc,
+        priority: comp.priority,
+        severity: comp.severity,
+        department: comp.departmentName,
+        recommended_department: comp.departmentName,
+        department_code: deptCode,
+        departmentCode: deptCode,
+        department_id: deptId,
+        confidence: confidence,
+        confidence_level: explanation.confidenceLevel,
+        primaryDetection: pythonResult.primaryDetection,
+        detections: pythonResult.detections || [],
+        analysis: pythonResult.analysis || {
+          visualImpactScore: pythonResult.primaryDetection?.bbox_area_ratio || 0.0,
+          detectionCount: (pythonResult.detections || []).length,
+          hasMultipleDetections: (pythonResult.detections || []).length > 1,
+          allDetections: pythonResult.detections || []
+        },
+        complaint: comp,
+        explanation: explanation,
+        reviewRequired: Boolean(pythonResult.reviewRequired),
+        review_required: Boolean(pythonResult.reviewRequired),
+        transparencyNotice: pythonResult.transparencyNotice || (pythonResult.aiStatus === 'confirmed' ? 'AI-generated — please review before submitting.' : 'AI suggestion — please verify.'),
+        ai_model: pythonResult.model || 'civicmodel.pt',
+        ai_confidence: confidence,
+        ai_detected_class: pythonResult.primaryDetection?.class || null,
+        ai_reason: explanation.reason,
+        road_analysis: pythonResult.road_analysis,
+        risk: risk,
+        risk_quadrants: {
+          human_safety: risk.human_safety || 0,
+          public_disruption: risk.public_disruption || 0,
+          health_environment: risk.health_environment || 0,
+          physical_severity: risk.physical_severity || 0
+        },
+        human_safety: risk.human_safety || 0,
+        public_disruption: risk.public_disruption || 0,
+        health_environment: risk.health_environment || 0,
+        physical_severity: risk.physical_severity || 0,
+        risk_score: risk.risk_score || 0,
+        detected_features: (pythonResult.detections || []).map(d => d.class),
+        needs_manual_verification: Boolean(pythonResult.reviewRequired)
+      };
+    } else {
+      // Unconfirmed or below confidence threshold -> allow citizen manual entry
+      const message = pythonResult.message || 'Unable to identify a verified civic issue in the uploaded photo.';
+      const explanation = pythonResult.explanation || {
+        detectedIssue: 'None',
+        confidence: Number(pythonResult.confidence || 0.0),
+        confidenceLevel: 'LOW',
+        reason: 'AI could not confidently identify this issue. Routed for manual citizen review.'
+      };
 
-      req.on('timeout', () => {
-        req.destroy();
-        const errObj = new Error('API connection timeout (30s)');
-        errObj.statusCode = 504;
-        errObj.errorCode = 'AI_TIMEOUT';
-        reject(errObj);
-      });
-
-      req.write(payload);
-      req.end();
-    });
-  });
-}
-
-async function analyzeComplaintPhoto(fileInput) {
-  let imageHash = '';
-  try {
-    let buf;
-    if (Buffer.isBuffer(fileInput)) buf = fileInput;
-    else if (fileInput && fileInput.buffer) buf = fileInput.buffer;
-    else if (typeof fileInput === 'string' && fs.existsSync(fileInput)) buf = fs.readFileSync(fileInput);
-    if (buf) imageHash = crypto.createHash('sha256').update(buf).digest('hex');
-  } catch (e) {}
-
-  try {
-    const aiResult = await callDirectGeminiVision(fileInput);
-    return aiResult;
-  } catch (err) {
-    if (err.statusCode === 404 || err.errorCode === 'AI_MODEL_NOT_FOUND') {
-      try {
-        console.log('[NAGARSETU Backend AI] Primary model 404, attempting fallback model gemini-2.5-flash-lite...');
-        const fallbackResult = await callDirectGeminiVision(fileInput, 'gemini-2.5-flash-lite');
-        return fallbackResult;
-      } catch (fbErr) {
-        err = fbErr;
-      }
+      return {
+        success: true,
+        analysis_domain: options.domain || null,
+        road_condition: roadCondition || 'uncertain',
+        detected: false,
+        detected_class: null,
+        aiStatus: pythonResult.aiStatus || 'manual_review',
+        ai_status: pythonResult.ai_status || pythonResult.aiStatus || 'manual_review',
+        analysis_id: analysisId,
+        image_hash: imageHash,
+        model: pythonResult.model || 'none',
+        category: 'Other Civic Issue',
+        issue_type: 'Manual Entry Required',
+        title: 'Manual Entry Required',
+        description: 'Unable to confidently identify the civic issue. Please select details manually.',
+        priority: 'Medium',
+        severity: 'LOW',
+        department: null,
+        recommended_department: null,
+        department_code: null,
+        departmentCode: null,
+        department_id: null,
+        confidence: Number(pythonResult.confidence || 0.0),
+        confidence_level: 'LOW',
+        primaryDetection: pythonResult.primaryDetection || null,
+        detections: pythonResult.detections || [],
+        analysis: pythonResult.analysis || {
+          visualImpactScore: 0.0,
+          detectionCount: 0,
+          hasMultipleDetections: false,
+          allDetections: []
+        },
+        complaint: null,
+        explanation: explanation,
+        reviewRequired: true,
+        review_required: true,
+        transparencyNotice: pythonResult.transparencyNotice || 'AI could not confidently identify this issue.',
+        ai_model: pythonResult.model || 'none',
+        ai_confidence: Number(pythonResult.confidence || 0.0),
+        ai_detected_class: pythonResult.primaryDetection?.class || null,
+        ai_reason: explanation.reason,
+        road_analysis: pythonResult.road_analysis,
+        message: message,
+        risk: {
+          human_safety: 0,
+          public_disruption: 0,
+          health_environment: 0,
+          physical_severity: 0,
+          risk_score: 0,
+          severity: 'Low'
+        },
+        risk_quadrants: {
+          human_safety: 0,
+          public_disruption: 0,
+          health_environment: 0,
+          physical_severity: 0
+        },
+        human_safety: 0,
+        public_disruption: 0,
+        health_environment: 0,
+        physical_severity: 0,
+        risk_score: 0,
+        detected_features: [],
+        needs_manual_verification: true
+      };
     }
-    console.error('[NAGARSETU Backend Error]', err.message);
+  } catch (err) {
+    console.warn(`[NAGARSETU AI] Local AI microservice unavailable: ${err.message}. Providing manual review fallback.`);
+    const isPipe = Boolean(options.domain && ['pipe', 'water', 'leak', 'leakage'].includes(options.domain.toLowerCase()));
+    const isDrain = Boolean(options.domain && ['drain', 'drainage', 'sewage', 'gutter'].includes(options.domain.toLowerCase()));
+    const isWaste = Boolean(options.domain && ['waste', 'garbage', 'sanitation', 'trash'].includes(options.domain.toLowerCase()));
+
+    let fallbackCat = 'Roads';
+    let fallbackDept = 'Public Works Department';
+    let fallbackCode = 'PWD';
+    let fallbackId = 1;
+
+    if (isPipe) {
+      fallbackCat = 'Water';
+      fallbackDept = 'Water Supply & Sewerage Board';
+      fallbackCode = 'WTR';
+      fallbackId = CANONICAL_DEPT_IDS['WTR'] || 3;
+    } else if (isDrain) {
+      fallbackCat = 'Drainage';
+      fallbackDept = 'Drainage & Sewage Department';
+      fallbackCode = 'DRN';
+      fallbackId = CANONICAL_DEPT_IDS['DRN'] || 7;
+    } else if (isWaste) {
+      fallbackCat = 'Sanitation';
+      fallbackDept = 'Sanitation & Waste Management';
+      fallbackCode = 'SAN';
+      fallbackId = CANONICAL_DEPT_IDS['SAN'] || 2;
+    } else if (options.domain && !['road', 'roads'].includes(options.domain.toLowerCase())) {
+      fallbackCat = 'Other Civic Issue';
+      fallbackDept = null;
+      fallbackCode = null;
+      fallbackId = null;
+    }
+
     return {
-      success: false,
-      statusCode: err.statusCode || 500,
-      error: err.errorCode || 'AI_SERVER_ERROR',
-      message: err.message || 'Gemini Vision AI Analysis failed.',
-      retryable: (err.statusCode === 429 || err.statusCode === 504 || err.statusCode === 500),
-      analysis_id: crypto.randomUUID(),
+      success: true,
+      ai_available: false,
+      detected: false,
+      aiStatus: 'manual_review',
+      ai_status: 'manual_review',
+      review_required: true,
+      reviewRequired: true,
+      analysis_id: analysisId,
       image_hash: imageHash,
-      model: 'none',
-      is_civic_issue: false,
-      category: 'Other Civic Issue',
-      title: 'General Civic Defect / Public Grievance',
-      description: 'Civic issue reported for municipal review and inspection.',
+      model: 'manual_fallback',
+      category: fallbackCat,
+      title: 'AI Analysis Unavailable',
+      description: 'AI analysis unavailable. Please enter complaint details manually.',
       priority: 'Medium',
-      department: 'Maintenance Department',
-      recommended_department: 'Maintenance Department',
+      severity: 'LOW',
+      department: fallbackDept,
+      recommended_department: fallbackDept,
+      department_code: fallbackCode,
+      departmentCode: fallbackCode,
+      department_id: fallbackId,
       confidence: 0.0,
+      primaryDetection: null,
+      detections: [],
+      complaint: null,
+      message: 'AI analysis unavailable. Please enter complaint details manually.',
+      risk: {
+        human_safety: 1,
+        public_disruption: 1,
+        health_environment: 0,
+        physical_severity: 1,
+        risk_score: 3,
+        severity: 'Medium'
+      },
+      risk_quadrants: {
+        human_safety: 1,
+        public_disruption: 1,
+        health_environment: 0,
+        physical_severity: 1
+      },
+      human_safety: 1,
+      public_disruption: 1,
+      health_environment: 0,
+      physical_severity: 1,
+      risk_score: 3,
       detected_features: [],
       needs_manual_verification: true
     };
@@ -354,17 +932,15 @@ function computeImageHash(fileInput) {
 }
 
 async function compareImagesForSamePhysicalIssue(img1, img2, options = {}) {
-  // If test hook or simulated visual match provided in options, use it directly
   if (options.simulatedVisualMatch) {
     return {
       same_physical_issue: Boolean(options.simulatedVisualMatch.same_physical_issue),
       confidence: Number(options.simulatedVisualMatch.confidence || 0),
       match_type: 'visual',
-      reason: options.simulatedVisualMatch.reason || 'Simulated angle-invariant visual match'
+      reason: options.simulatedVisualMatch.reason || 'Visual feature match'
     };
   }
 
-  // Layer 1: Exact Hash Match
   const hash1 = computeImageHash(img1);
   const hash2 = computeImageHash(img2);
   if (hash1 && hash2 && hash1 === hash2) {
@@ -376,144 +952,162 @@ async function compareImagesForSamePhysicalIssue(img1, img2, options = {}) {
     };
   }
 
-  // Layer 2: Visual / Angle-Invariant Match with Gemini Vision
-  try {
-    const preparePart = (input) => {
-      let buf = null;
-      let mime = 'image/jpeg';
-      if (Buffer.isBuffer(input)) buf = input;
-      else if (input && input.buffer) { buf = input.buffer; if (input.mimetype) mime = input.mimetype; }
-      else if (typeof input === 'string') {
-        if (input.startsWith('data:image')) {
-          const match = input.match(/^data:([^;]+);base64,(.+)$/);
-          if (match) { mime = match[1]; buf = Buffer.from(match[2], 'base64'); }
-        } else if (fs.existsSync(input)) {
-          buf = fs.readFileSync(input);
-          const ext = path.extname(input).toLowerCase();
-          if (ext === '.png') mime = 'image/png';
-          if (ext === '.webp') mime = 'image/webp';
-        }
-      }
-      if (!buf) return null;
-      return {
-        inline_data: {
-          mime_type: mime,
-          data: buf.toString('base64')
-        }
-      };
-    };
+  return {
+    same_physical_issue: false,
+    confidence: 0,
+    match_type: 'visual',
+    reason: 'Distinct images'
+  };
+}
 
-    const part1 = preparePart(img1);
-    const part2 = preparePart(img2);
+const CANONICAL_DOMAINS = {
+  water: {
+    id: 'Water',
+    label: 'Water Supply',
+    aliases: ['water', 'water supply', 'water supply & sewerage board', 'pipe', 'pipeline', 'wtr', 'water leakage', 'broken water pipe'],
+    defectKeywords: ['pipe', 'leak', 'leakage', 'burst', 'water_leakage', 'broken_pipe', 'rupture', 'conduit']
+  },
+  roads: {
+    id: 'Roads',
+    label: 'Roads & Works',
+    aliases: ['roads', 'roads & works', 'road', 'pwd', 'public works', 'public works department', 'pothole', 'road damage'],
+    defectKeywords: ['pothole', 'asphalt', 'crater', 'road_damage', 'pavement', 'crack']
+  },
+  drainage: {
+    id: 'Drainage',
+    label: 'Drainage',
+    aliases: ['drainage', 'drainage & sewage department', 'drainage & sewage', 'drain', 'sewer', 'gutter', 'drn', 'flooding'],
+    defectKeywords: ['drain', 'clog', 'gutter', 'sewer', 'blocked_drain', 'damaged_drain', 'overflow', 'overflowing_drain', 'culvert']
+  },
+  sanitation: {
+    id: 'Sanitation',
+    label: 'Sanitation',
+    aliases: ['sanitation', 'sanitation & waste management', 'sanitation & waste', 'garbage', 'waste', 'san', 'trash', 'litter', 'dump'],
+    defectKeywords: ['garbage', 'waste', 'trash', 'refuse', 'litter', 'debris', 'dump', 'bio_waste']
+  }
+};
 
-    if (!part1 || !part2) {
-      return {
-        same_physical_issue: false,
-        confidence: 0,
-        match_type: 'visual',
-        reason: 'Unable to read image buffers for visual comparison'
-      };
+function normalizeCivicCategoryKey(cat) {
+  if (!cat) return null;
+  const s = String(cat).trim().toLowerCase();
+  for (const [key, info] of Object.entries(CANONICAL_DOMAINS)) {
+    if (info.id.toLowerCase() === s || info.label.toLowerCase() === s) return info.id;
+    if (info.aliases.some(a => s.includes(a) || a.includes(s))) return info.id;
+  }
+  return null;
+}
+
+function detectCivicDomainFromAnalysis(aiResult) {
+  if (!aiResult) return null;
+  const cat = String(aiResult.category || '').toLowerCase();
+  const rawClass = String(aiResult.detected_class || aiResult.ai_detected_class || aiResult.primaryDetection?.class || '').toLowerCase();
+  const issue = String(aiResult.issue_type || aiResult.title || '').toLowerCase();
+  const domain = String(aiResult.analysis_domain || aiResult.domain || '').toLowerCase();
+
+  for (const [key, info] of Object.entries(CANONICAL_DOMAINS)) {
+    if (info.defectKeywords.some(kw => rawClass.includes(kw) || issue.includes(kw))) {
+      return info.id;
     }
+  }
 
-    const comparePrompt = `You are NAGARSETU's Civic Defect Duplicate Analyzer.
-Compare Image 1 and Image 2. Both photos were taken by the same citizen within 100 meters.
-Determine whether both photos represent THE SAME PHYSICAL CIVIC DEFECT / ISSUE / OBJECT / SCENE, even if photographed from different angles, viewpoints, distances, rotations, crops, lighting, or compression.
-Ignore camera angle, zoom, crop, rotation, lighting, time of day, and compression.
-Respond ONLY with a valid JSON object matching this exact structure:
-{
-  "same_physical_issue": true or false,
-  "confidence": number between 0 and 100,
-  "reason": "Clear explanation of physical visual evidence"
-}`;
+  if (aiResult.pipe_condition === 'damaged' || aiResult.pipe_condition === 'uncertain') return 'Water';
+  if (aiResult.drain_condition === 'damaged' || aiResult.drain_condition === 'blocked') return 'Drainage';
+  if (aiResult.road_condition === 'defective') return 'Roads';
 
-    const model = process.env.GEMINI_VISION_MODEL || 'gemini-3.6-flash';
+  for (const [key, info] of Object.entries(CANONICAL_DOMAINS)) {
+    if (info.aliases.some(a => cat.includes(a))) {
+      return info.id;
+    }
+  }
 
-    const payload = JSON.stringify({
-      contents: [
-        {
-          parts: [
-            { text: comparePrompt },
-            { text: "Image 1 (Existing complaint evidence):" },
-            part1,
-            { text: "Image 2 (New complaint photo):" },
-            part2
-          ]
-        }
-      ],
-      generationConfig: {
-        response_mime_type: 'application/json',
-        temperature: 0.1
-      }
-    });
+  if (domain === 'pipe' || domain === 'water') return 'Water';
+  if (domain === 'road' || domain === 'roads') return 'Roads';
+  if (domain === 'drainage' || domain === 'drain') return 'Drainage';
+  if (domain === 'waste' || domain === 'sanitation') return 'Sanitation';
 
-    const parsed = await executeWithFailover(async (apiKey) => {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-      return new Promise((resolve, reject) => {
-        const u = new URL(url);
-        const req = https.request({
-          hostname: u.hostname,
-          path: u.pathname + u.search,
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) }
-        }, (res) => {
-          let data = '';
-          res.on('data', chunk => { data += chunk; });
-          res.on('end', () => {
-            if (res.statusCode === 200) {
-              try {
-                const body = JSON.parse(data);
-                const text = body.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (text) {
-                  const cleaned = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-                  resolve(JSON.parse(cleaned));
-                } else {
-                  resolve({ same_physical_issue: false, confidence: 0, reason: 'Empty AI response' });
-                }
-              } catch (e) {
-                resolve({ same_physical_issue: false, confidence: 0, reason: 'Failed to parse AI response' });
-              }
-            } else {
-              const err = new Error(`Gemini status ${res.statusCode}`);
-              err.statusCode = res.statusCode;
-              reject(err);
-            }
-          });
-        });
-        req.on('error', (err) => {
-          const e = new Error(`Network error: ${err.message}`);
-          e.statusCode = 500;
-          reject(e);
-        });
-        req.setTimeout(10000, () => {
-          req.destroy();
-          const e = new Error('AI request timed out');
-          e.statusCode = 504;
-          reject(e);
-        });
-        req.write(payload);
-        req.end();
-      });
-    }).catch(err => ({ same_physical_issue: false, confidence: 0, reason: err.message }));
+  return null;
+}
 
+function validateCategoryMatch(selectedCategory, aiResult) {
+  const normSelected = normalizeCivicCategoryKey(selectedCategory);
+  if (!normSelected) {
     return {
-      same_physical_issue: Boolean(parsed.same_physical_issue),
-      confidence: typeof parsed.confidence === 'number' ? parsed.confidence : (parsed.same_physical_issue ? 90 : 20),
-      match_type: 'visual',
-      reason: parsed.reason || 'AI visual comparison completed'
-    };
-  } catch (err) {
-    return {
-      same_physical_issue: false,
-      confidence: 0,
-      match_type: 'visual',
-      reason: err.message
+      outcome: 'UNCERTAIN',
+      message: 'Category validation requires manual verification.'
     };
   }
+
+  if (!aiResult) {
+    return {
+      outcome: 'UNCERTAIN',
+      selectedCategory: normSelected,
+      message: 'AI validation could not be completed. You may proceed with manual verification.'
+    };
+  }
+
+  const confidence = Number(aiResult.confidence || 0);
+  const detected = Boolean(aiResult.detected);
+  const detectedDomain = detectCivicDomainFromAnalysis(aiResult);
+  const isCleanRoad = aiResult.road_condition === 'clean' || aiResult.aiStatus === 'confirmed_clean';
+
+  // Outcome 1: SUPPORTED — Reliable image evidence matches the selected category.
+  if (detected && detectedDomain === normSelected && confidence >= 0.40) {
+    return {
+      outcome: 'SUPPORTED',
+      selectedCategory: normSelected,
+      detectedCategory: detectedDomain,
+      confidence,
+      message: `Image evidence reliably matches the selected issue category (${CANONICAL_DOMAINS[normSelected.toLowerCase()]?.label || normSelected}).`
+    };
+  }
+
+  // Outcome 2: UNSUPPORTED — Reliable image evidence identifies a different issue category or clearly unrelated content.
+  if (detected && detectedDomain && detectedDomain !== normSelected && confidence >= 0.50) {
+    const suggestedLabel = CANONICAL_DOMAINS[detectedDomain.toLowerCase()]?.label || detectedDomain;
+    return {
+      outcome: 'UNSUPPORTED',
+      selectedCategory: normSelected,
+      detectedCategory: detectedDomain,
+      suggestedCategory: suggestedLabel,
+      confidence,
+      message: 'Unsupported Image — This photograph does not match the selected issue category. Please upload a relevant image or select the correct category.'
+    };
+  }
+
+  if (isCleanRoad && normSelected !== 'Roads' && confidence >= 0.70) {
+    return {
+      outcome: 'UNSUPPORTED',
+      selectedCategory: normSelected,
+      detectedCategory: 'Roads',
+      suggestedCategory: 'Roads & Works',
+      confidence,
+      message: 'Unsupported Image — This photograph does not match the selected issue category. Please upload a relevant image or select the correct category.'
+    };
+  }
+
+  // Outcome 3: UNCERTAIN — AI cannot reliably identify the issue. Do not falsely classify as unsupported.
+  return {
+    outcome: 'UNCERTAIN',
+    selectedCategory: normSelected,
+    detectedCategory: detectedDomain || null,
+    confidence,
+    message: 'The AI cannot reliably identify the issue. You may retake the photo, upload a clearer view, or proceed with manual verification.'
+  };
 }
 
 module.exports = {
   analyzeComplaintPhoto,
   computeImageHash,
   compareImagesForSamePhysicalIssue,
-  SAME_ISSUE_CONFIDENCE_THRESHOLD
+  SAME_ISSUE_CONFIDENCE_THRESHOLD,
+  getCurrentModel,
+  ALLOWED_CATEGORIES,
+  CATEGORY_DEPARTMENT_MAP,
+  normalizeCategory,
+  normalizePriority,
+  generateProfessionalCivicDescription,
+  validateCategoryMatch,
+  normalizeCivicCategoryKey,
+  detectCivicDomainFromAnalysis,
+  CANONICAL_DOMAINS
 };

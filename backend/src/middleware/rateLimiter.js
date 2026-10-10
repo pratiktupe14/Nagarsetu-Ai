@@ -126,10 +126,42 @@ function getAuthedClientKey(req) {
   return `ip_${ip}`;
 }
 
+/**
+ * Resolves shared Redis rate-limit store if REDIS_URL and adapter are configured.
+ * Safely falls back to process-local MemoryStore if Redis is unconfigured or unavailable,
+ * preventing unhandled crash while reporting required production multi-instance config.
+ */
+function resolveRateLimitStore(prefix) {
+  const redisUrl = process.env.REDIS_URL || process.env.KV_REST_API_URL;
+  if (!redisUrl) {
+    if (process.env.NODE_ENV === 'production') {
+      console.warn(`[RATE LIMIT WARNING] REDIS_URL is not set in production. Rate limits are degrading to process-local memory enforcement for ${prefix}. Configure REDIS_URL for distributed multi-instance synchronization.`);
+    }
+    return undefined; // uses default MemoryStore
+  }
+  try {
+    const { RedisStore } = require('rate-limit-redis');
+    const { createClient } = require('redis');
+    const client = createClient({ url: redisUrl });
+    client.on('error', (err) => console.warn(`[REDIS RATE LIMIT NOTE] Client error on ${prefix}:`, err.message));
+    client.connect().catch((err) => console.warn(`[REDIS RATE LIMIT NOTE] Connection failed on ${prefix}:`, err.message));
+    return new RedisStore({
+      sendCommand: (...args) => client.sendCommand(args),
+      prefix: `nagarsetu_rl_${prefix}:`
+    });
+  } catch (err) {
+    if (process.env.NODE_ENV === 'production') {
+      console.warn(`[REDIS RATE LIMIT WARNING] REDIS_URL provided but rate-limit-redis/redis client not loadable (${err.message}). Using fallback memory store for ${prefix}.`);
+    }
+    return undefined;
+  }
+}
+
 // 2. Public Endpoints Rate Limiter (Health, Geocoding, public maps)
 const publicRateLimiter = rateLimit({
   windowMs: getEnvInt('RATE_LIMIT_PUBLIC_WINDOW_MS', 15 * 60 * 1000), // 15 minutes
   max: getEnvInt('RATE_LIMIT_PUBLIC_MAX', 100), // 100 requests per 15 minutes
+  store: resolveRateLimitStore('public'),
   standardHeaders: true,
   legacyHeaders: false,
   validate: false,
@@ -145,6 +177,7 @@ const authedRateLimiter = rateLimit({
   windowMs: getEnvInt('RATE_LIMIT_AUTHED_WINDOW_MS', 15 * 60 * 1000), // 15 minutes
   max: getEnvInt('RATE_LIMIT_AUTHED_MAX', 300), // 300 requests per 15 minutes
   keyGenerator: getAuthedClientKey,
+  store: resolveRateLimitStore('authed'),
   skip: (req) => req.method === 'GET' || req.method === 'HEAD' || req.method === 'OPTIONS',
   standardHeaders: true,
   legacyHeaders: false,
@@ -161,6 +194,7 @@ const complaintSubmitLimiter = rateLimit({
   windowMs: getEnvInt('RATE_LIMIT_COMPLAINT_WINDOW_MS', 15 * 60 * 1000), // 15 minutes
   max: getEnvInt('RATE_LIMIT_COMPLAINT_MAX', 30), // 30 complaint submissions per 15 min per citizen
   keyGenerator: getAuthedClientKey,
+  store: resolveRateLimitStore('complaint'),
   standardHeaders: true,
   legacyHeaders: false,
   validate: false,

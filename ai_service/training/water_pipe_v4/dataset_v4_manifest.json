@@ -1,0 +1,850 @@
+{
+  "version": "v4.0",
+  "dataset_name": "NAGARSETU Water Pipe Civic Infrastructure Dataset V4",
+  "total_source_files": 92,
+  "total_unique_images": 90,
+  "duplicates_excluded": [
+    [
+      "images (21).jpg",
+      "images (19).jpg"
+    ],
+    [
+      "sentinelassam-english_2025-12-03_mru07lxm_Water-pipeline-leakage-at-Silpukhuri.avif",
+      "sentinelassam-english_2025-12-03_mru07lxm_Water-pipeline-leakage-at-Silpukhuri.avif"
+    ]
+  ],
+  "genuinely_new_since_v3_count": 1,
+  "genuinely_new_since_v3": [
+    {
+      "filename": "Screenshot 2026-10-09 174152.png",
+      "path": "D:\\NAGARSETU\\leaking pipes\\1\\Screenshot 2026-10-09 174152.png",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "dee2ec03348d3ec2035173d2cf1ba65d78e35549e788cd1e73aeaa491b09140b",
+      "folder": "leaking",
+      "group": "leak_screenshot"
+    }
+  ],
+  "classes": {
+    "0": "normal_pipe",
+    "1": "damaged_or_leaking_pipe"
+  },
+  "counts": {
+    "normal_pipe": 28,
+    "damaged_or_leaking_pipe": 62
+  },
+  "frozen_held_out_test": [
+    {
+      "filename": "blue-industrial-water-pipe-system-with-visible-rust-near-a-corrugated-metal-wall-in-an-outdoor-setting-photo.jpg",
+      "path": "D:\\NAGARSETU\\normal pipe images\\blue-industrial-water-pipe-system-with-visible-rust-near-a-corrugated-metal-wall-in-an-outdoor-setting-photo.jpg",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "1bb822961d54e40f95e0585b1933951422c3b0f3913497c3a55f81903b131fa5",
+      "folder": "normal",
+      "group": "normal_single_blue-industrial"
+    },
+    {
+      "filename": "istockphoto-1275396599-612x612.jpg",
+      "path": "D:\\NAGARSETU\\normal pipe images\\istockphoto-1275396599-612x612.jpg",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "4b9ab730e77c8379fd9631cfa3fa42e61a74508bb5f601110da35d0a0248741c",
+      "folder": "normal",
+      "group": "normal_istock_stock"
+    },
+    {
+      "filename": "istockphoto-1410643227-612x612.jpg",
+      "path": "D:\\NAGARSETU\\normal pipe images\\istockphoto-1410643227-612x612.jpg",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "7ab2c8e93cdb45c5c6be61054ad9e10dd17e530a70365739c916558cfd2bae18",
+      "folder": "normal",
+      "group": "normal_istock_stock"
+    },
+    {
+      "filename": "istockphoto-157590055-612x612.jpg",
+      "path": "D:\\NAGARSETU\\normal pipe images\\istockphoto-157590055-612x612.jpg",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "1e2bb058b5c8eb3152fea938758dee9d7822bb69dbe448989fc2f0d5650abeb5",
+      "folder": "normal",
+      "group": "normal_istock_stock"
+    },
+    {
+      "filename": "istockphoto-478577114-612x612.jpg",
+      "path": "D:\\NAGARSETU\\normal pipe images\\istockphoto-478577114-612x612.jpg",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "4ed08febe29b21c5d93b3d0bb0ce6531889f00f49b83d7e2ee29dba958c97ff0",
+      "folder": "normal",
+      "group": "normal_istock_stock"
+    },
+    {
+      "filename": "broken-water-pipe-leaking-out-soil-underground-leak-274565016.webp",
+      "path": "D:\\NAGARSETU\\leaking pipes\\broken-water-pipe-leaking-out-soil-underground-leak-274565016.webp",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "1d3a0d32597307059dc5a7daf8f48c07a47c5b1fda99f88084062ea9f03378aa",
+      "folder": "leaking",
+      "group": "leak_single_broken-water-pi"
+    },
+    {
+      "filename": "Screenshot 2026-10-09 003238.png",
+      "path": "D:\\NAGARSETU\\leaking pipes\\Screenshot 2026-10-09 003238.png",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "989fcaa53f793dd099320809bdbd989405e3b0e6e25a070eb7b1f06f4dd8f13e",
+      "folder": "leaking",
+      "group": "leak_screenshot"
+    },
+    {
+      "filename": "sentinelassam-english_2025-12-03_mru07lxm_Water-pipeline-leakage-at-Silpukhuri.avif",
+      "path": "D:\\NAGARSETU\\leaking pipes\\sentinelassam-english_2025-12-03_mru07lxm_Water-pipeline-leakage-at-Silpukhuri.avif",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "3a1ccb40b727c91ff59c7e8ca3e812277587e2f305bd9ded060588da2577949b",
+      "folder": "leaking",
+      "group": "leak_single_sentinelassam-e"
+    },
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.19.20 AM (1).jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.19.20 AM (1).jpeg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "c43649a751a0e6fd46397af0c520b4658fe4c97bb5c796958c9987347a765805",
+      "folder": "leaking",
+      "group": "leak_whatsapp_12_19"
+    },
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.19.20 AM (2).jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.19.20 AM (2).jpeg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "126a05ca7e428752634c6b35e2162b8b20a301d342bd0b448168be9303838b61",
+      "folder": "leaking",
+      "group": "leak_whatsapp_12_19"
+    },
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.19.20 AM.jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.19.20 AM.jpeg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "999187644c00028f6dcfecbaff54cebde1a3b4853f9827ac972c201b68bf8d97",
+      "folder": "leaking",
+      "group": "leak_whatsapp_12_19"
+    },
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.20.49 AM.jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.20.49 AM.jpeg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "28b5f76f82cf75b93a1d1645261d20e4743703589a645eb8d0e4b4f93c60f8f2",
+      "folder": "leaking",
+      "group": "leak_whatsapp_12_20"
+    },
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.20.50 AM (1).jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.20.50 AM (1).jpeg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "5ac5d5dfd57d9f6269c5943360d662996dc9f69cecae5ac275bc23cf8290f453",
+      "folder": "leaking",
+      "group": "leak_whatsapp_12_20"
+    },
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.20.50 AM.jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.20.50 AM.jpeg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "74c8955a15d9d4004964ddf6460002f8a556c995bbaf70c188d4ee5fd9f48db8",
+      "folder": "leaking",
+      "group": "leak_whatsapp_12_20"
+    },
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.20.51 AM.jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.20.51 AM.jpeg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "ae57b902075cd7821acc51f4df4f9972f2ec4a8853db82d0c19119d1e7aa995f",
+      "folder": "leaking",
+      "group": "leak_whatsapp_12_20"
+    }
+  ],
+  "train_val_pool": [
+    {
+      "filename": "4412.webp",
+      "path": "D:\\NAGARSETU\\normal pipe images\\4412.webp",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "c5c5f5f1d63518daea9802d4d9bbfc0ee9a82774d7603efe22eb9e8a5e5c8f91",
+      "folder": "normal",
+      "group": "normal_single_4412.webp"
+    },
+    {
+      "filename": "Screenshot 2026-10-09 011506.png",
+      "path": "D:\\NAGARSETU\\normal pipe images\\Screenshot 2026-10-09 011506.png",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "fc7554a9d51c0f4fb332cf3b75bc63ef6358bbc46c7fb6035caec1175e81b081",
+      "folder": "normal",
+      "group": "normal_screenshot"
+    },
+    {
+      "filename": "Screenshot 2026-10-09 011519.png",
+      "path": "D:\\NAGARSETU\\normal pipe images\\Screenshot 2026-10-09 011519.png",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "34c509448ad5feb28c2b7ad01c2fd6a2ecd8d09a15f63fbb6c8226e22261aec6",
+      "folder": "normal",
+      "group": "normal_screenshot"
+    },
+    {
+      "filename": "Screenshot 2026-10-09 011533.png",
+      "path": "D:\\NAGARSETU\\normal pipe images\\Screenshot 2026-10-09 011533.png",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "99ab0bffca6c0f873436b58b2792bf5fcf3c3ba842a4ef8da8328db9de715f92",
+      "folder": "normal",
+      "group": "normal_screenshot"
+    },
+    {
+      "filename": "Screenshot 2026-10-09 011541.png",
+      "path": "D:\\NAGARSETU\\normal pipe images\\Screenshot 2026-10-09 011541.png",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "56058f8e8410b7fb04ed66ac3f6aebbad5a335476102dbcd5d662b01aa31be42",
+      "folder": "normal",
+      "group": "normal_screenshot"
+    },
+    {
+      "filename": "Screenshot 2026-10-09 011601.png",
+      "path": "D:\\NAGARSETU\\normal pipe images\\Screenshot 2026-10-09 011601.png",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "cc9a9f05d031134767d4b412d2ef5ed325ac7b8af363b10f25b69dfe69017f2d",
+      "folder": "normal",
+      "group": "normal_screenshot"
+    },
+    {
+      "filename": "Screenshot 2026-10-09 011606.png",
+      "path": "D:\\NAGARSETU\\normal pipe images\\Screenshot 2026-10-09 011606.png",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "e9e82bd0c09d0d5addc22d8b3bd305b4c6b5ba488b165d1e972b62d5e6515d2b",
+      "folder": "normal",
+      "group": "normal_screenshot"
+    },
+    {
+      "filename": "Screenshot 2026-10-09 011630.png",
+      "path": "D:\\NAGARSETU\\normal pipe images\\Screenshot 2026-10-09 011630.png",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "9dd4d25f119ed17ac411a289792d0c1d259c5a672356412d57c5bb7f77a7a42c",
+      "folder": "normal",
+      "group": "normal_screenshot"
+    },
+    {
+      "filename": "Screenshot 2026-10-09 011706.png",
+      "path": "D:\\NAGARSETU\\normal pipe images\\Screenshot 2026-10-09 011706.png",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "62af7b341c7133e82d22e44e1f54c2396106bc1e4907260ae488adb9579743f1",
+      "folder": "normal",
+      "group": "normal_screenshot"
+    },
+    {
+      "filename": "Screenshot 2026-10-09 011735.png",
+      "path": "D:\\NAGARSETU\\normal pipe images\\Screenshot 2026-10-09 011735.png",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "2ac0b3a1af01e726d107722009b03d942757875ccb37aacb2aa98ffea5451c3a",
+      "folder": "normal",
+      "group": "normal_screenshot"
+    },
+    {
+      "filename": "Screenshot 2026-10-09 011809.png",
+      "path": "D:\\NAGARSETU\\normal pipe images\\Screenshot 2026-10-09 011809.png",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "60534edf6950fffc83f8cab387e13687ad8b3f637d07789540a7b23759f29c36",
+      "folder": "normal",
+      "group": "normal_screenshot"
+    },
+    {
+      "filename": "Screenshot 2026-10-09 011821.png",
+      "path": "D:\\NAGARSETU\\normal pipe images\\Screenshot 2026-10-09 011821.png",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "0a6f139d3f7fff0136706d01bb77dc2b312e4726bfe36d373c8e0afc19441b96",
+      "folder": "normal",
+      "group": "normal_screenshot"
+    },
+    {
+      "filename": "Screenshot 2026-10-09 011835.png",
+      "path": "D:\\NAGARSETU\\normal pipe images\\Screenshot 2026-10-09 011835.png",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "0e979ee81ef92bdb8a1a5f82c9134520d76a2358a1e84bbf345c26659eeae699",
+      "folder": "normal",
+      "group": "normal_screenshot"
+    },
+    {
+      "filename": "Screenshot 2026-10-09 011927.png",
+      "path": "D:\\NAGARSETU\\normal pipe images\\Screenshot 2026-10-09 011927.png",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "dfd808113cf30b5f56afd59e2deefe95ae96025df0aa8693d7b2a1e2353302b0",
+      "folder": "normal",
+      "group": "normal_screenshot"
+    },
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 1.24.00 AM.jpeg",
+      "path": "D:\\NAGARSETU\\normal pipe images\\WhatsApp Image 2026-10-09 at 1.24.00 AM.jpeg",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "9b87ee365f0a43b0793a10f3b99519af1f7058941374f10b53eadb28df5cf1b7",
+      "folder": "normal",
+      "group": "normal_whatsapp_1_24_"
+    },
+    {
+      "filename": "images (1).jpg",
+      "path": "D:\\NAGARSETU\\normal pipe images\\images (1).jpg",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "8bb5e279346bef95e184e451fede58416c95fb7b683e49d13ea613b444d772df",
+      "folder": "normal",
+      "group": "normal_images_batch_images (1)"
+    },
+    {
+      "filename": "images (2).jpg",
+      "path": "D:\\NAGARSETU\\normal pipe images\\images (2).jpg",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "76f4f0a30d003231c74c5cf0169601b32ea9350d26712b4f8306194894bac0e5",
+      "folder": "normal",
+      "group": "normal_images_batch_images (2)"
+    },
+    {
+      "filename": "images (3).jpg",
+      "path": "D:\\NAGARSETU\\normal pipe images\\images (3).jpg",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "79b895910479db45c2bc507adf2f2ae48d7fe0ffd2c5b11534ece758a39ee208",
+      "folder": "normal",
+      "group": "normal_images_batch_images (3)"
+    },
+    {
+      "filename": "images (4).jpg",
+      "path": "D:\\NAGARSETU\\normal pipe images\\images (4).jpg",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "0cd2ec48e72ae04a4f7adbfe8239e1079bf411496b978e9902aaf18626487e51",
+      "folder": "normal",
+      "group": "normal_images_batch_images (4)"
+    },
+    {
+      "filename": "images (5).jpg",
+      "path": "D:\\NAGARSETU\\normal pipe images\\images (5).jpg",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "7d7399e98002569c64b55aeaf2637b201d0db62dc28c500f13a82243fb207c14",
+      "folder": "normal",
+      "group": "normal_images_batch_images (5)"
+    },
+    {
+      "filename": "images (6).jpg",
+      "path": "D:\\NAGARSETU\\normal pipe images\\images (6).jpg",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "388f0bc659cf02921e451d7db6e64f86d006222312893fa613cb1817053cd8c3",
+      "folder": "normal",
+      "group": "normal_images_batch_images (6)"
+    },
+    {
+      "filename": "images.jpg",
+      "path": "D:\\NAGARSETU\\normal pipe images\\images.jpg",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "a92811d949c280bc1fa5b0004024764412717b73522e9299b5a1ed5063dbf347",
+      "folder": "normal",
+      "group": "normal_single_images.jpg"
+    },
+    {
+      "filename": "pipa-hdpe-1-1568x882.webp",
+      "path": "D:\\NAGARSETU\\normal pipe images\\pipa-hdpe-1-1568x882.webp",
+      "label": 0,
+      "class_name": "normal_pipe",
+      "sha256": "4195a9bd213e92cb02bde24adc148c35d28e27fec3d7ee7b3d30dd82f9fb5e52",
+      "folder": "normal",
+      "group": "normal_single_pipa-hdpe-1-156"
+    },
+    {
+      "filename": "114662673.avif",
+      "path": "D:\\NAGARSETU\\leaking pipes\\114662673.avif",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "e23af737843785379abd317c24a9d16591dc5a7425ef4530f95b25fa47a3e01e",
+      "folder": "leaking",
+      "group": "leak_single_114662673.avif"
+    },
+    {
+      "filename": "360_F_285419282_FOpILCT5N8GcSL1R8eccmWBcqgbgLzfR.jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\360_F_285419282_FOpILCT5N8GcSL1R8eccmWBcqgbgLzfR.jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "6cc2ff19ccd32b0787fab428f4849e9a6ce8cc0cf56113ac9bd5c0ff5d9d5394",
+      "folder": "leaking",
+      "group": "leak_single_360_F_285419282"
+    },
+    {
+      "filename": "8gpfpaywtj6a1.jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\8gpfpaywtj6a1.jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "69b9e1834290031e8ad77922eee5855482abdefb70d8d9996b7960f23aa5b51e",
+      "folder": "leaking",
+      "group": "leak_single_8gpfpaywtj6a1.j"
+    },
+    {
+      "filename": "broken-pvc.webp",
+      "path": "D:\\NAGARSETU\\leaking pipes\\broken-pvc.webp",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "803c44b023409fe260532fa86183567d7112524b66d109e27bcf3371989d60b0",
+      "folder": "leaking",
+      "group": "leak_single_broken-pvc.webp"
+    },
+    {
+      "filename": "burst-water-pipe.jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\burst-water-pipe.jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "d4b3141659cfa7fcd2a58d274cf43f71bc3704609ae98c35db17d809fd4e0f79",
+      "folder": "leaking",
+      "group": "leak_single_burst-water-pip"
+    },
+    {
+      "filename": "d61a7dc982b5917636a694051817fb09.webp",
+      "path": "D:\\NAGARSETU\\leaking pipes\\d61a7dc982b5917636a694051817fb09.webp",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "394b3edd15813a4b0bf163a2bfbb089a113373602c603bdb1a53802fdb0ca9fc",
+      "folder": "leaking",
+      "group": "leak_single_d61a7dc982b5917"
+    },
+    {
+      "filename": "damaged-concrete-drain-cover-broken-260nw-2718087129.jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\damaged-concrete-drain-cover-broken-260nw-2718087129.jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "bdedc8956efd92c2f10b9f3c38d3a5ecaab46838c6bb74599367ccff5a99573a",
+      "folder": "leaking",
+      "group": "leak_single_damaged-concret"
+    },
+    {
+      "filename": "images (1).jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (1).jpeg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "30f3ce30b664551e21fa98204c565471223100c2e993dabf7253ddcb06cef87b",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (1)"
+    },
+    {
+      "filename": "images (1).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (1).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "6f1a18b2bcb59df5de423203984b383552ca3a7e2b846e9a27a21c81dd0e3516",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (1)"
+    },
+    {
+      "filename": "images (10).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (10).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "e4fbd548e0c70bf385dfb1243ec7bd77f451f7c26834ca7948ebc5e235e4c4f8",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (10"
+    },
+    {
+      "filename": "images (11).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (11).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "4f2eefa21f739beb55c9c32d0da2d97e05b2e4a18d161383b67ab5380f83935b",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (11"
+    },
+    {
+      "filename": "images (12).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (12).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "771eb510a24c36843e8c57785fefaf1070c3777366522d71bbdb5d7fb632b0f0",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (12"
+    },
+    {
+      "filename": "images (13).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (13).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "124d751512014175219305a11d1d462e021553649ce5390a6ba88bc9138c13dd",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (13"
+    },
+    {
+      "filename": "images (14).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (14).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "ad2f8237564787777c8d443c592dfa4656a4f2baf332d025343a53c2d3195f0e",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (14"
+    },
+    {
+      "filename": "images (15).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (15).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "e05a44f36a5e0e8425053e53d29ed5697a0ddc2e5908e7ea12a9b9113093a6a1",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (15"
+    },
+    {
+      "filename": "images (16).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (16).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "c6e49917d2f83ba01ddd4297afa8fc1571e67bb2e798171ad308a3f24cf3a079",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (16"
+    },
+    {
+      "filename": "images (17).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (17).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "25b3d005667cc03ce99c43c51570e892514ffa8abadabf24b4a61252233ad299",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (17"
+    },
+    {
+      "filename": "images (18).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (18).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "1bc371b0029eaa20fa9afaf64ed4b73eab4776a36d6ce610cc29e83cdd817d41",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (18"
+    },
+    {
+      "filename": "images (19).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (19).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "cd5e0b3a816e043b7114da211e305661f62c08d10db2e8c0a02d41ed5982335b",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (19"
+    },
+    {
+      "filename": "images (2).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (2).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "d4771ce783bdc054dbf4ac99d714154cb8c7b797bf3da2ca958e2f991d473f51",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (2)"
+    },
+    {
+      "filename": "images (20).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (20).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "94f93a27bf891becf2fa3c4d95321e231d027c99e2115cdd921f5c8a2eccc25f",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (20"
+    },
+    {
+      "filename": "images (22).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (22).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "0c8684b7a552a2086f4c9753f4d3232ae8672e46347949be60ccf26211f3460b",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (22"
+    },
+    {
+      "filename": "images (23).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (23).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "8f633406bd6e2bd14b051344a45c9c72c1d6ec4ca78e1a373cd9a55819854ab3",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (23"
+    },
+    {
+      "filename": "images (24).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (24).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "f34a437bf492c2b0e6c6b07710d9140b99d54cf0baf478e8343dcf9b41930f7e",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (24"
+    },
+    {
+      "filename": "images (25).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (25).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "5b4e00e9e8987974d499f814375a70f91abd77d1a519505c0562c8e40d06c676",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (25"
+    },
+    {
+      "filename": "images (26).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (26).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "d9ec3ee9dc5bb2d0a22213496e86fa434397e582338d40e9afe3f9593bcb445f",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (26"
+    },
+    {
+      "filename": "images (27).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (27).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "139de5d2257c7ceb60f16b430cbefcf6b2016182d8ba5ccad37da445a6e00f77",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (27"
+    },
+    {
+      "filename": "images (28).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (28).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "fa79000d01f35738645e652ddad7be62269987e28e08a84654b0459a4eca7227",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (28"
+    },
+    {
+      "filename": "images (3).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (3).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "755ac011e1f3786fe024443c08d157d88514f78d06ff3fc103afa59757d29c5b",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (3)"
+    },
+    {
+      "filename": "images (3.jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (3.jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "20e7a8c10e82f1bc708a4f2978d183e0005e9cecb0b62b1afd2d620e69389e50",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (3."
+    },
+    {
+      "filename": "images (4).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (4).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "b1daea40aff647050d55f7f199a58e6f97145180abaa9c8e77e00d4c7a7a25b4",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (4)"
+    },
+    {
+      "filename": "images (5).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (5).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "67e7dfd0e23012cda4dca23295f675803a83adc97eca214cdb11186d97bed8a2",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (5)"
+    },
+    {
+      "filename": "images (6).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (6).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "7dfd523e043391dc19a3711ed192eb89271cb2d099d15056d61e2e43e776172d",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (6)"
+    },
+    {
+      "filename": "images (7).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (7).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "98cddcf03597f83dea99e4cc310bf806b68b3121ab89482ff059b99a7ca032fc",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (7)"
+    },
+    {
+      "filename": "images (8).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (8).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "49cc046d7b571852ad6546a6ce3d70514f9120dde6f656c8d2a274654a98288d",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (8)"
+    },
+    {
+      "filename": "images (9).jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images (9).jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "07ec90d05ac66cb6ed51c796b3d2f814bbf2e032729949d1fed761e4430c769c",
+      "folder": "leaking",
+      "group": "leak_images_batch_images (9)"
+    },
+    {
+      "filename": "images.jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images.jpeg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "f80c9d6929b62d690df9eeba1f2fa3789bdcaffa2bd9858c3034f2b54c2a8427",
+      "folder": "leaking",
+      "group": "leak_single_images.jpeg"
+    },
+    {
+      "filename": "images.jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\images.jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "5dbb7c7b39d48643c6525d537b672334c848e202d68a932782221da369f1bf60",
+      "folder": "leaking",
+      "group": "leak_single_images.jpg"
+    },
+    {
+      "filename": "istockphoto-2175168146-612x612.jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\istockphoto-2175168146-612x612.jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "645014264e1e1114c8ca9ff56e586a452069f5586efb2967008aa7bdd757d770",
+      "folder": "leaking",
+      "group": "leak_istock_stock"
+    },
+    {
+      "filename": "Leaky+pipe_d5ff57db-cae1-48a3-a0ae-7e79051482f5-prv.jpg.jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\Leaky+pipe_d5ff57db-cae1-48a3-a0ae-7e79051482f5-prv.jpg.jpeg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "7a4d0e03cf6fe9cab1db030c6d97c7ccf0a1aa0a212f82cb1e1dcc845a188a66",
+      "folder": "leaking",
+      "group": "leak_single_Leaky+pipe_d5ff"
+    },
+    {
+      "filename": "need-advice-on-fixing-leak-in-underground-pipes-v0-cHBibnF5N3o0M3pmMV4T4mLa_8iLGbORBOPLt17YUBd1n0HNEMGd_L7Hdw-m.webp",
+      "path": "D:\\NAGARSETU\\leaking pipes\\need-advice-on-fixing-leak-in-underground-pipes-v0-cHBibnF5N3o0M3pmMV4T4mLa_8iLGbORBOPLt17YUBd1n0HNEMGd_L7Hdw-m.webp",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "7f622d4eefe0159cca45ffbc58f33832a223f4370d6bd042c4bb1c2609c932e6",
+      "folder": "leaking",
+      "group": "leak_single_need-advice-on-"
+    },
+    {
+      "filename": "waste-water-pipe-leaking-pvc-260nw-1653987562.png",
+      "path": "D:\\NAGARSETU\\leaking pipes\\waste-water-pipe-leaking-pvc-260nw-1653987562.png",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "6540c5fecae947af21760d5df924bc925b62613497d91d3f1e86b19f23d5fac4",
+      "folder": "leaking",
+      "group": "leak_single_waste-water-pip"
+    },
+    {
+      "filename": "water-leaking-hole-industrial-hose-260nw-2609724773.jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\water-leaking-hole-industrial-hose-260nw-2609724773.jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "f6484f1720fb1654a4f5526ae29ce919cfea362a9100cf6070a88037045882da",
+      "folder": "leaking",
+      "group": "leak_single_water-leaking-h"
+    },
+    {
+      "filename": "water-main-pipe-leak-closeup-260nw-2738090293.jpg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\water-main-pipe-leak-closeup-260nw-2738090293.jpg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "e13141aa3a6f414557f5253b93013e05d1d03d295888a0f3a5509295e658b46e",
+      "folder": "leaking",
+      "group": "leak_single_water-main-pipe"
+    },
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.19.19 AM (1).jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.19.19 AM (1).jpeg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "e125d6aa45a62240f321df8677a4a64f7590a0ec7dd3d4d2e9e2e3be134b82a3",
+      "folder": "leaking",
+      "group": "leak_whatsapp_12_19"
+    },
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.19.19 AM (2).jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.19.19 AM (2).jpeg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "2318f0fbc33b223fbae947d33455955316db95d74dd4653b00a9674deee1f984",
+      "folder": "leaking",
+      "group": "leak_whatsapp_12_19"
+    },
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.19.19 AM.jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.19.19 AM.jpeg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "b4dc4287ef35d60ff8d0c52f94db49fb02e38042f89b6ae3a0c857307033b589",
+      "folder": "leaking",
+      "group": "leak_whatsapp_12_19"
+    },
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.32.25 AM.jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.32.25 AM.jpeg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "eb61a4c18803b26d1acbbb3cee5ba9dc4a8c20bb48a301ecf5ef2a7b8fbc7c80",
+      "folder": "leaking",
+      "group": "leak_whatsapp_12_32"
+    },
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.32.26 AM.jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.32.26 AM.jpeg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "f65fa4b70b72cc2c81a8dbc3b4cd5ed8484c22de557daebe5db7a61a31fada83",
+      "folder": "leaking",
+      "group": "leak_whatsapp_12_32"
+    },
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.33.38 AM.jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.33.38 AM.jpeg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "605e55eafa3e82f0acc67473580c4955cd0dc39db45c0d5a321f23d83f8afe16",
+      "folder": "leaking",
+      "group": "leak_whatsapp_12_33"
+    },
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.34.45 AM.jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.34.45 AM.jpeg",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "6d7eca05ff7b305881832f967235a87dfaba712480afb483a61a25409b3eed43",
+      "folder": "leaking",
+      "group": "leak_whatsapp_12_34"
+    },
+    {
+      "filename": "Screenshot 2026-10-09 174152.png",
+      "path": "D:\\NAGARSETU\\leaking pipes\\1\\Screenshot 2026-10-09 174152.png",
+      "label": 1,
+      "class_name": "damaged_or_leaking_pipe",
+      "sha256": "dee2ec03348d3ec2035173d2cf1ba65d78e35549e788cd1e73aeaa491b09140b",
+      "folder": "leaking",
+      "group": "leak_screenshot"
+    }
+  ]
+}

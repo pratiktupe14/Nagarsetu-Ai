@@ -61,6 +61,9 @@ const DepartmentHeadPortal = React.lazy(() => import('./pages/departmentHead/Dep
 const AnnouncementsWorkspacePage = React.lazy(() => import('./pages/announcements/AnnouncementsWorkspacePage').then(m => ({ default: m.AnnouncementsWorkspacePage })));
 const StaffManagementWorkspacePage = React.lazy(() => import('./pages/departmentHead/StaffManagementWorkspacePage').then(m => ({ default: m.StaffManagementWorkspacePage })));
 
+// Lazy-loaded Developer Super Admin Control Center
+const SuperAdminConsolePage = React.lazy(() => import('./pages/developer/SuperAdminConsolePage').then(m => ({ default: m.SuperAdminConsolePage })));
+
 // Lightweight Route Suspense Fallback (Eliminates dark viewport flash)
 const PageFallback: React.FC = () => (
   <div className="min-h-screen bg-white text-gray-900 flex flex-col items-center justify-center p-6 font-sans">
@@ -222,6 +225,9 @@ export default function App() {
                     <Route path="/staff/settings" element={<StaffSettingsPage />} />
                     <Route path="/staff/profile" element={<StaffSettingsPage />} />
                   </Route>
+
+                  {/* Isolated Developer Super Admin Control Center */}
+                  <Route path="/developer/secure-console" element={<SuperAdminConsolePage />} />
 
                   {/* Catch-all redirect to Landing */}
                   <Route path="*" element={<Navigate to="/" replace />} />

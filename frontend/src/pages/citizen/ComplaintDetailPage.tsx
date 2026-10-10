@@ -250,6 +250,23 @@ export const ComplaintDetailPage: React.FC = () => {
             </p>
           </div>
 
+          {/* RECURRING ISSUE INTELLIGENCE */}
+          {complaint.recurring_issue?.is_recurring && (
+            <div className="p-4 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900 space-y-2">
+              <div className="flex items-center space-x-2">
+                <span className="px-2.5 py-0.5 rounded-lg bg-amber-600 text-white font-extrabold text-xs font-outfit uppercase tracking-wider">
+                  Potential Recurring Issue
+                </span>
+                <span className="text-xs font-bold text-amber-800">
+                  Status: {complaint.recurring_issue.recurrence_status}
+                </span>
+              </div>
+              <p className="text-xs text-amber-800 leading-relaxed font-medium">
+                Previous resolved incident #{complaint.recurring_issue.previous_complaint_number || complaint.recurring_issue.previous_complaint_id} found within {complaint.recurring_issue.distance_meters != null ? `${complaint.recurring_issue.distance_meters} meters` : 'vicinity'}.
+              </p>
+            </div>
+          )}
+
           {/* BEFORE & AFTER PHOTO EVIDENCE */}
           <div className="space-y-3">
             <h3 className="text-sm font-extrabold text-gray-900 font-outfit uppercase tracking-wider">Photo Evidence</h3>

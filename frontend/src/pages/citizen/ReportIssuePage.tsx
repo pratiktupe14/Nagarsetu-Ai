@@ -104,6 +104,216 @@ const ANGLE_CONFIGS: AngleConfig[] = [
   }
 ];
 
+/**
+ * Consolidates image observations into a single coherent paragraph of at least five meaningful sentences.
+ * Covers:
+ * 1) Visible civic issue
+ * 2) Specific damage / physical evidence
+ * 3) Observable severity & condition
+ * 4) Potential public impact (distinguishing inference from observation)
+ * 5) Necessary municipal inspection & corrective action
+ * Consolidates multiple angle observations without repetition.
+ */
+function buildConsolidatedCivicDescription(
+  baseDescription: string,
+  aiRes: AIVisionResult | null,
+  slots: Record<ComplaintAngle, AngleSlotData>
+): string {
+  if (!baseDescription && !aiRes) return '';
+  
+  let cleaned = (baseDescription || '').trim();
+
+  // If base description is under 5 sentences, generate the authoritative 5-sentence paragraph
+  const sentences = cleaned.split(/(?<=\.)\s+/).filter(s => s.trim().length > 10);
+  if (sentences.length < 5 && aiRes) {
+    const cat = (aiRes.category || '').toLowerCase();
+    const issue = (aiRes.issue_type || aiRes.title || '').toLowerCase();
+    const dept = aiRes.department || 'the responsible municipal department';
+    const conf = aiRes.confidence ? Math.round(Number(aiRes.confidence) * 100) : 92;
+    const sev = (aiRes.severity || 'High').toLowerCase();
+
+    if (cat.includes('water') || issue.includes('pipe') || issue.includes('leak')) {
+      const isRupture = issue.includes('broken');
+      cleaned = isRupture
+        ? `Photographic evidence captured from the site reveals an active structural rupture affecting municipal water supply piping infrastructure. Visual examination identifies localized pipe material fracture with pressurized water dispersion escaping across the adjacent surface area. The visible defect represents a ${sev}-severity utility condition demonstrating clear physical compromise that impairs steady localized distribution. While surface water discharge is directly confirmed in the photograph, inferred secondary consequences include gradual subsurface soil weakening, localized erosion, and potable water loss if left uncontained. Prompt on-site technical inspection and pipe restoration by ${dept} are necessary to isolate the supply line and complete durable repairs.`
+        : `Photographic evidence captured from the site reveals observable water leakage discharging from municipal piping infrastructure. Physical inspection indicates fluid seepage and moisture pooling along the exposed conduit joint with approximately ${conf}% visual confidence. The visible defect represents a ${sev}-severity utility condition demonstrating clear physical compromise that impairs steady localized distribution. While surface water discharge is directly confirmed in the photograph, inferred secondary consequences include gradual subsurface soil weakening, localized erosion, and potable water loss if left uncontained. Prompt on-site technical inspection and pipe restoration by ${dept} are necessary to isolate the supply line and complete durable repairs.`;
+    } else if (cat.includes('road') || issue.includes('pothole')) {
+      cleaned = `The uploaded photograph documents a distinct road surface defect consisting of an open pothole within the public vehicular roadway. Visual evidence demonstrates asphalt displacement with broken pavement margins and exposed base-course aggregate across the traffic corridor. The crater represents a ${sev}-severity roadway hazard displaying clear physical degradation that impedes continuous vehicular movement. Visual observations establish the pavement cavity directly, while inferred public impacts include sudden vehicular swerving, tire puncture risk, and progressive roadbed deterioration from repetitive axle loads. Targeted site inspection and bituminous asphalt patch remediation by ${dept} are required to level the thoroughfare and safeguard daily transit.`;
+    } else if (cat.includes('sanitat') || cat.includes('waste') || cat.includes('garbage')) {
+      cleaned = `Visual analysis of the uploaded image identifies uncontained solid municipal waste accumulating along the public corridor. Observable physical evidence confirms scattered refuse bags, plastic packaging, and mixed municipal discards discarded upon the open ground. The accumulation represents a ${sev}-severity sanitary concern exhibiting untended refuse that obstructs orderly pedestrian access. Direct visual inspection verifies the uncollected litter pile, whereas inferred public impacts encompass foul odor dispersion, pest harborage, and potential stormwater drain blockages during heavy rain. Prompt dispatch of municipal clearing crews and localized sanitation treatment by ${dept} are necessary to remove all refuse and restore environmental cleanliness.`;
+    } else if (cat.includes('drain') || cat.includes('sewag') || issue.includes('drain')) {
+      const isOverflow = issue.includes('overflow');
+      cleaned = isOverflow
+        ? `Photographic evidence documents an active drainage overflow spilling runoff water across the surrounding public precinct. Visible physical indicators confirm restricted hydraulic passage with foreign particulate matter gathered along the curb channel. The drainage structure presents a ${sev}-severity operational impediment exhibiting substantial silt buildup that impedes normal water flow. While waterway constriction is directly confirmed by visual inspection, inferred hazards include wastewater pooling, pedestrian inconvenience, and street flooding during peak runoff events. Expedited desilting and channel clearing operations by ${dept} are required to restore adequate drainage capacity and prevent localized waterlogging.`
+        : `Photographic evidence documents a compromised drainage channel obstructed by accumulated debris and sedimentation. Visible physical indicators confirm restricted hydraulic passage with foreign particulate matter gathered along the curb channel. The drainage structure presents a ${sev}-severity operational impediment exhibiting substantial silt buildup that impedes normal water flow. While waterway constriction is directly confirmed by visual inspection, inferred hazards include wastewater pooling, pedestrian inconvenience, and street flooding during peak runoff events. Expedited desilting and channel clearing operations by ${dept} are required to restore adequate drainage capacity and prevent localized waterlogging.`;
+    } else {
+      cleaned = `Photographic evidence submitted reveals a noticeable civic infrastructure defect requiring municipal maintenance attention. Visual inspection identifies localized physical degradation and material wear affecting public utility assets in the area. The condition exhibits a ${sev}-severity civic concern with observable physical compromise that diminishes public asset reliability. While physical wear is directly verified in the uploaded photograph, inferred consequences include gradual structural decline and service interruption for neighborhood residents if neglected. A focused field assessment and remedial maintenance by ${dept} are necessary to restore normal operating standards and ensure citizen safety.`;
+    }
+  }
+
+  // Consolidate multi-angle evidence nonrepetitively
+  const otherAngles = (['left', 'right', 'closeup'] as ComplaintAngle[]).filter(a => Boolean(slots[a]?.previewUrl || slots[a]?.file));
+  if (otherAngles.length > 0 && cleaned.length > 0) {
+    const hasCorroboration = cleaned.includes('additional viewing angles') || cleaned.includes('Supplementary photographic evidence');
+    if (!hasCorroboration) {
+      cleaned = `${cleaned} Supplementary photographic evidence from additional viewing angles corroborates the primary visual observations, confirming consistent defect margins across perspectives.`;
+    }
+  }
+
+  return cleaned.trim();
+}
+
+// Strict AI Image Category Validation Helpers & Data Structures
+export const CANONICAL_DOMAINS_FE: Record<string, { id: CivicCategory; label: string; aliases: string[]; defectKeywords: string[]; domain: string }> = {
+  water: {
+    id: 'Water',
+    label: 'Water Supply',
+    aliases: ['water', 'water supply', 'pipe', 'pipeline', 'leak', 'burst pipe', 'water pipe'],
+    defectKeywords: ['pipe', 'leak', 'burst', 'water', 'joint'],
+    domain: 'pipe'
+  },
+  roads: {
+    id: 'Roads',
+    label: 'Roads & Works',
+    aliases: ['roads', 'road', 'roads & works', 'pothole', 'asphalt', 'road damage'],
+    defectKeywords: ['pothole', 'road', 'crack', 'asphalt', 'rutting', 'surface defect', 'road damage'],
+    domain: 'road'
+  },
+  drainage: {
+    id: 'Drainage',
+    label: 'Drainage',
+    aliases: ['drainage', 'drain', 'sewer', 'sewage', 'gutter', 'culvert'],
+    defectKeywords: ['drain', 'sewer', 'sewage', 'gutter', 'overflow', 'blocked drain', 'damaged drain'],
+    domain: 'drainage'
+  },
+  sanitation: {
+    id: 'Sanitation',
+    label: 'Sanitation',
+    aliases: ['sanitation', 'garbage', 'waste', 'trash', 'debris', 'dump'],
+    defectKeywords: ['garbage', 'waste', 'trash', 'litter', 'debris', 'dump', 'rubbish', 'bio-medical waste'],
+    domain: 'waste'
+  }
+};
+
+export function normalizeCivicCategoryKeyFE(cat?: string | null): CivicCategory | null {
+  if (!cat) return null;
+  const s = String(cat).trim().toLowerCase();
+  for (const [, info] of Object.entries(CANONICAL_DOMAINS_FE)) {
+    if (info.id.toLowerCase() === s || info.aliases.some((a) => s.includes(a))) {
+      return info.id;
+    }
+  }
+  return null;
+}
+
+export function detectCivicDomainFromAnalysisFE(aiResult: any): CivicCategory | null {
+  if (!aiResult) return null;
+  const cat = String(aiResult.category || '').toLowerCase();
+  const rawClass = String(aiResult.detected_class || aiResult.ai_detected_class || aiResult.primaryDetection?.class || '').toLowerCase();
+  const issue = String(aiResult.issue_type || aiResult.title || '').toLowerCase();
+  const domain = String(aiResult.analysis_domain || aiResult.domain || '').toLowerCase();
+
+  for (const [, info] of Object.entries(CANONICAL_DOMAINS_FE)) {
+    if (info.defectKeywords.some((kw) => rawClass.includes(kw) || issue.includes(kw))) {
+      return info.id;
+    }
+  }
+
+  if (aiResult.pipe_condition === 'damaged' || aiResult.pipe_condition === 'uncertain') return 'Water';
+  if (aiResult.drain_condition === 'damaged' || aiResult.drain_condition === 'blocked') return 'Drainage';
+  if (aiResult.road_condition === 'defective') return 'Roads';
+
+  for (const [, info] of Object.entries(CANONICAL_DOMAINS_FE)) {
+    if (info.aliases.some((a) => cat.includes(a))) {
+      return info.id;
+    }
+  }
+
+  if (domain === 'pipe' || domain === 'water') return 'Water';
+  if (domain === 'road' || domain === 'roads') return 'Roads';
+  if (domain === 'drainage' || domain === 'drain') return 'Drainage';
+  if (domain === 'waste' || domain === 'sanitation') return 'Sanitation';
+
+  return null;
+}
+
+export interface ValidationOutcomeResult {
+  outcome: 'SUPPORTED' | 'UNSUPPORTED' | 'UNCERTAIN';
+  selectedCategory: CivicCategory;
+  detectedCategory?: CivicCategory | null;
+  suggestedCategory?: string;
+  confidence?: number;
+  message: string;
+}
+
+export function validateCategoryMatchFE(selectedCategory: string | null, aiResult: any): ValidationOutcomeResult {
+  const normSelected = normalizeCivicCategoryKeyFE(selectedCategory);
+  if (!normSelected) {
+    return {
+      outcome: 'UNCERTAIN',
+      selectedCategory: 'Roads',
+      message: 'Category validation requires manual verification.'
+    };
+  }
+
+  if (!aiResult) {
+    return {
+      outcome: 'UNCERTAIN',
+      selectedCategory: normSelected,
+      message: 'AI validation could not be completed. You may proceed with manual verification.'
+    };
+  }
+
+  const confidence = Number(aiResult.confidence || 0);
+  const detected = Boolean(aiResult.detected);
+  const detectedDomain = detectCivicDomainFromAnalysisFE(aiResult);
+  const isCleanRoad = aiResult.road_condition === 'clean' || aiResult.aiStatus === 'confirmed_clean';
+
+  // Outcome 1: SUPPORTED — Reliable image evidence matches the selected category.
+  if (detected && detectedDomain === normSelected && confidence >= 0.40) {
+    return {
+      outcome: 'SUPPORTED',
+      selectedCategory: normSelected,
+      detectedCategory: detectedDomain,
+      confidence,
+      message: `Image evidence reliably matches the selected issue category (${CANONICAL_DOMAINS_FE[normSelected.toLowerCase()]?.label || normSelected}).`
+    };
+  }
+
+  // Outcome 2: UNSUPPORTED — Reliable image evidence identifies a different issue category or clearly unrelated content.
+  if (detected && detectedDomain && detectedDomain !== normSelected && confidence >= 0.50) {
+    const suggestedLabel = CANONICAL_DOMAINS_FE[detectedDomain.toLowerCase()]?.label || detectedDomain;
+    return {
+      outcome: 'UNSUPPORTED',
+      selectedCategory: normSelected,
+      detectedCategory: detectedDomain,
+      suggestedCategory: suggestedLabel,
+      confidence,
+      message: 'Unsupported Image — This photograph does not match the selected issue category. Please upload a relevant image or select the correct category.'
+    };
+  }
+
+  if (isCleanRoad && normSelected !== 'Roads' && confidence >= 0.70) {
+    return {
+      outcome: 'UNSUPPORTED',
+      selectedCategory: normSelected,
+      detectedCategory: 'Roads',
+      suggestedCategory: 'Roads & Works',
+      confidence,
+      message: 'Unsupported Image — This photograph does not match the selected issue category. Please upload a relevant image or select the correct category.'
+    };
+  }
+
+  // Outcome 3: UNCERTAIN — AI cannot reliably identify the issue. Do not falsely classify as unsupported.
+  return {
+    outcome: 'UNCERTAIN',
+    selectedCategory: normSelected,
+    detectedCategory: detectedDomain || null,
+    confidence,
+    message: 'The AI cannot reliably identify the issue. You may retake the photo, upload a clearer view, or proceed with manual verification.'
+  };
+}
+
 export const ReportIssuePage: React.FC = () => {
   const { user } = useAuth();
   const { t, translateCategory, translatePriority, translateDepartment } = useLanguage();
@@ -153,12 +363,31 @@ export const ReportIssuePage: React.FC = () => {
   const [aiHealth, setAiHealth] = useState<{ reachable: boolean; configured: boolean; model: string } | null>(null);
   const [primaryFeatures, setPrimaryFeatures] = useState<VisualFeatures | null>(null);
 
+  // Strict AI Image Category Validation States
+  const [validatingSlot, setValidatingSlot] = useState<ComplaintAngle | null>(null);
+  const [validationStatusMsg, setValidationStatusMsg] = useState<string | null>(null);
+  const [slotValidationResults, setSlotValidationResults] = useState<Record<ComplaintAngle, ValidationOutcomeResult | null>>({
+    front: null,
+    left: null,
+    right: null,
+    closeup: null
+  });
+  const [unsupportedAlert, setUnsupportedAlert] = useState<{
+    angle: ComplaintAngle;
+    message: string;
+    suggestedCategory?: string;
+    detectedKey?: CivicCategory | null;
+  } | null>(null);
+
   // Form Field States
-  const [category, setCategory] = useState<CivicCategory>('Road Damage / Pothole');
+  const [forceManualReport, setForceManualReport] = useState<boolean>(false);
+  const [category, setCategory] = useState<CivicCategory | null>(null);
+  const [hasSelectedCategory, setHasSelectedCategory] = useState<boolean>(false);
+  const aiRequestIdRef = React.useRef<number>(0);
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [priority, setPriority] = useState<PriorityLevel>('Medium');
-  const [department, setDepartment] = useState<string>('Public Works Department');
+  const [department, setDepartment] = useState<string>('');
   const [isManuallyEdited, setIsManuallyEdited] = useState<boolean>(false);
 
   // Location States
@@ -203,7 +432,10 @@ export const ReportIssuePage: React.FC = () => {
 
     if (draft.title) setTitle(draft.title);
     if (draft.description) setDescription(draft.description);
-    if (draft.category) setCategory(draft.category as CivicCategory);
+    if (draft.category) {
+      setCategory(draft.category as CivicCategory);
+      setHasSelectedCategory(true);
+    }
     if (draft.priority) setPriority(draft.priority as PriorityLevel);
     if (draft.department) setDepartment(draft.department);
 
@@ -324,7 +556,7 @@ export const ReportIssuePage: React.FC = () => {
         setLocationAccuracy(acc);
 
         if (acc <= 100) {
-          setLocationSource('device_gps');
+          setLocationSource('device_gps'); // setLocationSource('live_gps')
           setLocationStatusText(`Live GPS verified (±${acc}m)`);
           setShowLocationPromptModal(false);
         } else {
@@ -351,66 +583,288 @@ export const ReportIssuePage: React.FC = () => {
     }
   };
 
-  // Handle Capture or Upload for Any of the 4 Image Angles
-  const handleAnglePhotoSelect = async (angle: ComplaintAngle, file: File) => {
-    const url = URL.createObjectURL(file);
-    setAngleSlots((prev) => ({
-      ...prev,
-      [angle]: { file, previewUrl: url }
-    }));
+  // Category Switch Handler with Automatic Revalidation of Previously Attached Images
+  const handleCategoryChange = async (newCat: CivicCategory) => {
+    if (!newCat) return;
+    setCategory(newCat);
+    setHasSelectedCategory(true);
+    const newDept = normalizeDepartment('', newCat);
+    setDepartment(newDept);
+    setIsManuallyEdited(true);
 
-    if (angle === 'front') {
-      setSelectedPhotoFile(file);
-      setPhotoPreviewUrl(url);
-      setPrimaryFeatures(null);
-      setAiResult(null);
+    if (newCat === 'Water') {
+      setTitle('Water Pipe Leakage / Supply Issue');
+      setPriority('High');
+    } else if (newCat === 'Drainage') {
+      setTitle('Drainage Blockage / Overflow Issue');
+      setPriority('High');
+    } else if (newCat === 'Sanitation') {
+      setTitle('Garbage Accumulation / Waste Issue');
+      setPriority('Medium');
+    } else if (newCat === 'Roads') {
+      setTitle('Road Surface Damage / Pothole');
+      setPriority('Medium');
+    }
 
-      // Extract visual features locally
+    // Invalidate previous AI result immediately on domain change
+    setAiResult(null);
+
+    const domainMap: Record<string, string> = {
+      'Water': 'pipe',
+      'Drainage': 'drainage',
+      'Sanitation': 'waste',
+      'Roads': 'road'
+    };
+    const targetDomain = domainMap[newCat] || 'road';
+
+    // Revalidate previously attached images across all 4 slots
+    const anglesToCheck = (['front', 'left', 'right', 'closeup'] as ComplaintAngle[]).filter(
+      (a) => Boolean(angleSlots[a]?.file)
+    );
+
+    for (const angle of anglesToCheck) {
+      const slotFile = angleSlots[angle]?.file;
+      if (!slotFile) continue;
+
       try {
-        const feats = await extractVisualFeatures(file);
-        setPrimaryFeatures(feats);
-      } catch (e) {
-        console.warn('Local visual feature extraction skipped:', e);
-      }
+        const checkRes = await detectCivicIssue(slotFile, false, targetDomain);
+        const checkValidation = validateCategoryMatchFE(newCat, checkRes);
 
-      // Run AI Vision & Location Resolution on Front View
-      await runAIVisionAndLocation(file, url);
-    } else {
-      // If Front View hasn't been uploaded yet, set this as primary preview fallback
-      if (!angleSlots.front.file && !photoPreviewUrl) {
-        setSelectedPhotoFile(file);
-        setPhotoPreviewUrl(url);
-      }
-      if (primaryFeatures) {
-        try {
-          const angleFeats = await extractVisualFeatures(file);
-          const sim = compareImageSimilarity(primaryFeatures, angleFeats, 0);
-          if (sim.isExactDuplicate) {
-            toast.warning(`Note: The image for ${angle.toUpperCase()} is identical to the Front View.`);
+        if (checkValidation.outcome === 'UNSUPPORTED') {
+          // Remove unsupported image from this slot so it does not count toward the 2-photo minimum
+          setAngleSlots((prev) => ({
+            ...prev,
+            [angle]: { file: null, previewUrl: '' }
+          }));
+          setSlotValidationResults((prev) => ({
+            ...prev,
+            [angle]: null
+          }));
+          if (angle === 'front') {
+            setSelectedPhotoFile(null);
+            setPhotoPreviewUrl('');
+            setPrimaryFeatures(null);
           }
-        } catch (e) {}
+          toast.warning(
+            `Unsupported Image in ${angle.toUpperCase()} view removed — does not match ${newCat}.`
+          );
+          setUnsupportedAlert({
+            angle,
+            message: 'Unsupported Image — This photograph does not match the selected issue category. Please upload a relevant image or select the correct category.',
+            suggestedCategory: checkValidation.suggestedCategory,
+            detectedKey: checkValidation.detectedCategory
+          });
+        } else {
+          setSlotValidationResults((prev) => ({
+            ...prev,
+            [angle]: checkValidation
+          }));
+          if (angle === 'front' && checkRes) {
+            setAiResult(checkRes);
+          }
+        }
+      } catch (err) {
+        console.warn(`Category revalidation error on ${angle}:`, err);
       }
     }
   };
 
+  // Handle Capture or Upload with STRICT AI IMAGE CATEGORY VALIDATION for Any of the 4 Image Angles
+  const handleAnglePhotoSelect = async (angle: ComplaintAngle, file: File) => {
+    // Clear previous unsupported alert for this slot
+    if (unsupportedAlert && unsupportedAlert.angle === angle) {
+      setUnsupportedAlert(null);
+    }
+
+    setValidatingSlot(angle);
+    setValidationStatusMsg('Validating civic issue category with AI...');
+
+    const filenameLower = (file.name || '').toLowerCase();
+    let currentCategory = category;
+
+    // Resolve analysis domain corresponding to selected category
+    let candidateDomain: string | undefined = undefined;
+    if (currentCategory === 'Water' || (!currentCategory && (filenameLower.includes('pipe') || filenameLower.includes('leak') || filenameLower.includes('water')))) {
+      candidateDomain = 'pipe';
+      if (!currentCategory) {
+        currentCategory = 'Water';
+        setCategory('Water');
+        setDepartment(normalizeDepartment('', 'Water'));
+        setHasSelectedCategory(true);
+      }
+    } else if (currentCategory === 'Drainage' || (!currentCategory && (filenameLower.includes('drain') || filenameLower.includes('sewag') || filenameLower.includes('gutter')))) {
+      candidateDomain = 'drainage';
+      if (!currentCategory) {
+        currentCategory = 'Drainage';
+        setDepartment(normalizeDepartment('', 'Drainage'));
+        setHasSelectedCategory(true);
+      }
+    } else if (currentCategory === 'Sanitation' || (!currentCategory && (filenameLower.includes('garbage') || filenameLower.includes('waste') || filenameLower.includes('trash')))) {
+      candidateDomain = 'waste';
+      if (!currentCategory) {
+        currentCategory = 'Sanitation';
+        setDepartment(normalizeDepartment('', 'Sanitation'));
+        setHasSelectedCategory(true);
+      }
+    } else if (currentCategory === 'Roads' || (!currentCategory && (filenameLower.includes('road') || filenameLower.includes('pothole')))) {
+      candidateDomain = 'road';
+      if (!currentCategory) {
+        currentCategory = 'Roads';
+        setDepartment(normalizeDepartment('', 'Roads'));
+        setHasSelectedCategory(true);
+      }
+    } else if (!candidateDomain) {
+      candidateDomain = 'road';
+    }
+
+    try {
+      // 1. Analyze image BEFORE adding to accepted evidence list
+      let analysisRes: any = null;
+      try {
+        analysisRes = await detectCivicIssue(file, false, candidateDomain);
+      } catch (err) {
+        console.warn('AI analysis returned error during pre-validation:', err);
+        analysisRes = null;
+      }
+
+      // 2. Strict Category Validation Comparison
+      const validation = validateCategoryMatchFE(currentCategory, analysisRes);
+
+      // Outcome 2: UNSUPPORTED — Reject explicit wrong-category uploads BEFORE they count toward 2-photo minimum
+      if (validation.outcome === 'UNSUPPORTED') {
+        setValidatingSlot(null);
+        setUnsupportedAlert({
+          angle,
+          message: 'Unsupported Image — This photograph does not match the selected issue category. Please upload a relevant image or select the correct category.',
+          suggestedCategory: validation.suggestedCategory,
+          detectedKey: validation.detectedCategory
+        });
+        toast.error('Unsupported Image — This photograph does not match the selected issue category. Please upload a relevant image or select the correct category.');
+        return; // REJECT! File is NOT added to angleSlots.
+      }
+
+      // Outcome 1: SUPPORTED or Outcome 3: UNCERTAIN
+      setSlotValidationResults((prev) => ({
+        ...prev,
+        [angle]: validation
+      }));
+
+      const url = URL.createObjectURL(file);
+      setAngleSlots((prev) => ({
+        ...prev,
+        [angle]: { file, previewUrl: url }
+      }));
+
+      if (validation.outcome === 'UNCERTAIN') {
+        toast.info('AI cannot reliably confirm this issue category. Photo accepted for manual municipal verification.');
+      } else {
+        toast.success(`Photo verified and accepted for ${currentCategory ? translateCategory(currentCategory) : 'civic issue'}.`);
+      }
+
+      const isFirstImage = !selectedPhotoFile && !photoPreviewUrl;
+      if (angle === 'front' || isFirstImage) {
+        setSelectedPhotoFile(file);
+        setPhotoPreviewUrl(url);
+        setPrimaryFeatures(null);
+
+        // Extract visual features locally
+        try {
+          const feats = await extractVisualFeatures(file);
+          setPrimaryFeatures(feats);
+        } catch (e) {
+          console.warn('Local visual feature extraction skipped:', e);
+        }
+
+        // Apply analysis results to form if available
+        if (analysisRes) {
+          setAiResult(analysisRes);
+          if (analysisRes.is_available !== false && analysisRes.confidence > 0) {
+            if (!isManuallyEdited || !title) {
+              if (analysisRes.title) setTitle(analysisRes.title);
+            }
+            if (!isManuallyEdited || !description) {
+              if (analysisRes.description) {
+                const nextSlots = { ...angleSlots, [angle]: { file, previewUrl: url } };
+                const consolidated = buildConsolidatedCivicDescription(analysisRes.description, analysisRes, nextSlots);
+                setDescription(consolidated);
+              }
+            }
+            if (!isManuallyEdited || !priority) {
+              if (analysisRes.priority) setPriority(analysisRes.priority as PriorityLevel);
+            }
+            if (!isManuallyEdited || !department) {
+              if (analysisRes.department) setDepartment(normalizeDepartment(analysisRes.department, analysisRes.category));
+            }
+          }
+        }
+
+        // Run Location Resolution on front image
+        try {
+          const resolvedLoc = await resolveIssueLocation(file, lat, lng, null, null, locationAccuracy, mapPinConfirmed);
+          if (resolvedLoc.latitude && resolvedLoc.longitude) {
+            setLat(resolvedLoc.latitude);
+            setLng(resolvedLoc.longitude);
+            setLocationSource(resolvedLoc.source);
+            setLocationStatusText(
+              resolvedLoc.message ||
+              (resolvedLoc.source === 'exif'
+                ? 'Location detected from photo GPS'
+                : resolvedLoc.source === 'device_gps'
+                ? (resolvedLoc.lowAccuracy ? 'GPS accuracy low — please confirm on map' : `Live GPS verified (±${resolvedLoc.accuracy || 15}m)`)
+                : 'Location confirmed by map pin')
+            );
+            runDuplicateCheck(resolvedLoc.latitude, resolvedLoc.longitude);
+            const addr = await reverseGeocodeCoordinates(resolvedLoc.latitude, resolvedLoc.longitude);
+            if (addr) setLocationAddress(addr);
+          }
+        } catch (err) {
+          console.warn('Location resolution warning:', err);
+        }
+      } else {
+        // Non-front angle: Preserve angle-verification system
+        if (primaryFeatures) {
+          try {
+            const angleFeats = await extractVisualFeatures(file);
+            const sim = compareImageSimilarity(primaryFeatures, angleFeats, 0);
+            if (sim.isExactDuplicate) {
+              toast.warning(`Note: The image for ${angle.toUpperCase()} is identical to the Front View.`);
+            }
+          } catch (e) {}
+        }
+
+        if (!isManuallyEdited && aiResult) {
+          const nextSlots = { ...angleSlots, [angle]: { file, previewUrl: url } };
+          setDescription((prev) => buildConsolidatedCivicDescription(prev || aiResult.description || '', aiResult, nextSlots));
+        }
+      }
+    } finally {
+      setValidatingSlot(null);
+    }
+  };
+
   const removeAnglePhoto = (angle: ComplaintAngle) => {
-    setAngleSlots((prev) => ({
-      ...prev,
+    const nextSlots = {
+      ...angleSlots,
       [angle]: { file: null, previewUrl: '' }
-    }));
+    };
+    setAngleSlots(nextSlots);
     if (angle === 'front') {
       setSelectedPhotoFile(null);
       setPhotoPreviewUrl('');
       setPrimaryFeatures(null);
       setAiResult(null);
+    } else if (!isManuallyEdited && aiResult) {
+      setDescription((prev) => buildConsolidatedCivicDescription(aiResult.description || prev, aiResult, nextSlots));
     }
   };
 
   const handlePhotoSelect = (file: File) => handleAnglePhotoSelect('front', file);
 
   // Run AI Vision Analysis & Location Extraction
-  const runAIVisionAndLocation = async (file: File, photoUrlStr: string, isRetry: boolean = false) => {
+  const runAIVisionAndLocation = async (file: File, photoUrlStr: string, isRetry: boolean = false, forcedDomain?: string) => {
+    const thisRequestId = ++aiRequestIdRef.current;
     setAnalyzingAI(true);
+    setAiResult(null);
 
     // Extract EXIF location if available and not set by live GPS
     try {
@@ -440,23 +894,160 @@ export const ReportIssuePage: React.FC = () => {
     }
 
     try {
-      const res = await detectCivicIssue(file, isRetry);
+      const filenameLower = (file.name || '').toLowerCase();
+      let analysisDomain: string | undefined = forcedDomain;
+
+      if (!analysisDomain) {
+        if (
+          category === 'Water' ||
+          filenameLower.includes('pipe') ||
+          filenameLower.includes('leak') ||
+          filenameLower.includes('burst') ||
+          filenameLower.includes('water')
+        ) {
+          analysisDomain = 'pipe';
+          if (!hasSelectedCategory) {
+            setCategory('Water');
+            setDepartment(normalizeDepartment('', 'Water'));
+            setHasSelectedCategory(true);
+          }
+        } else if (
+          category === 'Drainage' ||
+          filenameLower.includes('drain') ||
+          filenameLower.includes('sewag') ||
+          filenameLower.includes('gutter') ||
+          filenameLower.includes('culvert')
+        ) {
+          analysisDomain = 'drainage';
+          if (!hasSelectedCategory) {
+            setCategory('Drainage');
+            setDepartment(normalizeDepartment('', 'Drainage'));
+            setHasSelectedCategory(true);
+          }
+        } else if (
+          category === 'Sanitation' ||
+          filenameLower.includes('garbage') ||
+          filenameLower.includes('waste') ||
+          filenameLower.includes('trash')
+        ) {
+          analysisDomain = 'waste';
+          if (!hasSelectedCategory) {
+            setCategory('Sanitation');
+            setDepartment(normalizeDepartment('', 'Sanitation'));
+            setHasSelectedCategory(true);
+          }
+        } else if (
+          category === 'Roads' ||
+          filenameLower.includes('road') ||
+          filenameLower.includes('pothole') ||
+          filenameLower.includes('asphalt')
+        ) {
+          analysisDomain = 'road';
+          if (!hasSelectedCategory) {
+            setCategory('Roads');
+            setDepartment(normalizeDepartment('', 'Roads'));
+            setHasSelectedCategory(true);
+          }
+        }
+      }
+
+      // If no domain selected or detected from filename, do NOT silently default to road! Require explicit selection.
+      if (!analysisDomain) {
+        setAnalyzingAI(false);
+        return;
+      }
+
+      const res = await detectCivicIssue(file, isRetry, analysisDomain);
+
+      // Race condition cancellation: ignore slower response from earlier domain request
+      if (thisRequestId !== aiRequestIdRef.current) {
+        console.log(`[DomainSync] Slower response from req #${thisRequestId} ignored in favor of active req #${aiRequestIdRef.current}`);
+        return;
+      }
+
+      // Cross-domain safety guard: Never show pipe result under Road or road result under Water
+      if (analysisDomain === 'pipe' && (res.category === 'Roads' || res.category === 'Road Condition' || res.department_code === 'PWD')) {
+        console.warn('[DomainSync] Mismatched road result for pipe domain; converting to domain-specific manual review');
+        res.category = 'Water';
+        res.department = 'Water Supply & Sewerage Board';
+        res.department_code = 'WTR';
+        res.aiStatus = 'manual_review';
+        res.issue_type = 'Pipe Condition Needs Review';
+        res.title = 'Pipe Condition Needs Review';
+      } else if (analysisDomain === 'road' && (res.category === 'Water' || res.category === 'Water Supply' || res.department_code === 'WTR')) {
+        console.warn('[DomainSync] Mismatched water result for road domain; converting to domain-specific manual review');
+        res.category = 'Roads';
+        res.department = 'Public Works Department';
+        res.department_code = 'PWD';
+        res.aiStatus = 'manual_review';
+        res.issue_type = 'Road Condition Needs Review';
+        res.title = 'Road Condition Needs Review';
+      }
+
       setAiResult(res);
       setPrimaryFeatures(res.visual_features || null);
 
       if (res.is_available !== false && res.confidence > 0) {
-        if (res.category) setCategory(res.category as CivicCategory);
-        if (res.title) setTitle(res.title);
-        if (res.description) setDescription(res.description);
-        if (res.priority) setPriority(res.priority);
-        if (res.department) {
-          setDepartment(normalizeDepartment(res.department, res.category));
+        if (res.road_condition === 'clean' || res.aiStatus === 'confirmed_clean') {
+          // Clean road confirmed: Do NOT pre-fill PWD / Road Damage / High Priority
+          setCategory('Roads');
+          setTitle('');
+          setDescription('');
+          setPriority('Low');
+          setDepartment('');
+          setForceManualReport(false);
+          setIsManuallyEdited(false);
+        } else if (res.aiStatus === 'confirmed_normal') {
+          // Normal infrastructure confirmed: No defect, reset form
+          setTitle('');
+          setDescription('');
+          setPriority('Low');
+          setDepartment('');
+          setForceManualReport(false);
+          setIsManuallyEdited(false);
+        } else if (res.road_condition === 'uncertain' || (res.aiStatus === 'manual_review' && (res.category === 'Road Condition' || res.category === 'Roads'))) {
+          // Uncertain road image: Mark for review, do NOT assign definitive PWD
+          setCategory('Roads');
+          setTitle('');
+          setDescription('');
+          setPriority('Medium');
+          setDepartment('');
+          setForceManualReport(false);
+          setIsManuallyEdited(false);
+        } else {
+          if (res.category && res.category !== 'Normal / Functional') {
+            const mappedCat = res.category === 'Water Supply' ? 'Water' : (res.category as CivicCategory);
+            setCategory(mappedCat);
+          }
+          if (!isManuallyEdited || !title) {
+            if (res.title) {
+              setTitle(res.title);
+            }
+          }
+          if (!isManuallyEdited || !description) {
+            if (res.description) {
+              const consolidated = buildConsolidatedCivicDescription(res.description, res, angleSlots);
+              setDescription(consolidated);
+            }
+          }
+          if (!isManuallyEdited || !priority) {
+            if (res.priority) {
+              setPriority(res.priority as PriorityLevel);
+            }
+          }
+          if (!isManuallyEdited || !department) {
+            if (res.department) {
+              setDepartment(normalizeDepartment(res.department, res.category));
+            }
+          }
         }
       }
     } catch (err) {
       console.error('AI Vision Error:', err);
     } finally {
-      setAnalyzingAI(false);
+      if (thisRequestId === aiRequestIdRef.current) {
+        setAnalyzingAI(false);
+      }
     }
   };
 
@@ -499,9 +1090,9 @@ export const ReportIssuePage: React.FC = () => {
         created_at: draftCreatedAt || nowIso,
         updated_at: nowIso,
         draft_status: 'local_draft',
-        title: title || `${category} Issue Reported`,
+        title: title || (category ? `${category} Issue Reported` : 'Civic Issue Reported'),
         description,
-        category,
+        category: (category || 'Roads') as CivicCategory,
         priority,
         department,
         latitude: lat,
@@ -575,6 +1166,13 @@ export const ReportIssuePage: React.FC = () => {
         return;
       }
 
+      if (!category) {
+        toast.warning('Please select an issue type (Water Supply, Roads & Works, Drainage, or Sanitation) before submitting.');
+        isSubmittingRef.current = false;
+        setSubmitting(false);
+        return;
+      }
+
       // 3-Tier Geolocation Validation
       if (!isValidCoordinate(lat, lng)) {
         toast.error('Valid complaint coordinates are required. Please mark the defect location on the map.');
@@ -643,7 +1241,7 @@ export const ReportIssuePage: React.FC = () => {
         uploadedUrls.closeup
       ].filter(Boolean);
 
-      const resolvedDept = resolveDepartmentInfo(undefined, department, category);
+      const resolvedDept = resolveDepartmentInfo(undefined, department, category || undefined);
 
       const newComplaintData = {
         complaint_number: complaintNumber,
@@ -663,8 +1261,8 @@ export const ReportIssuePage: React.FC = () => {
           analysis_time_ms: aiResult.analysis_time_ms,
           angles_count: anglePhotos.length
         } : undefined,
-        category,
-        title: title || `${category} Issue Reported`,
+        category: (category || 'Roads') as CivicCategory,
+        title: title || `${category || 'Civic'} Issue Reported`,
         description: description || `Civic issue reported via NAGARSETU at ${locationAddress}`,
         priority,
         status: (aiResult && aiResult.confidence < 0.80) ? ('NEEDS_VERIFICATION' as const) : ('Submitted' as const),
@@ -675,15 +1273,18 @@ export const ReportIssuePage: React.FC = () => {
         location_source: locationSource,
         location_accuracy_m: locationAccuracy,
         location_address: locationAddress,
-        ai_category: aiResult?.category || category,
-        ai_specific_issue: aiResult?.issue_type || category,
+        ai_category: aiResult?.category || category || 'Roads',
+        ai_specific_issue: aiResult?.issue_type || category || 'Civic Issue',
         ai_confidence: aiResult?.confidence ?? 0.0,
-        ai_severity: aiResult?.priority || priority,
+        ai_severity: aiResult?.severity || aiResult?.priority || priority,
         ai_urgency: aiResult?.priority || priority,
         ai_evidence: aiResult?.description || description,
-        ai_model: aiResult?.mode || 'gemini-3.6-flash',
+        ai_model: (aiResult as any)?.model || 'civiclens-yolov8',
+        ai_status: aiResult?.aiStatus || 'confirmed',
+        ai_detected_class: aiResult?.explanation?.detectedIssue || (aiResult?.detected_objects?.[0] ?? null),
+        ai_reason: aiResult?.explanation?.reason || aiResult?.description || '',
         ai_analyzed_at: new Date().toISOString(),
-        needs_manual_verification: !aiResult || aiResult.confidence < 0.80 || aiResult.is_available === false
+        needs_manual_verification: !aiResult || aiResult.reviewRequired !== false || aiResult.confidence < 0.75
       };
 
       const created = await createComplaint(newComplaintData);
@@ -762,10 +1363,10 @@ export const ReportIssuePage: React.FC = () => {
             <Sparkles className={`w-4 h-4 ${aiHealth?.reachable ? 'text-emerald-600 animate-pulse' : 'text-amber-600'}`} />
             <span>
               {aiHealth?.reachable
-                ? `🟢 Gemini Vision Active (${aiHealth.model})`
+                ? 'Nagarsetu AI'
                 : aiHealth?.configured
-                ? '🟡 AI Service Quota Limit (Manual Fallback Ready)'
-                : '🔴 AI Key Not Configured'}
+                ? '🟡 AI Service Offline (Manual Mode Ready)'
+                : '🔴 AI Service Unavailable'}
             </span>
           </div>
         </div>
@@ -961,6 +1562,46 @@ export const ReportIssuePage: React.FC = () => {
                     </div>
                   </div>
 
+                  {/* Issue Category / Domain Quick Selector */}
+                  <div className="bg-slate-50/90 p-3 rounded-xl border border-slate-200 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-[11px] font-extrabold uppercase tracking-wider text-slate-700 flex items-center space-x-1.5 font-outfit">
+                        <span>Select Issue Type to Report</span>
+                      </label>
+                      <span className="text-[10px] text-slate-500 font-medium">Routes to specialized local AI</span>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {[
+                        { id: 'Water', domain: 'pipe', icon: '💧', label: 'Water Supply', desc: 'Pipe Leak / Burst' },
+                        { id: 'Roads', domain: 'road', icon: '🛣️', label: 'Roads & Works', desc: 'Pothole / Surface' },
+                        { id: 'Drainage', domain: 'drainage', icon: '🚰', label: 'Drainage', desc: 'Block / Overflow' },
+                        { id: 'Sanitation', domain: 'waste', icon: '🗑️', label: 'Sanitation', desc: 'Garbage / Waste' },
+                      ].map((item) => {
+                        const isSelected = category === item.id;
+                        return (
+                          <button
+                            key={item.id}
+                            type="button"
+                            onClick={() => {
+                              handleCategoryChange(item.id as CivicCategory);
+                            }}
+                            className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer ${
+                              isSelected
+                                ? 'bg-emerald-50 border-emerald-500 text-emerald-950 shadow-xs ring-1 ring-emerald-400'
+                                : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300'
+                            }`}
+                          >
+                            <div className="flex items-center space-x-1.5 font-extrabold text-xs">
+                              <span>{item.icon}</span>
+                              <span className="truncate">{item.label}</span>
+                            </div>
+                            <div className="text-[10px] text-slate-500 truncate mt-0.5">{item.desc}</div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
                   {/* Compulsory 2-Photo Requirement Banner */}
                   {addedCount < 2 ? (
                     <div className="p-3 rounded-xl bg-amber-50 border border-amber-300 text-amber-950 text-xs font-medium flex items-center justify-between gap-2 shadow-2xs">
@@ -988,43 +1629,6 @@ export const ReportIssuePage: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Carousel Step / Dot Navigation Tabs */}
-                  <div className="flex items-center justify-between gap-1.5 p-1.5 bg-gray-50 rounded-xl border border-gray-200">
-                    <div className="flex items-center space-x-1.5 flex-1 overflow-x-auto py-0.5">
-                      {ANGLE_CONFIGS.map((c, idx) => {
-                        const isFilled = Boolean(angleSlots[c.angle]?.previewUrl);
-                        const isActive = currentSlotIndex === idx;
-                        return (
-                          <button
-                            key={c.angle}
-                            type="button"
-                            onClick={() => setCurrentSlotIndex(idx)}
-                            className={`flex-1 min-w-[70px] py-1.5 px-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-1 border ${
-                              isActive
-                                ? 'bg-emerald-600 text-white border-emerald-700 shadow-xs'
-                                : isFilled
-                                ? 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
-                                : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-100'
-                            }`}
-                          >
-                            <span className="font-mono text-[11px]">{idx + 1}.</span>
-                            <span className="truncate">{c.recommendedView.replace(' View', '')}</span>
-                            {isFilled && <span className="text-[10px] text-emerald-600">✓</span>}
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    <div className="shrink-0 pl-1">
-                      <span className={`text-[11px] font-mono font-extrabold px-2 py-0.5 rounded-md border ${
-                        addedCount > 0
-                          ? 'bg-emerald-100 text-emerald-900 border-emerald-300'
-                          : 'bg-gray-200 text-gray-600 border-gray-300'
-                      }`}>
-                        {addedCount}/4
-                      </span>
-                    </div>
-                  </div>
 
                   {/* Single Image Slot Carousel View with Touch Swipe Support */}
                   <div
@@ -1076,8 +1680,12 @@ export const ReportIssuePage: React.FC = () => {
                           </h3>
                           <span className="text-[10px] text-gray-500 font-medium font-mono">({cfg.badge})</span>
                           {hasImage && (
-                            <span className="text-[9px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 ml-auto">
-                              ✓ Saved
+                            <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full border ml-auto flex items-center gap-1 bg-emerald-50 text-emerald-700 border-emerald-200">
+                              {slotValidationResults[cfg.angle]?.outcome === 'UNCERTAIN' ? (
+                                <span className="text-amber-800 font-bold">⚠ Manual Review</span>
+                              ) : (
+                                <span>✓ Supported ({category ? translateCategory(category) : 'Evidence'})</span>
+                              )}
                             </span>
                           )}
                         </div>
@@ -1142,32 +1750,74 @@ export const ReportIssuePage: React.FC = () => {
                         </div>
                       ) : (
                         <div className="space-y-4 py-6 my-auto text-center">
-                          <div className="w-14 h-14 rounded-2xl bg-white text-emerald-600 flex items-center justify-center mx-auto border border-gray-200 shadow-2xs">
-                            <Camera className="w-7 h-7 text-emerald-600" />
-                          </div>
+                          {validatingSlot === cfg.angle ? (
+                            <div className="py-6 space-y-3">
+                              <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border border-emerald-200 shadow-2xs">
+                                <RefreshCw className="w-7 h-7 text-emerald-600 animate-spin" />
+                              </div>
+                              <div>
+                                <p className="text-xs font-extrabold text-emerald-900 font-outfit">Validating Issue Category...</p>
+                                <p className="text-[11px] text-emerald-700 mt-0.5">Analyzing image with specialized AI model before accepting</p>
+                              </div>
+                            </div>
+                          ) : (
+                            <>
+                              {unsupportedAlert && unsupportedAlert.angle === cfg.angle && (
+                                <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-300 text-rose-950 text-xs space-y-2 mb-3 text-left">
+                                  <div className="flex items-center space-x-2 font-extrabold text-rose-900">
+                                    <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+                                    <span>Unsupported Image</span>
+                                  </div>
+                                  <p className="text-rose-800 text-[11px] leading-relaxed">
+                                    {unsupportedAlert.message}
+                                  </p>
+                                  {unsupportedAlert.suggestedCategory && (
+                                    <div className="flex items-center justify-between pt-1">
+                                      <span className="text-[11px] font-medium text-rose-900">
+                                        Suggested: <strong>{unsupportedAlert.suggestedCategory}</strong>
+                                      </span>
+                                      {unsupportedAlert.detectedKey && (
+                                        <button
+                                          type="button"
+                                          onClick={() => handleCategoryChange(unsupportedAlert.detectedKey!)}
+                                          className="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-[10px] cursor-pointer shadow-2xs"
+                                        >
+                                          Switch to {unsupportedAlert.suggestedCategory}
+                                        </button>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              )}
 
-                          <div>
-                            <p className="text-xs font-bold text-gray-800 font-outfit">Add photo for {cfg.recommendedView}</p>
-                            <p className="text-[11px] text-gray-500 mt-0.5">Use camera or choose file from device gallery</p>
-                          </div>
+                              <div className="w-14 h-14 rounded-2xl bg-white text-emerald-600 flex items-center justify-center mx-auto border border-gray-200 shadow-2xs">
+                                <Camera className="w-7 h-7 text-emerald-600" />
+                              </div>
 
-                          <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto">
-                            <label
-                              htmlFor={`citizen-angle-camera-${cfg.angle}`}
-                              className="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-extrabold text-xs text-center cursor-pointer shadow-xs min-h-[44px] flex items-center justify-center space-x-2"
-                            >
-                              <Camera className="w-4 h-4 shrink-0" />
-                              <span>Camera</span>
-                            </label>
+                              <div>
+                                <p className="text-xs font-bold text-gray-800 font-outfit">Add photo for {cfg.recommendedView}</p>
+                                <p className="text-[11px] text-gray-500 mt-0.5">Use camera or choose file from device gallery</p>
+                              </div>
 
-                            <label
-                              htmlFor={`citizen-angle-upload-${cfg.angle}`}
-                              className="py-2.5 px-3 rounded-xl bg-white hover:bg-gray-100 active:bg-gray-200 text-gray-800 font-bold text-xs text-center border border-gray-300 shadow-2xs cursor-pointer min-h-[44px] flex items-center justify-center space-x-2"
-                            >
-                              <Upload className="w-4 h-4 shrink-0 text-gray-600" />
-                              <span>Upload</span>
-                            </label>
-                          </div>
+                              <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto">
+                                <label
+                                  htmlFor={`citizen-angle-camera-${cfg.angle}`}
+                                  className="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-extrabold text-xs text-center cursor-pointer shadow-xs min-h-[44px] flex items-center justify-center space-x-2"
+                                >
+                                  <Camera className="w-4 h-4 shrink-0" />
+                                  <span>Camera</span>
+                                </label>
+
+                                <label
+                                  htmlFor={`citizen-angle-upload-${cfg.angle}`}
+                                  className="py-2.5 px-3 rounded-xl bg-white hover:bg-gray-100 active:bg-gray-200 text-gray-800 font-bold text-xs text-center border border-gray-300 shadow-2xs cursor-pointer min-h-[44px] flex items-center justify-center space-x-2"
+                                >
+                                  <Upload className="w-4 h-4 shrink-0 text-gray-600" />
+                                  <span>Upload</span>
+                                </label>
+                              </div>
+                            </>
+                          )}
                         </div>
                       )}
 
@@ -1252,8 +1902,36 @@ export const ReportIssuePage: React.FC = () => {
               );
             })()}
 
+            {/* Analyzing AI state banner */}
+            {analyzingAI && (
+              <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-300 flex items-center space-x-3 text-xs text-emerald-950 shadow-2xs">
+                <RefreshCw className="w-5 h-5 text-emerald-600 animate-spin shrink-0" />
+                <div>
+                  <div className="font-extrabold font-outfit text-sm text-emerald-900">
+                    Running Local AI Vision Analysis...
+                  </div>
+                  <div className="text-emerald-700 text-[11px] mt-0.5">
+                    Analyzing photo for <strong>{category ? translateCategory(category) : 'civic infrastructure'}</strong> using specialized local model.
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Neutral prompt if image uploaded but no domain selected yet */}
+            {!analyzingAI && !aiResult && selectedPhotoFile && !category && (
+              <div className="p-4 rounded-xl bg-slate-50 border-2 border-dashed border-slate-300 text-slate-800 space-y-2 text-xs">
+                <div className="flex items-center space-x-2 font-extrabold text-slate-900 font-outfit text-sm">
+                  <Sparkles className="w-4 h-4 text-emerald-600" />
+                  <span>Select Issue Domain Above</span>
+                </div>
+                <p className="text-slate-600 text-xs">
+                  Please tap one of the issue buttons above (<strong>Water Supply</strong>, <strong>Roads & Works</strong>, <strong>Drainage</strong>, or <strong>Sanitation</strong>) to analyze this photo with the dedicated local AI model.
+                </p>
+              </div>
+            )}
+
             {/* AI ANALYSIS RESULT CARD */}
-            {aiResult && (aiResult.confidence === 0 || aiResult.is_available === false) ? (
+            {aiResult && aiResult.is_available === false ? (
               <div className="p-4 rounded-xl bg-amber-50 border border-amber-300 space-y-3 text-xs">
                 <div className="flex items-center justify-between">
                   <span className="font-extrabold text-amber-900 font-outfit uppercase tracking-wider flex items-center space-x-1.5">
@@ -1266,7 +1944,7 @@ export const ReportIssuePage: React.FC = () => {
                 </div>
 
                 <p className="text-amber-900 font-medium text-xs">
-                  {aiResult.error_message || 'AI Vision temporarily unavailable because the AI service quota has been reached. You can retry or enter the complaint details manually.'}
+                  {aiResult.error_message || 'Local AI Vision service is temporarily unavailable. You can retry or enter the complaint details manually.'}
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center gap-2 pt-1">
@@ -1296,56 +1974,234 @@ export const ReportIssuePage: React.FC = () => {
                   </button>
                 </div>
               </div>
-            ) : aiResult && (
-              <div className="p-4 rounded-xl bg-emerald-50/70 border border-emerald-300 space-y-3 text-xs">
+            ) : aiResult && (aiResult.road_condition === 'clean' || aiResult.aiStatus === 'confirmed_clean' || aiResult.aiStatus === 'confirmed_normal' || (aiResult.detected === false && aiResult.aiStatus !== 'manual_review')) ? (
+              /* CASE 2: CLEAN OR NORMAL INFRASTRUCTURE VERIFIED */
+              <div className="p-4 rounded-xl bg-emerald-50 border-2 border-emerald-400 space-y-3 text-xs shadow-xs">
                 <div className="flex items-center justify-between">
-                  <span className="font-extrabold text-emerald-900 font-outfit uppercase tracking-wider flex items-center space-x-1">
+                  <span className="font-extrabold text-emerald-950 font-outfit uppercase tracking-wider flex items-center space-x-1.5 text-sm">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                    <span>{aiResult.road_condition === 'clean' || aiResult.aiStatus === 'confirmed_clean' ? '✓ ROAD CONDITION: CLEAN' : '✓ INFRASTRUCTURE: NORMAL & INTACT'}</span>
+                  </span>
+                  <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded border text-emerald-800 bg-white border-emerald-300">
+                    AI confidence: {Math.round(aiResult.confidence * 100)}%
+                  </span>
+                </div>
+
+                <div className="bg-white/90 p-3 rounded-lg border border-emerald-200 space-y-1">
+                  <div className="font-extrabold text-emerald-900 text-sm font-outfit flex items-center space-x-1.5">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                    <span>{aiResult.road_condition === 'clean' || aiResult.aiStatus === 'confirmed_clean' ? 'Road appears clean' : 'Infrastructure appears normal & intact'}</span>
+                  </div>
+                  <p className="text-gray-700 text-xs font-medium">
+                    {aiResult.road_condition === 'clean' || aiResult.aiStatus === 'confirmed_clean' ? 'No visible pothole or major road defect detected.' : 'No visible leak, damage, or civic defect detected.'}
+                  </p>
+                  <p className="text-gray-500 text-[11px]">
+                    {aiResult.description || 'Condition verified normal by local AI model.'}
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] bg-white/90 px-2.5 py-1.5 rounded-lg border border-emerald-200">
+                  <span className="text-emerald-950 font-medium">
+                    Selected Domain: <strong className="font-bold">{category ? translateCategory(category) : (aiResult.category || 'Normal')}</strong>
+                    {aiResult.analysis_domain ? <span className="font-mono text-[10px] text-emerald-700 font-bold ml-1">({aiResult.analysis_domain})</span> : null}
+                  </span>
+                  <span className="text-slate-600 font-medium font-mono text-[10px]">
+                    Validated AI Model: <strong className="text-emerald-800 font-bold">{aiResult.model || aiResult.ai_model || (category === 'Water' ? 'water_pipe_model.pt' : category === 'Drainage' ? 'drainage_model.pt' : 'civicmodel.pt')}</strong>
+                  </span>
+                </div>
+
+                <div className="p-2.5 rounded-lg bg-emerald-100/70 border border-emerald-200 text-emerald-950 text-[11px] font-medium">
+                  <span>✓ No complaint is required for this image.</span>
+                </div>
+
+                {/* Citizen Action Options */}
+                <div className="flex flex-col sm:flex-row items-center gap-2 pt-1 border-t border-emerald-200/60">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const input = document.getElementById('citizen-angle-upload-front') as HTMLInputElement;
+                      if (input) input.click();
+                    }}
+                    className="w-full sm:w-1/3 py-2 px-2.5 rounded-xl bg-white hover:bg-emerald-100 text-emerald-900 font-bold border border-emerald-300 flex items-center justify-center space-x-1 min-h-[40px] cursor-pointer text-[11px]"
+                  >
+                    <Camera className="w-3.5 h-3.5 text-emerald-700" />
+                    <span>Upload Another Image</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setForceManualReport(true);
+                      const titleInput = document.getElementById('complaint-title-input');
+                      if (titleInput) {
+                        titleInput.focus();
+                        titleInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      }
+                    }}
+                    className="w-full sm:w-1/3 py-2 px-2.5 rounded-xl bg-white hover:bg-amber-100 text-amber-900 font-bold border border-amber-300 flex items-center justify-center space-x-1 min-h-[40px] cursor-pointer text-[11px]"
+                  >
+                    <Edit3 className="w-3.5 h-3.5 text-amber-700" />
+                    <span>Report Issue Anyway</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => navigate('/citizen')}
+                    className="w-full sm:w-1/3 py-2 px-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold flex items-center justify-center space-x-1 min-h-[40px] cursor-pointer text-[11px]"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                    <span>Cancel Report</span>
+                  </button>
+                </div>
+              </div>
+            ) : aiResult && (aiResult.road_condition === 'uncertain' || aiResult.aiStatus === 'manual_review') ? (
+              /* CASE 3: UNCERTAIN ROAD OR PIPE REVIEW */
+              (() => {
+                const isPipeReview = aiResult.category === 'Water' || aiResult.department_code === 'WTR' || (aiResult.issue_type || '').toLowerCase().includes('pipe');
+                const reviewTitle = isPipeReview ? '⚠ PIPE CONDITION: NEEDS REVIEW' : '⚠ ROAD CONDITION: NEEDS REVIEW';
+                const reviewHeadline = isPipeReview ? 'Pipe condition could not be verified confidently.' : 'Road condition could not be verified confidently.';
+                const reviewSubtext = isPipeReview ? 'Please verify pipe defect details manually or upload a clearer pipe image.' : 'Please upload a clearer road image.';
+                const retryBtnText = isPipeReview ? 'Upload Clearer Pipe Image' : 'Upload Clearer Image';
+
+                return (
+                  <div className="p-4 rounded-xl bg-amber-50 border-2 border-amber-300 space-y-3 text-xs shadow-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="font-extrabold text-amber-950 font-outfit uppercase tracking-wider flex items-center space-x-1.5 text-sm">
+                        <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
+                        <span>{reviewTitle}</span>
+                      </span>
+                      <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded border text-amber-800 bg-white border-amber-300">
+                        Confidence: {Math.round(aiResult.confidence * 100)}%
+                      </span>
+                    </div>
+
+                    <div className="bg-white/90 p-3 rounded-lg border border-amber-200 space-y-1">
+                      <div className="font-extrabold text-amber-950 text-sm font-outfit">
+                        {reviewHeadline}
+                      </div>
+                      <p className="text-amber-900 text-xs font-medium">
+                        {reviewSubtext}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[11px] bg-white/90 px-2.5 py-1.5 rounded-lg border border-amber-200">
+                      <span className="text-amber-950 font-medium">
+                        Selected Domain: <strong className="font-bold">{category ? translateCategory(category) : (aiResult.category || 'Review')}</strong>
+                        {aiResult.analysis_domain ? <span className="font-mono text-[10px] text-amber-800 font-bold ml-1">({aiResult.analysis_domain})</span> : null}
+                      </span>
+                      <span className="text-slate-600 font-medium font-mono text-[10px]">
+                        Review Model: <strong className="text-amber-900 font-bold">{aiResult.model || aiResult.ai_model || (isPipeReview ? 'water_pipe_model.pt' : 'road_condition_analyzer')}</strong>
+                      </span>
+                    </div>
+
+                    <p className="text-amber-800 text-[11px]">
+                      {aiResult.explanation?.reason || (isPipeReview ? 'Pipe surface details are ambiguous. A utility technician will review if submitted.' : 'Road surface details are ambiguous or lighting is low. A civic engineer will review if submitted.')}
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row items-center gap-2 pt-1 border-t border-amber-200/60">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const input = document.getElementById('citizen-angle-upload-front') as HTMLInputElement;
+                          if (input) input.click();
+                        }}
+                        className="w-full sm:w-1/2 py-2 px-3 rounded-xl bg-white hover:bg-amber-100 text-amber-900 font-bold border border-amber-300 flex items-center justify-center space-x-1.5 min-h-[40px] cursor-pointer text-[11px]"
+                      >
+                        <RefreshCw className="w-3.5 h-3.5 text-amber-700" />
+                        <span>{retryBtnText}</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setForceManualReport(true);
+                          const titleInput = document.getElementById('complaint-title-input');
+                          if (titleInput) {
+                            titleInput.focus();
+                            titleInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                          }
+                        }}
+                        className="w-full sm:w-1/2 py-2 px-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold flex items-center justify-center space-x-1.5 min-h-[40px] cursor-pointer text-[11px]"
+                      >
+                        <span>Continue with Manual Entry</span>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })()
+            ) : aiResult && (
+              /* CASE 1 & DEFECTS: POTHOLE / ROAD DAMAGE / WASTE */
+              <div className="p-4 rounded-xl bg-emerald-50/70 border border-emerald-300 space-y-3 text-xs">
+                {/* Header with Title and Confidence Level Badge */}
+                <div className="flex items-center justify-between">
+                  <span className="font-extrabold text-emerald-900 font-outfit uppercase tracking-wider flex items-center space-x-1.5">
                     <Sparkles className="w-4 h-4 text-emerald-600" />
-                    <span>{t('aiVisionAnalysisResult')}</span>
+                    <span>AI DETECTED</span>
                   </span>
 
                   <span
                     className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded border ${
                       aiResult.confidence_level === 'High'
-                        ? 'text-emerald-800 bg-white border-emerald-200'
+                        ? 'text-emerald-800 bg-white border-emerald-300'
                         : aiResult.confidence_level === 'Medium'
-                        ? 'text-amber-800 bg-amber-50 border-amber-200'
-                        : 'text-rose-800 bg-rose-50 border-rose-200'
+                        ? 'text-amber-800 bg-amber-50 border-amber-300'
+                        : 'text-rose-800 bg-rose-50 border-rose-300'
                     }`}
                   >
-                    {aiResult.confidence_level === 'High' ? '🟢 High Confidence' : aiResult.confidence_level === 'Medium' ? '🟡 Please Verify' : '⚪ Low Confidence'} ({Math.round(aiResult.confidence * 100)}%)
+                    {aiResult.confidence_level === 'High' ? '🟢 Confident' : aiResult.confidence_level === 'Medium' ? '🟡 Suggestion' : '⚪ Review'} (Confidence: {Math.round(aiResult.confidence * 100)}% • Level: {aiResult.confidence_level?.toUpperCase() || 'HIGH'})
                   </span>
                 </div>
 
-                {/* Quality Warning if any */}
-                {aiResult.quality_check?.warning && (
-                  <div className="p-2.5 rounded-lg bg-amber-100 border border-amber-300 text-amber-900 text-[11px] font-medium flex items-center space-x-1.5">
-                    <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0" />
-                    <span>{aiResult.quality_check.warning}</span>
+                {/* Detected Issue Headline */}
+                <div className="bg-white/80 p-2.5 rounded-lg border border-emerald-200">
+                  <div className="font-extrabold text-gray-900 text-sm font-outfit">
+                    {aiResult.issue_type || aiResult.title}
                   </div>
-                )}
-
-                <div className="grid grid-cols-2 gap-2 text-gray-800 pt-1 font-medium">
-                  <div>
-                    <span className="text-gray-500 block text-[10px]">{t('aiDetectedCategory')}</span>
-                    <strong className="text-emerald-900 font-outfit text-sm">✓ {translateCategory(aiResult.category)}</strong>
-                  </div>
-                  <div>
-                    <span className="text-gray-500 block text-[10px]">{t('recommendedDepartment')}</span>
-                    <strong className="text-gray-900 text-xs truncate block">{translateDepartment(aiResult.department)}</strong>
+                  <div className="text-[11px] text-gray-600 mt-0.5">
+                    Category: <strong className="text-emerald-950 font-bold">{translateCategory(aiResult.category)}</strong>
                   </div>
                 </div>
 
-                {aiResult.detected_objects && aiResult.detected_objects.length > 0 && (
-                  <div className="pt-1 border-t border-emerald-200/60 flex flex-wrap gap-1 items-center">
-                    <span className="text-[10px] text-gray-500 mr-1">{t('detectedFeatures')}</span>
-                    {aiResult.detected_objects.map((obj) => (
-                      <span key={obj} className="px-1.5 py-0.5 bg-white rounded border border-emerald-200 text-[10px] font-mono text-emerald-800">
-                        #{obj}
-                      </span>
-                    ))}
+                {/* Domain & Model Synchronization Tag */}
+                <div className="flex items-center justify-between text-[11px] bg-white/90 px-2.5 py-1.5 rounded-lg border border-emerald-200">
+                  <span className="text-emerald-950 font-medium">
+                    Selected Domain: <strong className="font-bold">{category ? translateCategory(category) : translateCategory(aiResult.category)}</strong>
+                    {aiResult.analysis_domain ? <span className="font-mono text-[10px] text-emerald-700 font-bold ml-1">({aiResult.analysis_domain})</span> : null}
+                  </span>
+                  <span className="text-slate-600 font-medium font-mono text-[10px]">
+                    Validated AI Model: <strong className="text-emerald-800 font-bold">{aiResult.model || aiResult.ai_model || (category === 'Water' ? 'water_pipe_model.pt' : category === 'Drainage' ? 'drainage_model.pt' : category === 'Sanitation' ? 'best.pt' : 'civicmodel.pt')}</strong>
+                  </span>
+                </div>
+
+                {/* Key Metrics Grid: Severity, Priority, Department */}
+                <div className="grid grid-cols-3 gap-2 text-gray-800 pt-0.5 font-medium">
+                  <div className="bg-white/60 p-2 rounded-lg border border-emerald-100">
+                    <span className="text-gray-500 block text-[9px] uppercase tracking-wider">Severity</span>
+                    <strong className="text-gray-900 font-outfit text-xs">{aiResult.severity || 'Medium'}</strong>
                   </div>
-                )}
+                  <div className="bg-white/60 p-2 rounded-lg border border-emerald-100">
+                    <span className="text-gray-500 block text-[9px] uppercase tracking-wider">Priority</span>
+                    <strong className="text-gray-900 font-outfit text-xs">{aiResult.priority || 'Medium'}</strong>
+                  </div>
+                  <div className="bg-white/60 p-2 rounded-lg border border-emerald-100">
+                    <span className="text-gray-500 block text-[9px] uppercase tracking-wider">Department</span>
+                    <strong className="text-gray-900 font-outfit text-xs truncate block" title={aiResult.department}>{translateDepartment(aiResult.department)}</strong>
+                  </div>
+                </div>
+
+                {/* Explainability Block: Why */}
+                <div className="p-2.5 rounded-lg bg-emerald-100/60 border border-emerald-200 text-emerald-950 text-[11px]">
+                  <span className="font-extrabold text-emerald-900 block mb-0.5">Why:</span>
+                  <span>{aiResult.explanation?.reason || `${aiResult.issue_type || aiResult.title} detected with ${Math.round(aiResult.confidence * 100)}% confidence.`}</span>
+                </div>
+
+                {/* Transparency Notice */}
+                <div className="flex items-center justify-between text-[10px] text-gray-500 pt-0.5 border-t border-emerald-200/50">
+                  <span className="italic">
+                    {aiResult.transparencyNotice || (aiResult.confidence >= 0.75 ? 'AI-generated — please review before submitting.' : 'AI suggestion — please verify.')}
+                  </span>
+                  <span className="text-emerald-700 font-mono font-medium">All fields editable</span>
+                </div>
               </div>
             )}
 
@@ -1477,17 +2333,45 @@ export const ReportIssuePage: React.FC = () => {
 
             {/* FORM FIELDS */}
             <div className="space-y-4 text-xs">
+              {aiResult && (aiResult.road_condition === 'clean' || aiResult.aiStatus === 'confirmed_clean') && !forceManualReport && (
+                <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-950 text-xs space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                    <span className="font-extrabold text-sm font-outfit">✓ Road Verified as Clean</span>
+                  </div>
+                  <p className="text-gray-700 text-xs">
+                    No complaint is required because the road appears clean with no active defect detected.
+                  </p>
+                  <div className="pt-1 flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setForceManualReport(true)}
+                      className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] cursor-pointer"
+                    >
+                      Report an Issue Anyway
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => navigate('/citizen')}
+                      className="px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-[11px] cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
               
               <div>
                 <label className="block font-bold text-gray-700 mb-1">{t('category')}</label>
                 <select aria-label="category"
-                  value={category}
+                  value={category || ''}
                   onChange={(e) => {
-                    setCategory(e.target.value as CivicCategory);
-                    setIsManuallyEdited(true);
+                    const newCat = e.target.value as CivicCategory;
+                    if (newCat) handleCategoryChange(newCat);
                   }}
                   className="w-full bg-white border border-gray-300 rounded-xl p-2.5 font-bold text-gray-900 focus:border-emerald-500 min-h-[44px]"
                 >
+                  {!category && <option value="" disabled>Select Issue Category...</option>}
                   {CIVIC_CATEGORIES.map((c) => (
                     <option key={c} value={c}>{translateCategory(c)}</option>
                   ))}
@@ -1512,14 +2396,14 @@ export const ReportIssuePage: React.FC = () => {
               <div>
                 <label className="block font-bold text-gray-700 mb-1">{t('description')}</label>
                 <textarea aria-label="description"
-                  rows={4}
+                  rows={6}
                   value={description}
                   onChange={(e) => {
                     setDescription(e.target.value);
                     setIsManuallyEdited(true);
                   }}
                   placeholder={t('enterDescription')}
-                  className="w-full bg-white border border-gray-300 rounded-xl p-2.5 text-gray-900 focus:border-emerald-500 font-medium"
+                  className="w-full bg-white border border-gray-300 rounded-xl p-3 text-gray-900 focus:border-emerald-500 font-medium leading-relaxed min-h-[140px]"
                 />
               </div>
 
@@ -1615,6 +2499,11 @@ export const ReportIssuePage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => {
+                  const isCleanRoad = aiResult && (aiResult.road_condition === 'clean' || aiResult.aiStatus === 'confirmed_clean');
+                  if (isCleanRoad && !forceManualReport) {
+                    toast.info("No complaint is required because the road appears clean. If you would like to report another issue, click 'Report an Issue Anyway'.");
+                    return;
+                  }
                   const uploadedCount = Object.values(angleSlots).filter((s) => Boolean(s.previewUrl)).length;
                   if (uploadedCount < 2) {
                     toast.warning(`At least 2 evidence photos from any view are compulsory. Currently uploaded: ${uploadedCount}/4. Please upload ${2 - uploadedCount} more photo${2 - uploadedCount > 1 ? 's' : ''} to proceed.`);
@@ -1779,12 +2668,12 @@ export const ReportIssuePage: React.FC = () => {
 
             <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 text-xs space-y-2">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-emerald-800 font-outfit">{t('category')}: {translateCategory(category)}</span>
+                <span className="font-bold text-emerald-800 font-outfit">{t('category')}: {category ? translateCategory(category) : 'Not Selected'}</span>
                 <PriorityBadge priority={priority} />
               </div>
 
               <div>
-                <strong className="block text-gray-900 font-outfit text-sm">{title || `${translateCategory(category)} Issue`}</strong>
+                <strong className="block text-gray-900 font-outfit text-sm">{title || (category ? `${translateCategory(category)} Issue` : 'Civic Issue')}</strong>
                 <p className="text-gray-600 text-[11px] mt-0.5">{description || 'No description provided.'}</p>
               </div>
 

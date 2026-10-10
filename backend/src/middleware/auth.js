@@ -104,6 +104,17 @@ const DEMO_USER_TOKENS = {
     department_code: 'PWD',
     language_pref: 'en'
   },
+  'demo-token-department-head': {
+    id: 1,
+    name: 'Rahul Kumar',
+    mobile: '+91 9822000001',
+    email: 'rahul.kumar@nagarsetu.gov.in',
+    role: 'department_head',
+    department_id: '8ed9f760-1314-427c-a515-c2a54d6df6d8',
+    department_name: 'Public Works Department (PWD)',
+    department_code: 'PWD',
+    language_pref: 'en'
+  },
   'demo-token-hod': {
     id: 1,
     name: 'Rahul Kumar',
@@ -115,14 +126,119 @@ const DEMO_USER_TOKENS = {
     department_code: 'PWD',
     language_pref: 'en'
   },
+  'demo-token-water-head': {
+    id: 3,
+    name: 'Vikram Patil',
+    mobile: '+91 9822000003',
+    email: 'vikram.patil@nagarsetu.gov.in',
+    role: 'department_head',
+    department_id: 'ead370cc-459c-44f0-899f-8a97f0928beb',
+    department_name: 'Water Supply & Sewerage Board',
+    department_code: 'WTR',
+    language_pref: 'en'
+  },
+  'demo-token-wtr-head': {
+    id: 3,
+    name: 'Vikram Patil',
+    mobile: '+91 9822000003',
+    email: 'vikram.patil@nagarsetu.gov.in',
+    role: 'department_head',
+    department_id: 'ead370cc-459c-44f0-899f-8a97f0928beb',
+    department_name: 'Water Supply & Sewerage Board',
+    department_code: 'WTR',
+    language_pref: 'en'
+  },
+  'demo-token-sanitation-head': {
+    id: 11,
+    name: 'Amit Sharma',
+    mobile: '+91 9822000002',
+    email: 'amit.sharma@nagarsetu.gov.in',
+    role: 'department_head',
+    department_id: '9cabc1f2-fd10-48dd-a5cb-01d05197de22',
+    department_name: 'Sanitation & Waste Management',
+    department_code: 'SAN',
+    language_pref: 'en'
+  },
+  'demo-token-san-head': {
+    id: 11,
+    name: 'Amit Sharma',
+    mobile: '+91 9822000002',
+    email: 'amit.sharma@nagarsetu.gov.in',
+    role: 'department_head',
+    department_id: '9cabc1f2-fd10-48dd-a5cb-01d05197de22',
+    department_name: 'Sanitation & Waste Management',
+    department_code: 'SAN',
+    language_pref: 'en'
+  },
   'demo-token-service-staff': {
-    id: 101,
+    id: 20,
     name: 'Amit Patil',
     mobile: '9822010001',
     email: 'amit.patil@nagarsetu.gov.in',
     role: 'service_staff',
     department_id: '8ed9f760-1314-427c-a515-c2a54d6df6d8',
     department_name: 'Public Works Department (PWD)',
+    department_code: 'PWD',
+    employee_id: 'PWD-STF-001',
+    language_pref: 'en'
+  },
+  'demo-token-pwd-staff': {
+    id: 23,
+    name: 'Rohit More',
+    mobile: '9822010004',
+    email: 'rohit.more@nagarsetu.gov.in',
+    role: 'service_staff',
+    department_id: '8ed9f760-1314-427c-a515-c2a54d6df6d8',
+    department_name: 'Public Works Department (PWD)',
+    department_code: 'PWD',
+    employee_id: 'PWD-STF-004',
+    language_pref: 'en'
+  },
+  'demo-token-san-staff': {
+    id: 26,
+    name: 'Prashant Mane',
+    mobile: '9822010006',
+    email: 'prashant.mane@nagarsetu.gov.in',
+    role: 'service_staff',
+    department_id: '9cabc1f2-fd10-48dd-a5cb-01d05197de22',
+    department_name: 'Sanitation & Waste Management',
+    department_code: 'SAN',
+    employee_id: 'SAN-STF-001',
+    language_pref: 'en'
+  },
+  'demo-token-wtr-staff': {
+    id: 30,
+    name: 'Kiran Patil',
+    mobile: '9822010011',
+    email: 'kiran.patil@nagarsetu.gov.in',
+    role: 'service_staff',
+    department_id: 'ead370cc-459c-44f0-899f-8a97f0928beb',
+    department_name: 'Water Supply & Sewerage Board',
+    department_code: 'WTR',
+    employee_id: 'WTR-STF-001',
+    language_pref: 'en'
+  },
+  'demo-token-drn-head': {
+    id: 16,
+    name: 'Sanjay More',
+    mobile: '+91 9822000004',
+    email: 'sanjay.more@nagarsetu.gov.in',
+    role: 'department_head',
+    department_id: 'ee73cb82-cc47-4333-b7d6-4491353c1354',
+    department_name: 'Drainage & Sewage Department',
+    department_code: 'DRN',
+    language_pref: 'en'
+  },
+  'demo-token-drn-staff': {
+    id: 35,
+    name: 'Sunil Patil',
+    mobile: '9822010016',
+    email: 'sunil.patil@nagarsetu.gov.in',
+    role: 'service_staff',
+    department_id: 'ee73cb82-cc47-4333-b7d6-4491353c1354',
+    department_name: 'Drainage & Sewage Department',
+    department_code: 'DRN',
+    employee_id: 'DRN-STF-001',
     language_pref: 'en'
   },
   'demo-token': {
@@ -249,7 +365,24 @@ async function authenticateToken(req, res, next) {
     }
 
     if (!role) {
-      role = authUser.app_metadata?.role || authUser.user_metadata?.role || ((authUser.email || '').toLowerCase().includes('admin') ? 'city_admin' : 'citizen');
+      const em = (authUser.email || '').toLowerCase().trim();
+      if (em.includes('admin')) {
+        role = 'city_admin';
+      } else if (
+        em.includes('rahul.kumar') ||
+        em.includes('amit.sharma') ||
+        em.includes('vikram.patil') ||
+        em.includes('sanjay.more') ||
+        em.includes('aditya.joshi') ||
+        em.includes('kunal.kulkarni') ||
+        em.includes('rohan.deshmukh') ||
+        em.includes('hod') ||
+        em.includes('depthead')
+      ) {
+        role = 'department_head';
+      } else {
+        role = authUser.app_metadata?.role || authUser.user_metadata?.role || 'citizen';
+      }
     }
 
     const normalizedRole = normalizeRole(role);

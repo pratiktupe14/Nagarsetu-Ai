@@ -1,0 +1,20 @@
+{
+  "perfect_pipe_count": 28,
+  "water_leakage_count": 37,
+  "broken_pipe_count": 20,
+  "excluded_duplicates": 1,
+  "train_count": 60,
+  "val_count": 12,
+  "test_count": 13,
+  "perfect_pipe_accuracy": 0.9231,
+  "perfect_pipe_precision": 0.8,
+  "perfect_pipe_recall": 1.0,
+  "perfect_pipe_false_positive_rate": 0.1111,
+  "water_leakage_precision": 0.625,
+  "water_leakage_recall": 0.8333,
+  "broken_pipe_precision": 0.0,
+  "broken_pipe_recall": 0.0,
+  "overall_accuracy": 0.6923,
+  "overall_f1": 0.5344,
+  "training_time_seconds": 55.88
+}

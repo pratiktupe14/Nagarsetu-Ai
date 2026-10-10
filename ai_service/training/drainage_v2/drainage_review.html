@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NAGARSETU 3.1 — Drainage AI Annotation & Label Review</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --surface: #111827;
+      --surface-light: #1f2937;
+      --border: #374151;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --primary: #3b82f6;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --cyan: #06b6d4;
+      --radius: 8px;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      z-index: 10;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .badge {
+      background: var(--surface-light);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .kpi-bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .kpi-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      background: var(--surface-light);
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+    .kpi-chip b {
+      color: #fff;
+    }
+    .kpi-chip.kpi-warn {
+      border-color: var(--warning);
+      color: var(--warning);
+    }
+    .actions-bar {
+      display: flex;
+      gap: 8px;
+    }
+    button {
+      background: var(--surface-light);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+    button:hover {
+      background: #283548;
+      border-color: #4b5563;
+    }
+    button.primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+    button.primary:hover {
+      background: #2563eb;
+    }
+    button.success {
+      background: var(--success);
+      border-color: var(--success);
+      color: #fff;
+    }
+    .main-layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+    .sidebar {
+      width: 340px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .sidebar-filter {
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .filter-btn-group {
+      display: flex;
+      gap: 5px;
+    }
+    .filter-btn {
+      flex: 1;
+      padding: 5px;
+      font-size: 0.72rem;
+      border-radius: 4px;
+      text-align: center;
+      background: var(--surface-light);
+      cursor: pointer;
+      border: 1px solid var(--border);
+    }
+    .filter-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+      font-weight: 700;
+    }
+    .image-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .image-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: var(--surface-light);
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-size: 0.78rem;
+      gap: 8px;
+    }
+    .image-item:hover {
+      background: #263346;
+    }
+    .image-item.active {
+      border-color: var(--primary);
+      background: #1e293b;
+    }
+    .image-item-info {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+    .badge-status {
+      font-size: 0.68rem;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .badge-status.normal { background: #064e3b; color: #34d399; }
+    .badge-status.blocked { background: #78350f; color: #fbbf24; }
+    .badge-status.damaged { background: #7f1d1d; color: #f87171; }
+    .badge-status.unreviewed { background: #4c1d95; color: #c084fc; border: 1px solid #a855f7; }
+
+    .stage-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #000;
+      position: relative;
+    }
+    .stage-header {
+      padding: 10px 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .image-stage {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+      padding: 20px;
+    }
+    .image-stage img {
+      max-width: 95%;
+      max-height: 90%;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+      border: 1px solid #334155;
+    }
+    .control-panel {
+      width: 360px;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+    }
+    .panel-section {
+      background: var(--surface-light);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .panel-section h3 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .class-btn-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .class-choice-btn {
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border: 2px solid transparent;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.15s ease;
+    }
+    .class-choice-btn.btn-normal {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+    .class-choice-btn.btn-normal:hover, .class-choice-btn.btn-normal.active {
+      background: var(--success);
+      color: #fff;
+      border-color: var(--success);
+    }
+    .class-choice-btn.btn-blocked {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+    .class-choice-btn.btn-blocked:hover, .class-choice-btn.btn-blocked.active {
+      background: var(--warning);
+      color: #000;
+      border-color: var(--warning);
+    }
+    .class-choice-btn.btn-damaged {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    .class-choice-btn.btn-damaged:hover, .class-choice-btn.btn-damaged.active {
+      background: var(--danger);
+      color: #fff;
+      border-color: var(--danger);
+    }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #1e293b;
+      border: 1px solid var(--primary);
+      padding: 10px 18px;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 100;
+    }
+    .toast.visible { opacity: 1; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1>NAGARSETU 3.1 — Drainage AI Label Review</h1>
+      <span class="badge">MobileNetV3-Small (3-Class)</span>
+    </div>
+    <div class="kpi-bar">
+      <div class="kpi-chip">Total Unique: <b id="kpi-total">106</b></div>
+      <div class="kpi-chip">Verified: <b id="kpi-verified" style="color:#10b981;">99</b></div>
+      <div class="kpi-chip kpi-warn">Needs Review: <b id="kpi-unreviewed" style="color:#f59e0b;">7</b></div>
+    </div>
+    <div class="actions-bar">
+      <button class="primary" onclick="saveToServer()">💾 Save Reviews to Disk</button>
+      <button onclick="exportJson()">📥 Export JSON</button>
+      <button onclick="copyJson()">📋 Copy JSON</button>
+    </div>
+  </header>
+
+  <div class="main-layout">
+    <div class="sidebar">
+      <div class="sidebar-filter">
+        <div class="filter-btn-group">
+          <div class="filter-btn" id="filter-unreviewed" onclick="setFilter('unreviewed')">⚠️ Needs Review (7)</div>
+          <div class="filter-btn active" id="filter-all" onclick="setFilter('all')">All (106)</div>
+          <div class="filter-btn" id="filter-verified" onclick="setFilter('verified')">Verified (99)</div>
+        </div>
+      </div>
+      <div class="image-list" id="image-list"></div>
+    </div>
+
+    <div class="stage-container">
+      <div class="stage-header">
+        <div>
+          <b id="active-filename">Image filename</b>
+          <span class="badge" id="active-dimensions">Dimensions</span>
+        </div>
+        <div>
+          <button onclick="prevImage()">◀ Previous</button>
+          <button onclick="nextImage()">Next ▶</button>
+        </div>
+      </div>
+      <div class="image-stage">
+        <img id="main-image" src="" alt="Drainage photograph" />
+      </div>
+    </div>
+
+    <div class="control-panel">
+      <div class="panel-section">
+        <h3>Current Ground Truth Label</h3>
+        <div class="class-btn-grid">
+          <div class="class-choice-btn btn-normal" id="btn-normal" onclick="setLabel('normal_drain')">
+            <span>🟢 Normal Drain (1)</span>
+            <span style="font-size:0.75rem;">Clean / Functional</span>
+          </div>
+          <div class="class-choice-btn btn-blocked" id="btn-blocked" onclick="setLabel('blocked_drain')">
+            <span>🟡 Blocked Drain (2)</span>
+            <span style="font-size:0.75rem;">Clogged / Overflow</span>
+          </div>
+          <div class="class-choice-btn btn-damaged" id="btn-damaged" onclick="setLabel('damaged_drain')">
+            <span>🔴 Broken Drain (3)</span>
+            <span style="font-size:0.75rem;">Damaged Slab / Grate</span>
+          </div>
+        </div>
+        <div style="margin-top:10px;display:flex;align-items:center;gap:8px;">
+          <input type="checkbox" id="chk-overflow" onchange="toggleOverflow(this.checked)" />
+          <label for="chk-overflow" style="font-size:0.8rem;cursor:pointer;">🌊 Flag as Overflowing Drain (Nuance)</label>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <h3>Review Status</h3>
+        <div id="review-status-tag" style="font-size:0.85rem;font-weight:700;">Status</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);line-height:1.4;" id="review-desc">
+          Catalog label from ground truth catalog.
+        </div>
+        <button class="success" onclick="confirmCurrent()">✅ Confirm Label for this Image</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Saved</div>
+
+  <script>
+    const INITIAL_DATA = [{"index": 1, "filename": "09d2afff-c9e6-4a0b-b06c-b0ac78a8c516_1790499968874 (1).jpg", "relative_url": "images/img_001_09d2afff-c9e6-4a0b-b06c-b0ac78a8c516_1790499968874_1.jpg", "width": 1200, "height": 900, "sha256": "abc05790a0f150419d2fca66a0e919966e14cb0f825a2da0807ed776e3b198ac", "group": "session_burst_09d2", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 2, "filename": "09d2afff-c9e6-4a0b-b06c-b0ac78a8c516_1790499968874.jpg", "relative_url": "images/img_002_09d2afff-c9e6-4a0b-b06c-b0ac78a8c516_1790499968874.jpg", "width": 3047, "height": 2285, "sha256": "a8c175bcb6025deeb0f192b40269827e8951498386f98a14f598f3b299f9adc5", "group": "session_burst_09d2", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 3, "filename": "121658674.avif", "relative_url": "images/img_003_121658674.avif", "width": 1280, "height": 720, "sha256": "fe494016743dc83e680e8c15d5da8362500110d691e5f5d28cb02db6bf46ba58", "group": "session_single_121658674.av", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 4, "filename": "124484822.avif", "relative_url": "images/img_004_124484822.avif", "width": 1280, "height": 720, "sha256": "af7df1a2e8dbfdcb316372c3311f22a29768cbe8705a1199f31d04c9d0ec1fdd", "group": "session_single_124484822.av", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 5, "filename": "128926359.avif", "relative_url": "images/img_005_128926359.avif", "width": 1280, "height": 718, "sha256": "dedec252ab695428930127aff3bc3a70e4072b0226e5dbf09128e3227d4c8783", "group": "session_single_128926359.av", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 6, "filename": "54c49313-8a19-4bf9-93e8-1c4db27ea3cd_1789962940981.jpg", "relative_url": "images/img_006_54c49313-8a19-4bf9-93e8-1c4db27ea3cd_1789962940981.jpg", "width": 1200, "height": 900, "sha256": "cacd2f7ef037706b6645837dcccf062521055c255f76bf0d5eb224a0b9d5f4bb", "group": "session_single_54c49313-8a1", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 7, "filename": "56694397.avif", "relative_url": "images/img_007_56694397.avif", "width": 1280, "height": 720, "sha256": "c56009050fb85c45f03af633487ef97101bdafb4cc42259ae7a867d5e6ea19dd", "group": "session_single_56694397.avi", "catalog_label": "DRAIN_OVERFLOW", "assigned_label": "blocked_drain", "is_overflow": true, "is_verified": true, "status": "verified"}, {"index": 8, "filename": "7we0y7hj7hyf1.jpg", "relative_url": "images/img_008_7we0y7hj7hyf1.jpg", "width": 1200, "height": 1600, "sha256": "7f739ed44ae5742c9c409368e3e3b2e9e4fbfe0333441e58ebeae2e31a731193", "group": "session_single_7we0y7hj7hyf", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 9, "filename": "8eafe9d5-6d92-4fbe-b831-50e80a38fea6_1789109089366.jpg", "relative_url": "images/img_009_8eafe9d5-6d92-4fbe-b831-50e80a38fea6_1789109089366.jpg", "width": 1200, "height": 900, "sha256": "99ca730a300b94553dc9234cf9733b40eaf9b55bb35768b247700fbc867e96bf", "group": "session_single_8eafe9d5-6d9", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 10, "filename": "920c9b8a-2cfa-4222-bb6b-8ba65f9ceefc-577x1024.jpg", "relative_url": "images/img_010_920c9b8a-2cfa-4222-bb6b-8ba65f9ceefc-577x1024.jpg", "width": 577, "height": 1024, "sha256": "10ae0ea8a0e61d9c3c1403e1880deb52b73ec96c855dc8eff028be859360c250", "group": "session_single_920c9b8a-2cf", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 11, "filename": "IMG_A_section_of_TrustPu_2_1_9PA8Q3JP.jpg", "relative_url": "images/img_011_IMG_A_section_of_TrustPu_2_1_9PA8Q3JP.jpg", "width": 1200, "height": 1469, "sha256": "bf3e665c5c2460e98d7ef56fbb391fd7549e5560587daaa807708766b2507096", "group": "session_single_IMG_A_sectio", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 12, "filename": "Screenshot 2026-10-09 005711.png", "relative_url": "images/img_012_Screenshot_2026-10-09_005711.png", "width": 593, "height": 333, "sha256": "59ba1423da18061ba0b6d4666aac0dc54b671aa8d7310bd5804554c81d048d89", "group": "session_oct09_screenshot", "catalog_label": "NORMAL_DRAIN", "assigned_label": "normal_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 13, "filename": "Screenshot 2026-10-09 005723.png", "relative_url": "images/img_013_Screenshot_2026-10-09_005723.png", "width": 582, "height": 320, "sha256": "1950cea784526ad7e1427ee8d80c87055553e72ae54045fe3903da47aa35d986", "group": "session_oct09_screenshot", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 14, "filename": "WhatsApp Image 2026-10-09 at 12.40.30 AM.jpeg", "relative_url": "images/img_014_WhatsApp_Image_2026-10-09_at_12.40.30_AM.jpeg", "width": 960, "height": 619, "sha256": "5c978cfde87998df6513e7fb0403dbca7dcbf3d0d655184744ef66ab36912a1e", "group": "session_oct09_1240", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 15, "filename": "WhatsApp Image 2026-10-09 at 12.40.31 AM (1).jpeg", "relative_url": "images/img_015_WhatsApp_Image_2026-10-09_at_12.40.31_AM_1.jpeg", "width": 1428, "height": 1071, "sha256": "30fd4d3865c139703d687eae02054f770df2bd846d3781bba0489009a6026b16", "group": "session_oct09_1240", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 16, "filename": "WhatsApp Image 2026-10-09 at 12.40.31 AM (2).jpeg", "relative_url": "images/img_016_WhatsApp_Image_2026-10-09_at_12.40.31_AM_2.jpeg", "width": 303, "height": 674, "sha256": "95731a1bddf036835d22dcf36ba5fb778bd01792d310a69e673b0cce16af4db4", "group": "session_oct09_1240", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 17, "filename": "WhatsApp Image 2026-10-09 at 12.40.31 AM.jpeg", "relative_url": "images/img_017_WhatsApp_Image_2026-10-09_at_12.40.31_AM.jpeg", "width": 1080, "height": 830, "sha256": "0c5f188e50a0b5c876330488febec8f81d64e2b6fef81667a9b1ea3fafc55d9c", "group": "session_oct09_1240", "catalog_label": "DRAIN_OVERFLOW", "assigned_label": "blocked_drain", "is_overflow": true, "is_verified": true, "status": "verified"}, {"index": 18, "filename": "WhatsApp Image 2026-10-09 at 12.40.32 AM (1).jpeg", "relative_url": "images/img_018_WhatsApp_Image_2026-10-09_at_12.40.32_AM_1.jpeg", "width": 1200, "height": 675, "sha256": "f874e3d63e4b4199dcc861bb84b11c7c2a8cebb6fa582b7644f3e91a647b2aa0", "group": "session_oct09_1240", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 19, "filename": "WhatsApp Image 2026-10-09 at 12.40.32 AM (2).jpeg", "relative_url": "images/img_019_WhatsApp_Image_2026-10-09_at_12.40.32_AM_2.jpeg", "width": 700, "height": 525, "sha256": "e93db969b4ecad4ecbafdd50cd5e719b90f27da7be9fd30ec87296478031bfcc", "group": "session_oct09_1240", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 20, "filename": "WhatsApp Image 2026-10-09 at 12.40.32 AM (3).jpeg", "relative_url": "images/img_020_WhatsApp_Image_2026-10-09_at_12.40.32_AM_3.jpeg", "width": 1280, "height": 720, "sha256": "494890ea0e255efbd85ecd53b50d62e5d28c270bac8af401155754f826021689", "group": "session_oct09_1240", "catalog_label": "DRAIN_OVERFLOW", "assigned_label": "blocked_drain", "is_overflow": true, "is_verified": true, "status": "verified"}, {"index": 21, "filename": "WhatsApp Image 2026-10-09 at 12.40.32 AM.jpeg", "relative_url": "images/img_021_WhatsApp_Image_2026-10-09_at_12.40.32_AM.jpeg", "width": 1200, "height": 1600, "sha256": "39de21f83ad4dbaa0181cd706b49a2a7441a4e87a1e95c3a1d428cb02a1a3c2f", "group": "session_oct09_1240", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 22, "filename": "WhatsApp Image 2026-10-09 at 12.40.33 AM (1).jpeg", "relative_url": "images/img_022_WhatsApp_Image_2026-10-09_at_12.40.33_AM_1.jpeg", "width": 612, "height": 408, "sha256": "171b3404a54a4fd62564d31258a4c1eba60ef79f69736547b9d689e6c1e60d4e", "group": "session_oct09_1240", "catalog_label": "NORMAL_DRAIN", "assigned_label": "normal_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 23, "filename": "WhatsApp Image 2026-10-09 at 12.40.33 AM (2).jpeg", "relative_url": "images/img_023_WhatsApp_Image_2026-10-09_at_12.40.33_AM_2.jpeg", "width": 1280, "height": 720, "sha256": "0125de45f1527012b2c7f741e79d2796ba046edfb20a064c1bce8443e916f056", "group": "session_oct09_1240", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 24, "filename": "WhatsApp Image 2026-10-09 at 12.40.33 AM.jpeg", "relative_url": "images/img_024_WhatsApp_Image_2026-10-09_at_12.40.33_AM.jpeg", "width": 400, "height": 533, "sha256": "b64c2d5dcdd222dc4fbab5f8cd29265877fbd7ea19bad2730dde5f82bf64afaf", "group": "session_oct09_1240", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 25, "filename": "WhatsApp Image 2026-10-09 at 12.40.34 AM (1).jpeg", "relative_url": "images/img_025_WhatsApp_Image_2026-10-09_at_12.40.34_AM_1.jpeg", "width": 800, "height": 689, "sha256": "7ed19a9b54bd8e8f3b8472492a40d158f1f663a36af5700ae8abf86615d55a6d", "group": "session_oct09_1240", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 26, "filename": "WhatsApp Image 2026-10-09 at 12.40.34 AM.jpeg", "relative_url": "images/img_026_WhatsApp_Image_2026-10-09_at_12.40.34_AM.jpeg", "width": 678, "height": 900, "sha256": "161727e7fc39589eccd71526208654b95f20f86f6865edbb8d74e6ab5defcd0a", "group": "session_oct09_1240", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 27, "filename": "WhatsApp Image 2026-10-09 at 12.45.54 AM (1).jpeg", "relative_url": "images/img_027_WhatsApp_Image_2026-10-09_at_12.45.54_AM_1.jpeg", "width": 447, "height": 447, "sha256": "f1e8a40151b0d4053a6f4be5ba91d1f88f8ffb822bfe518b67e913e17ccbf60a", "group": "session_oct09_1245", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 28, "filename": "WhatsApp Image 2026-10-09 at 12.45.54 AM.jpeg", "relative_url": "images/img_028_WhatsApp_Image_2026-10-09_at_12.45.54_AM.jpeg", "width": 800, "height": 534, "sha256": "e8ed2a6ffb7e254003b840c981c4dc4d15335476c6a104c57b1771c5c90b7c88", "group": "session_oct09_1245", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 29, "filename": "WhatsApp Image 2026-10-09 at 12.51.01 AM (1).jpeg", "relative_url": "images/img_029_WhatsApp_Image_2026-10-09_at_12.51.01_AM_1.jpeg", "width": 1000, "height": 632, "sha256": "0108930e7bc70fc0c20d7b826cc38c41a8fdf8b1ccc177dd276cde11d1b125ab", "group": "session_oct09_1251", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 30, "filename": "WhatsApp Image 2026-10-09 at 12.51.01 AM (2).jpeg", "relative_url": "images/img_030_WhatsApp_Image_2026-10-09_at_12.51.01_AM_2.jpeg", "width": 640, "height": 853, "sha256": "a9f9ec0a93c627e040d1638caca79b1cb0bda8688d36c7b8d956788723b4498c", "group": "session_oct09_1251", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 31, "filename": "WhatsApp Image 2026-10-09 at 12.51.01 AM.jpeg", "relative_url": "images/img_031_WhatsApp_Image_2026-10-09_at_12.51.01_AM.jpeg", "width": 1013, "height": 675, "sha256": "88099124d33b05e0347a467c916bfb603b4f0abbff0fc55595fb6d6cac8202de", "group": "session_oct09_1251", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 32, "filename": "WhatsApp Image 2026-10-09 at 12.51.02 AM (1).jpeg", "relative_url": "images/img_032_WhatsApp_Image_2026-10-09_at_12.51.02_AM_1.jpeg", "width": 408, "height": 612, "sha256": "68f28228831766a0914a200c1678ad7658dc9d2ae24a903c2234eaafdc6f8996", "group": "session_oct09_1251", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 33, "filename": "WhatsApp Image 2026-10-09 at 12.51.02 AM (2).jpeg", "relative_url": "images/img_033_WhatsApp_Image_2026-10-09_at_12.51.02_AM_2.jpeg", "width": 1200, "height": 675, "sha256": "5d25be813bc9873e21ccb5306a9279ab91c2ddf6718f393ef9ef4ef4b2485fc2", "group": "session_oct09_1251", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 34, "filename": "WhatsApp Image 2026-10-09 at 12.51.02 AM.jpeg", "relative_url": "images/img_034_WhatsApp_Image_2026-10-09_at_12.51.02_AM.jpeg", "width": 1280, "height": 960, "sha256": "d7bce077645993fcc523770ccb6757e966d5ba8697a0cbfd82fe521ab2a25eb3", "group": "session_oct09_1251", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 35, "filename": "WhatsApp Image 2026-10-09 at 12.53.59 AM.jpeg", "relative_url": "images/img_035_WhatsApp_Image_2026-10-09_at_12.53.59_AM.jpeg", "width": 900, "height": 1600, "sha256": "8c6db7c36612d7f7b4596eb66cd40aca8626ac13e7cbe3348071f7285ae8c267", "group": "session_single_WhatsApp Ima", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 36, "filename": "WhatsApp Image 2026-10-09 at 12.54.36 AM.jpeg", "relative_url": "images/img_036_WhatsApp_Image_2026-10-09_at_12.54.36_AM.jpeg", "width": 335, "height": 597, "sha256": "8f63030a01b868520f9a7daf7359b1a9c6a4efd61c0a06a1a0d2300ace9095d9", "group": "session_single_WhatsApp Ima", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 37, "filename": "WhatsApp Image 2026-10-09 at 12.59.17 AM.jpeg", "relative_url": "images/img_037_WhatsApp_Image_2026-10-09_at_12.59.17_AM.jpeg", "width": 1428, "height": 1071, "sha256": "51c4a7a001bdf5db36b786419db7b8c3d6a15620832d3702c972459554a81bd6", "group": "session_single_WhatsApp Ima", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 38, "filename": "a-close-up-view-of-a-damaged-urban-street-surface-showing-a-metal-storm-drain-grate-positioned-at-the-edge-of-a-large-deep-pothole-or-sinkhole-the-3F9P90R.jpg", "relative_url": "images/img_038_a-close-up-view-of-a-damaged-urban-street-surface-showing-a-metal-storm-drain-grate-positioned-at-the-edge-of-a-large-deep-pothole-or-sinkhole-the-3F9P90R.jpg", "width": 1300, "height": 1065, "sha256": "d45a37e110323c6934a807d1a94ac5266d9f88ef810d257653e8e5fea81717d7", "group": "session_single_a-close-up-v", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 39, "filename": "dangerous-broken-concrete-drain-cover-creating-hole-sidewalk-damaged-collapsed-red-drainage-leaves-hazardous-open-465823045.webp", "relative_url": "images/img_039_dangerous-broken-concrete-drain-cover-creating-hole-sidewalk-damaged-collapsed-red-drainage-leaves-hazardous-open-465823045.webp", "width": 675, "height": 900, "sha256": "54a2ead9bc31ccf26bd94b5b0cc3758d5b754857a4b11b4783850e48ef72d130", "group": "session_single_dangerous-br", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 40, "filename": "dbcl_169054508064c3abb8201fb_1690531846342.jpg", "relative_url": "images/img_040_dbcl_169054508064c3abb8201fb_1690531846342.jpg", "width": 1200, "height": 900, "sha256": "51d0e2c1366d8ff2fab35fdd306ab06646b930d60027e0be9b3bcf78ab44388e", "group": "session_single_dbcl_1690545", "catalog_label": "NORMAL_DRAIN", "assigned_label": "normal_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 41, "filename": "dt-next_2026-06-12_l9o65836_1-1.avif", "relative_url": "images/img_041_dt-next_2026-06-12_l9o65836_1-1.avif", "width": 480, "height": 270, "sha256": "5b33d52df0548fd95d3c10b6a3cc6d51427e8f0ae89451d77b9f458403594a62", "group": "session_single_dt-next_2026", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 42, "filename": "e79a6b6c-026b-4d14-98fd-ed8e8ad3d4f7_1791026121021.jpg", "relative_url": "images/img_042_e79a6b6c-026b-4d14-98fd-ed8e8ad3d4f7_1791026121021.jpg", "width": 1200, "height": 900, "sha256": "ad77585d566ea8611df59e50ffe7510008be0bb5ed6e4fe4360f0bee38141a6c", "group": "session_single_e79a6b6c-026", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 43, "filename": "eabd595c-aa40-40f9-9349-fc01156b4727_1791169668662.jpg", "relative_url": "images/img_043_eabd595c-aa40-40f9-9349-fc01156b4727_1791169668662.jpg", "width": 1200, "height": 900, "sha256": "bdbed7f27221762e43caaafb98767ae651b2b172fccee0558c9b90d6cf38d934", "group": "session_single_eabd595c-aa4", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 44, "filename": "images (1).jpg", "relative_url": "images/img_044_images_1.jpg", "width": 671, "height": 457, "sha256": "2821121aade88166f6b0802d450740ee8e91792038a370aa5a7bbccfdbadfca0", "group": "session_images_batch", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 45, "filename": "images (10).jpg", "relative_url": "images/img_045_images_10.jpg", "width": 390, "height": 242, "sha256": "a3e9086b186074ca53334ee13bf933f72ebe118dfbe2680a1d3bacaf51283d38", "group": "session_images_batch", "catalog_label": "NORMAL_DRAIN", "assigned_label": "normal_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 46, "filename": "images (11).jpg", "relative_url": "images/img_046_images_11.jpg", "width": 679, "height": 452, "sha256": "7c5ff6c36f69bdbe0e7f8b0ad4ad3d42d4be34904a3b5535ad4c1cea310a2dd4", "group": "session_images_batch", "catalog_label": "NORMAL_DRAIN", "assigned_label": "normal_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 47, "filename": "images (12).jpg", "relative_url": "images/img_047_images_12.jpg", "width": 495, "height": 471, "sha256": "ac3dbec99da00024ae7a3b81eaebf8add9800ed48ae78d077af2a53f87ab8cf1", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 48, "filename": "images (13).jpg", "relative_url": "images/img_048_images_13.jpg", "width": 480, "height": 639, "sha256": "0583fedb91f3f6bafc0c9fdb6b002a7c9461f71e44f84d5caf5bcbb02372420e", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 49, "filename": "images (14).jpg", "relative_url": "images/img_049_images_14.jpg", "width": 387, "height": 516, "sha256": "0670ead3703994af0316f37498bddfae17d2aee8cd24f29864b817551517c929", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 50, "filename": "images (15).jpg", "relative_url": "images/img_050_images_15.jpg", "width": 335, "height": 597, "sha256": "0bf4b042f8f87818191348a785f4c21c65358fdf30a1137ee64ac31e8e1aa60b", "group": "session_images_batch", "catalog_label": "NORMAL_DRAIN", "assigned_label": "normal_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 51, "filename": "images (16).jpg", "relative_url": "images/img_051_images_16.jpg", "width": 480, "height": 640, "sha256": "d44bf3eb12e3b943e21d3badf0615404f60df51e8d384725614bcd8fa9baa4e5", "group": "session_images_batch", "catalog_label": "NORMAL_DRAIN", "assigned_label": "normal_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 52, "filename": "images (17).jpg", "relative_url": "images/img_052_images_17.jpg", "width": 480, "height": 640, "sha256": "fcb65a19900937276a5e7a53ca481d233ad09e7f305971ec6c63b0fd0ff10116", "group": "session_images_batch", "catalog_label": "NORMAL_DRAIN", "assigned_label": "normal_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 53, "filename": "images (19).jpg", "relative_url": "images/img_053_images_19.jpg", "width": 678, "height": 452, "sha256": "91e82c19456fa594dce95416dd1e86b37acd9f3b97a08a673ca14d5363b0c454", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 54, "filename": "images (2).jpg", "relative_url": "images/img_054_images_2.jpg", "width": 739, "height": 415, "sha256": "aac1bb41b4a7e6a3f8b3f9c0a7b1cea27be96880015200d95429d387bf79ec4c", "group": "session_images_batch", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 55, "filename": "images (20).jpg", "relative_url": "images/img_055_images_20.jpg", "width": 480, "height": 640, "sha256": "de779ecdc9dc22ed246c3d9d65648cf84a4277c907e36a8a37eff72e653ad6d2", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 56, "filename": "images (21).jpg", "relative_url": "images/img_056_images_21.jpg", "width": 480, "height": 640, "sha256": "47921e996fe35bbd7ea4af5b447092f36118ca284f3c166f203a96eda1ddd378", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 57, "filename": "images (22).jpg", "relative_url": "images/img_057_images_22.jpg", "width": 387, "height": 516, "sha256": "23102f5f43ae49f5064d0d7a5262a28d2e72b2f81406b32e39c3b8eb8c505474", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 58, "filename": "images (23).jpg", "relative_url": "images/img_058_images_23.jpg", "width": 480, "height": 640, "sha256": "d5482fb9f24652e92e056f3bdce19dda9f80568833a08b5fa723a4e28bfc4b28", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 59, "filename": "images (24).jpg", "relative_url": "images/img_059_images_24.jpg", "width": 495, "height": 404, "sha256": "d9a7da3d7970ccf6cc83e8bf43c8c4b0cec530b4d1b587518d96070ecf2a352c", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 60, "filename": "images (25).jpg", "relative_url": "images/img_060_images_25.jpg", "width": 408, "height": 728, "sha256": "156be4cb2570dd89a549f69d2196751f4dd166fa90afcd1b767e68860713573e", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 61, "filename": "images (26).jpg", "relative_url": "images/img_061_images_26.jpg", "width": 640, "height": 480, "sha256": "8e7e7d55a0f76f8bd6b2c3d03ee311510d57e3aa7c4e4b5d2cdf0e04b213e665", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 62, "filename": "images (27).jpg", "relative_url": "images/img_062_images_27.jpg", "width": 680, "height": 451, "sha256": "f383b4f8edcd9fe792c47d831162f70ab00406d9d37cbeafb0df07b7ab04ba43", "group": "session_images_batch", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 63, "filename": "images (28).jpg", "relative_url": "images/img_063_images_28.jpg", "width": 739, "height": 415, "sha256": "9e70d1bb952388d64c89296337c776945adccd48daf8fde2d328cd9f69f15c6b", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 64, "filename": "images (29).jpg", "relative_url": "images/img_064_images_29.jpg", "width": 690, "height": 388, "sha256": "22d17043b3fac4a76419be898fe6060e23198027c55b71b122619975cdc215f5", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 65, "filename": "images (3).jpg", "relative_url": "images/img_065_images_3.jpg", "width": 316, "height": 632, "sha256": "c95b0c306bcca54b3d75f72e8ef4b4c320875d2cdaec52ad2ac7ba8dcea9c93d", "group": "session_images_batch", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 66, "filename": "images (30).jpg", "relative_url": "images/img_066_images_30.jpg", "width": 399, "height": 290, "sha256": "33ad1a1743dd3626c53faf2f27346b5a9b5a8857783c0d245a31d5b38f2125fd", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 67, "filename": "images (32).jpg", "relative_url": "images/img_067_images_32.jpg", "width": 387, "height": 321, "sha256": "b6b8f3731fdb8bb1097870d9986d8a0e5506a499a1b2d649e6c4ed0e6fccb9ad", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 68, "filename": "images (33).jpg", "relative_url": "images/img_068_images_33.jpg", "width": 638, "height": 480, "sha256": "ccab548a0f39b3381047fa8b56a46deecc5c736546faa462377ec70eec5392d1", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 69, "filename": "images (34).jpg", "relative_url": "images/img_069_images_34.jpg", "width": 691, "height": 444, "sha256": "e9daaf8df0b0ae304479fea1a65f47d70a87830cc7c5187965472707b1f3e69f", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 70, "filename": "images (35).jpg", "relative_url": "images/img_070_images_35.jpg", "width": 739, "height": 415, "sha256": "c08e65e549170888fb6ba718b16656a5cb7d52da70a53fb04b586b02a63529c7", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 71, "filename": "images (36).jpg", "relative_url": "images/img_071_images_36.jpg", "width": 660, "height": 465, "sha256": "9e4419863da0fcb298ce6b9cdf09bf3a02722dff711aa2db9df7e718ab793385", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 72, "filename": "images (37).jpg", "relative_url": "images/img_072_images_37.jpg", "width": 536, "height": 572, "sha256": "66aba51039969b03dfea6f8e9cf3f303132d03fc2b3da37eba71b8e05a5326c1", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 73, "filename": "images (38).jpg", "relative_url": "images/img_073_images_38.jpg", "width": 639, "height": 480, "sha256": "45ba06c238cefcfa2c9cd53630e9d7e2476218a43a1d23115b3bd4c00d729884", "group": "session_images_batch", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 74, "filename": "images (39).jpg", "relative_url": "images/img_074_images_39.jpg", "width": 640, "height": 479, "sha256": "c979773384df83267e21df406e1832d3c4c2c0548394bd21b219e3f1aca2f756", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 75, "filename": "images (4).jpg", "relative_url": "images/img_075_images_4.jpg", "width": 480, "height": 270, "sha256": "856afb747ea49e35b770f7ce0a8b31686eab9d8b8646a2d2c67c7654c3f9a325", "group": "session_images_batch", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 76, "filename": "images (40).jpg", "relative_url": "images/img_076_images_40.jpg", "width": 739, "height": 415, "sha256": "187f5763f320e82446b04bda1cc5a2693c1e261920f41eb8ff379c5005e31368", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 77, "filename": "images (41).jpg", "relative_url": "images/img_077_images_41.jpg", "width": 381, "height": 805, "sha256": "01307512314e0d6c8bee6a59ee834de713eacd554ba50d9a02b58d2b1889c89b", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 78, "filename": "images (42).jpg", "relative_url": "images/img_078_images_42.jpg", "width": 480, "height": 640, "sha256": "f3d5f272d70ea934ffbda72c23ba0241b031278c5d542dafdc064f1b377d3f76", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 79, "filename": "images (43).jpg", "relative_url": "images/img_079_images_43.jpg", "width": 494, "height": 620, "sha256": "c04210ee129a8a7e59349fb77ce21f9000ee6b0e8e574bb85b49801d9bb87c4e", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 80, "filename": "images (44).jpg", "relative_url": "images/img_080_images_44.jpg", "width": 495, "height": 569, "sha256": "05e059f7eae942e51546ae8fa140e5047c7a0e9ba21c942debe99f73e6af8586", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 81, "filename": "images (46).jpg", "relative_url": "images/img_081_images_46.jpg", "width": 415, "height": 739, "sha256": "860b72057e77eb4d8f7d86c23cecaa5d7368fe112d9ebf5bba316505cf5c5cb0", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 82, "filename": "images (47).jpg", "relative_url": "images/img_082_images_47.jpg", "width": 576, "height": 432, "sha256": "bf8ee2b6c40fbda2a31d9bdb4718b4e7016c6a1410053ca7c2bd01264379eec1", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 83, "filename": "images (48).jpg", "relative_url": "images/img_083_images_48.jpg", "width": 576, "height": 432, "sha256": "8ff76ae296bc7957b91bad5448979a149bcebef01560d31976e3173321246f01", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 84, "filename": "images (49).jpg", "relative_url": "images/img_084_images_49.jpg", "width": 605, "height": 507, "sha256": "da6b04056c9d4a85263d103345f5e20576bb9791076e84e794e980909869c043", "group": "session_images_batch", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 85, "filename": "images (5).jpg", "relative_url": "images/img_085_images_5.jpg", "width": 677, "height": 453, "sha256": "0b8731d4f3f77022371f4f38c825296edff63c8959cfa51341cf6c595d293d79", "group": "session_images_batch", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 86, "filename": "images (51).jpg", "relative_url": "images/img_086_images_51.jpg", "width": 410, "height": 748, "sha256": "e20b62d8bb0f2f8c67d15a35188609e4a42651bb76fe7461a553843be127b344", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 87, "filename": "images (52).jpg", "relative_url": "images/img_087_images_52.jpg", "width": 640, "height": 480, "sha256": "3b453670cb73a6f177ef74dfdb8b2955f71c762b4bf07de4e2fec4eb844ee996", "group": "session_images_batch", "catalog_label": "NORMAL_DRAIN", "assigned_label": "normal_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 88, "filename": "images (53).jpg", "relative_url": "images/img_088_images_53.jpg", "width": 739, "height": 415, "sha256": "16566886785f1eb4f5fbb05a56ebf45eab4d2548ac9f8b4733ef3681780ccd94", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 89, "filename": "images (54).jpg", "relative_url": "images/img_089_images_54.jpg", "width": 640, "height": 479, "sha256": "d269ff8ae2439647002228cc3a4a1fd9d088faf4d03cbbbfcfaf0ac2c8dd614e", "group": "session_images_batch", "catalog_label": "DAMAGED_DRAIN", "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 90, "filename": "images (55).jpg", "relative_url": "images/img_090_images_55.jpg", "width": 480, "height": 640, "sha256": "bc86b5bca806933774a500e9bdcd4789af7ec931813d6bf542f6763ce4488f46", "group": "session_images_batch", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 91, "filename": "images (56).jpg", "relative_url": "images/img_091_images_56.jpg", "width": 480, "height": 640, "sha256": "58031db834e7989d327de93f8e6411ae2cdbd0bab672964ec6c11b92c4e5462a", "group": "session_images_batch", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 92, "filename": "images (6).jpg", "relative_url": "images/img_092_images_6.jpg", "width": 347, "height": 251, "sha256": "3bc33f725431ccc355ee73a9c34926a73aeb7d453c01ac6385f91dab897f19ca", "group": "session_images_batch", "catalog_label": "NORMAL_DRAIN", "assigned_label": "normal_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 93, "filename": "images (7).jpg", "relative_url": "images/img_093_images_7.jpg", "width": 159, "height": 318, "sha256": "ce73a2bd4fc2019408a6da5ce6b11e8d4fa1ca2f264b4e63e22b5c7c569817f4", "group": "session_images_batch", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 94, "filename": "images (8).jpg", "relative_url": "images/img_094_images_8.jpg", "width": 715, "height": 429, "sha256": "946233169a62dde0f0d8a54c350c02ad69d37dcd174b7681cda38f12abd7b1fb", "group": "session_images_batch", "catalog_label": "NORMAL_DRAIN", "assigned_label": "normal_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 95, "filename": "images (9).jpg", "relative_url": "images/img_095_images_9.jpg", "width": 461, "height": 256, "sha256": "045b2ae8cb6c821e3d645a140f00b96b0577bec3f236736b40240b6d7a7fbccc", "group": "session_images_batch", "catalog_label": "NORMAL_DRAIN", "assigned_label": "normal_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 96, "filename": "images.jpg", "relative_url": "images/img_096_images.jpg", "width": 366, "height": 241, "sha256": "629fe4c5dbe30d83811f1c77cc345128aba04e7dc0cbf2a7da6ac5986a06d6b9", "group": "session_single_images.jpg", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 97, "filename": "indiawaterportal_import_sites_default_files_styles_image_1200x675_public_iwp-images_drain.avif", "relative_url": "images/img_097_indiawaterportal_import_sites_default_files_styles_image_1200x675_public_iwp-images_drain.avif", "width": 1200, "height": 675, "sha256": "284547b18d52b7d320126e5af45ff9bba94e3eccb1509c3b21b00eca4ba8cf5f", "group": "session_single_indiawaterpo", "catalog_label": "BLOCKED_DRAIN", "assigned_label": "blocked_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 98, "filename": "old-rusty-metal-drain-cover-260nw-2753251053.webp", "relative_url": "images/img_098_old-rusty-metal-drain-cover-260nw-2753251053.webp", "width": 461, "height": 280, "sha256": "7d03e2edfe8fc661af6c035e3c53ccd6a47d5b78b289618bd6481942bd6db650", "group": "session_single_old-rusty-me", "catalog_label": "NORMAL_DRAIN", "assigned_label": "normal_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 99, "filename": "photo.avif", "relative_url": "images/img_099_photo.avif", "width": 1279, "height": 720, "sha256": "88dfccbdb10b6380781255c227531ad3bbcaf284a10452d9395e17a7449fbd04", "group": "session_single_photo.avif", "catalog_label": "NORMAL_DRAIN", "assigned_label": "normal_drain", "is_overflow": false, "is_verified": true, "status": "verified"}, {"index": 100, "filename": "Repaired Drain on a Busy Neighborhood Street.png", "relative_url": "images/img_100_Repaired_Drain_on_a_Busy_Neighborhood_Street.png", "width": 1450, "height": 1085, "sha256": "91e6509c4f03fce1b2ff28a5161c05026df86457da8a634e13250a70ece0a523", "group": "session_single_Repaired Dra", "catalog_label": null, "assigned_label": "normal_drain", "is_overflow": false, "is_verified": false, "status": "needs_review"}, {"index": 101, "filename": "Screenshot 2026-10-09 145124.png", "relative_url": "images/img_101_Screenshot_2026-10-09_145124.png", "width": 170, "height": 336, "sha256": "5e29aa998ee22a96007fef3bb4ba3069091a02979792c53332101e1ef71bb176", "group": "session_oct09_screenshot", "catalog_label": null, "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": false, "status": "needs_review"}, {"index": 102, "filename": "Screenshot 2026-10-09 145425.png", "relative_url": "images/img_102_Screenshot_2026-10-09_145425.png", "width": 342, "height": 235, "sha256": "2b17aaf1a01dabd2486b64bd1557c5f77caed8c267530e1856792fb532d899b2", "group": "session_oct09_screenshot", "catalog_label": null, "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": false, "status": "needs_review"}, {"index": 103, "filename": "WhatsApp Image 2026-10-09 at 12.05.04 PM.jpeg", "relative_url": "images/img_103_WhatsApp_Image_2026-10-09_at_12.05.04_PM.jpeg", "width": 720, "height": 1600, "sha256": "c35443d0cc0fa80d27587b436eb22d3446e3fb6c1a708b980a53cef77f3a4207", "group": "session_single_WhatsApp Ima", "catalog_label": null, "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": false, "status": "needs_review"}, {"index": 104, "filename": "WhatsApp Image 2026-10-09 at 2.42.08 PM.jpeg", "relative_url": "images/img_104_WhatsApp_Image_2026-10-09_at_2.42.08_PM.jpeg", "width": 720, "height": 1600, "sha256": "de539f795c83753f0b59ea3e7105405b3cc1e8e2cf70d668c841aaa8d8fee2ea", "group": "session_oct09_1442", "catalog_label": null, "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": false, "status": "needs_review"}, {"index": 105, "filename": "WhatsApp Image 2026-10-09 at 2.42.12 PM (1).jpeg", "relative_url": "images/img_105_WhatsApp_Image_2026-10-09_at_2.42.12_PM_1.jpeg", "width": 720, "height": 1600, "sha256": "669f6880086ec97d114ab2120c4dda208e6d57826c2fe2ee1bb76c31bc94251e", "group": "session_oct09_1442", "catalog_label": null, "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": false, "status": "needs_review"}, {"index": 106, "filename": "WhatsApp Image 2026-10-09 at 2.42.12 PM.jpeg", "relative_url": "images/img_106_WhatsApp_Image_2026-10-09_at_2.42.12_PM.jpeg", "width": 720, "height": 1600, "sha256": "55fbd4297a6e3145e4e48e1e2cc260627422de9efece78873da9812a57bdceb3", "group": "session_oct09_1442", "catalog_label": null, "assigned_label": "damaged_drain", "is_overflow": false, "is_verified": false, "status": "needs_review"}];
+    const STORAGE_KEY = "nagarsetu_drainage_review_v2";
+    let dataset = [];
+    let currentIdx = 0;
+    let currentFilter = "unreviewed";
+
+    function init() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try {
+          dataset = JSON.parse(stored);
+        } catch(e) {
+          dataset = INITIAL_DATA;
+        }
+      } else {
+        dataset = INITIAL_DATA;
+      }
+
+      // Default to the first unreviewed image
+      const firstUn = dataset.findIndex(d => !d.is_verified);
+      currentIdx = firstUn !== -1 ? firstUn : 0;
+
+      updateKpis();
+      filterList();
+      selectImage(currentIdx);
+
+      // Keyboard shortcuts 1, 2, 3
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "1") setLabel("normal_drain");
+        else if (e.key === "2") setLabel("blocked_drain");
+        else if (e.key === "3") setLabel("damaged_drain");
+        else if (e.key === "ArrowRight") nextImage();
+        else if (e.key === "ArrowLeft") prevImage();
+      });
+    }
+
+    function updateKpis() {
+      const total = dataset.length;
+      const verified = dataset.filter(d => d.is_verified).length;
+      const unreviewed = total - verified;
+
+      document.getElementById("kpi-total").innerText = total;
+      document.getElementById("kpi-verified").innerText = verified;
+      document.getElementById("kpi-unreviewed").innerText = unreviewed;
+    }
+
+    function setFilter(f) {
+      currentFilter = f;
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById(`filter-${f}`).classList.add("active");
+      filterList();
+    }
+
+    function filterList() {
+      const list = document.getElementById("image-list");
+      list.innerHTML = "";
+
+      dataset.forEach((item, idx) => {
+        if (currentFilter === "unreviewed" && item.is_verified) return;
+        if (currentFilter === "verified" && !item.is_verified) return;
+
+        const el = document.createElement("div");
+        el.className = `image-item ${idx === currentIdx ? "active" : ""}`;
+        el.onclick = () => selectImage(idx);
+
+        let badgeCls = "unreviewed";
+        let badgeTxt = "NEEDS REVIEW";
+        if (item.is_verified) {
+          if (item.assigned_label === "normal_drain") { badgeCls = "normal"; badgeTxt = "NORMAL"; }
+          else if (item.assigned_label === "blocked_drain") { badgeCls = "blocked"; badgeTxt = item.is_overflow ? "OVERFLOW" : "BLOCKED"; }
+          else if (item.assigned_label === "damaged_drain") { badgeCls = "damaged"; badgeTxt = "DAMAGED"; }
+        }
+
+        el.innerHTML = `
+          <div class="image-item-info">
+            <b>#${item.index}</b> ${item.filename}
+          </div>
+          <span class="badge-status ${badgeCls}">${badgeTxt}</span>
+        `;
+        list.appendChild(el);
+      });
+    }
+
+    function selectImage(idx) {
+      if (idx < 0 || idx >= dataset.length) return;
+      currentIdx = idx;
+      const item = dataset[currentIdx];
+
+      document.getElementById("active-filename").innerText = `#${item.index} — ${item.filename}`;
+      document.getElementById("active-dimensions").innerText = `${item.width}x${item.height} (${item.group})`;
+      document.getElementById("main-image").src = item.relative_url;
+
+      document.querySelectorAll(".class-choice-btn").forEach(b => b.classList.remove("active"));
+      if (item.assigned_label === "normal_drain") document.getElementById("btn-normal").classList.add("active");
+      else if (item.assigned_label === "blocked_drain") document.getElementById("btn-blocked").classList.add("active");
+      else if (item.assigned_label === "damaged_drain") document.getElementById("btn-damaged").classList.add("active");
+
+      document.getElementById("chk-overflow").checked = !!item.is_overflow;
+
+      const stTag = document.getElementById("review-status-tag");
+      const stDesc = document.getElementById("review-desc");
+      if (item.is_verified) {
+        stTag.innerText = "✅ Confirmed Ground Truth";
+        stTag.style.color = "#10b981";
+        stDesc.innerText = `Class: ${item.assigned_label.toUpperCase()}${item.is_overflow ? " (Overflowing)" : ""}`;
+      } else {
+        stTag.innerText = "⚠️ Awaiting Human Confirmation";
+        stTag.style.color = "#f59e0b";
+        stDesc.innerText = `Suggested Label: ${item.assigned_label.toUpperCase()}. Click a button above to confirm or change.`;
+      }
+
+      filterList();
+    }
+
+    function setLabel(label) {
+      const item = dataset[currentIdx];
+      item.assigned_label = label;
+      item.is_verified = true;
+      item.status = "verified";
+      if (label !== "blocked_drain") item.is_overflow = false;
+      saveLocal();
+      selectImage(currentIdx);
+      showToast(`Set to ${label.toUpperCase()}`);
+    }
+
+    function toggleOverflow(val) {
+      const item = dataset[currentIdx];
+      item.is_overflow = val;
+      if (val) {
+        item.assigned_label = "blocked_drain";
+        item.is_verified = true;
+      }
+      saveLocal();
+      selectImage(currentIdx);
+    }
+
+    function confirmCurrent() {
+      const item = dataset[currentIdx];
+      item.is_verified = true;
+      item.status = "verified";
+      saveLocal();
+      showToast(`Confirmed #${item.index} as ${item.assigned_label.toUpperCase()}`);
+      nextImage();
+    }
+
+    function nextImage() {
+      if (currentIdx < dataset.length - 1) selectImage(currentIdx + 1);
+    }
+
+    function prevImage() {
+      if (currentIdx > 0) selectImage(currentIdx - 1);
+    }
+
+    function saveLocal() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(dataset));
+      updateKpis();
+    }
+
+    function buildPayload() {
+      return {
+        review_metadata: {
+          generated_at: new Date().toISOString(),
+          system: "NAGARSETU 3.1 Drainage AI Review Tool",
+          total_images: dataset.length,
+          verified_images: dataset.filter(d => d.is_verified).length,
+          class_counts: {
+            normal_drain: dataset.filter(d => d.is_verified && d.assigned_label === "normal_drain").length,
+            blocked_drain: dataset.filter(d => d.is_verified && d.assigned_label === "blocked_drain").length,
+            damaged_drain: dataset.filter(d => d.is_verified && d.assigned_label === "damaged_drain").length,
+            overflow_drain: dataset.filter(d => d.is_verified && d.is_overflow).length
+          }
+        },
+        images: dataset
+      };
+    }
+
+    function saveToServer() {
+      saveLocal();
+      const payload = JSON.stringify(buildPayload(), null, 2);
+      fetch("http://localhost:8767/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload
+      }).then(r => r.json()).then(data => {
+        showToast("✅ Successfully saved to server disk!");
+      }).catch(e => {
+        showToast("Saved locally (Server offline)");
+      });
+    }
+
+    function exportJson() {
+      saveToServer();
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(buildPayload(), null, 2));
+      const a = document.createElement("a");
+      a.href = dataStr;
+      a.download = "drainage_annotations_reviewed.json";
+      a.click();
+    }
+
+    function copyJson() {
+      const payload = JSON.stringify(buildPayload(), null, 2);
+      navigator.clipboard.writeText(payload).then(() => {
+        showToast("✅ JSON copied to clipboard!");
+      });
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.innerText = msg;
+      t.className = "toast visible";
+      setTimeout(() => { t.className = "toast"; }, 2500);
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>

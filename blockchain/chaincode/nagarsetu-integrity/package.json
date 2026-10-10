@@ -1,0 +1,17 @@
+{
+  "name": "nagarsetu-integrity-chaincode",
+  "version": "3.1.0",
+  "description": "NAGARSETU 3.1 Permissioned Blockchain Integrity & Privacy Chaincode for Hyperledger Fabric",
+  "main": "index.js",
+  "scripts": {
+    "start": "fabric-chaincode-node start",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "fabric-contract-api": "^2.5.4",
+    "fabric-shim": "^2.5.4"
+  }
+}

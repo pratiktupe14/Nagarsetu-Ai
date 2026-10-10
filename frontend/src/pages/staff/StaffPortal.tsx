@@ -9,6 +9,7 @@ import { DashboardLayout } from '../../components/DashboardLayout';
 import { StatusBadge } from '../../components/StatusBadge';
 import { PriorityBadge } from '../../components/PriorityBadge';
 import { ActivityTimeline } from '../../components/ActivityTimeline';
+import { CitizenFeedbackCard } from '../../components/CitizenFeedbackCard';
 import {
   getStaffTasks, acceptStaffTask, startStaffTravel, startStaffWork,
   submitStaffResolution
@@ -1424,6 +1425,22 @@ export const StaffPortal: React.FC = () => {
                     <span>{submittingResolution ? t('submittingProof') : t('markWorkCompleted')}</span>
                   </button>
                 </form>
+              )}
+
+              {/* CITIZEN FEEDBACK & RATING (If Available) */}
+              {(selectedTask.rating || (selectedTask as any).feedback) && (
+                <div className="space-y-2 pt-2 border-t border-gray-200">
+                  <span className="text-[10px] font-extrabold font-mono uppercase text-gray-500 block">
+                    Citizen Feedback & Rating
+                  </span>
+                  <CitizenFeedbackCard
+                    citizenName={selectedTask.citizen_name || (selectedTask as any).feedback?.citizen_name || 'Citizen'}
+                    complaintNumber={selectedTask.complaint_number}
+                    rating={selectedTask.rating || (selectedTask as any).feedback?.rating}
+                    review={selectedTask.feedback_comment || (selectedTask as any).feedback?.review || (selectedTask as any).feedback?.comment}
+                    submissionDate={selectedTask.feedback_created_at || (selectedTask as any).feedback?.created_at || (selectedTask as any).feedback?.submission_date}
+                  />
+                </div>
               )}
 
               {/* TASK ACTIVITY TIMELINE */}

@@ -1,0 +1,40 @@
+# ---------------------------------------------------------------------------
+# NAGARSETU 3.1 — Hyperledger Fabric Cryptographic Identity Configuration
+# ---------------------------------------------------------------------------
+# Organization 1: Municipal Authority (MunicipalAuthorityMSP)
+# Organization 2: Independent Auditor (AuditorMSP)
+# Ordering Service: 3-Node Raft Cluster (OrdererMSP)
+# ---------------------------------------------------------------------------
+
+OrdererOrgs:
+  - Name: Orderer
+    Domain: nagarsetu.gov.in
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: orderer1
+        CommonName: orderer1.nagarsetu.gov.in
+      - Hostname: orderer2
+        CommonName: orderer2.nagarsetu.gov.in
+      - Hostname: orderer3
+        CommonName: orderer3.nagarsetu.gov.in
+
+PeerOrgs:
+  - Name: MunicipalAuthority
+    Domain: municipal.nagarsetu.gov.in
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+      Start: 0
+      Hostname: peer{{.Payload}}
+    Users:
+      Count: 1
+
+  - Name: IndependentAuditor
+    Domain: auditor.nagarsetu.gov.in
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+      Start: 0
+      Hostname: peer{{.Payload}}
+    Users:
+      Count: 1

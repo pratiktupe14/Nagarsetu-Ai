@@ -26,7 +26,7 @@ async function seedDefaultUsers() {
     if (citizenCheck.rows && citizenCheck.rows.length > 0) {
       for (const row of citizenCheck.rows) {
         await query(
-          `UPDATE users SET password_hash = ?, role = 'citizen', status = 'active' WHERE id = ?`,
+          `UPDATE users SET name = 'Pratik Dilip Tupe', password_hash = ?, role = 'citizen', status = 'active' WHERE id = ?`,
           [citizenHash, row.id]
         );
       }

@@ -10,6 +10,9 @@ describe('Citizen Complaint Submission Flow with Demo & JWT Auth', () => {
 
   before(async () => {
     await initDatabase();
+    const { query } = require('../src/config/db');
+    await query("DELETE FROM complaints WHERE complaint_number LIKE 'NS-%'").catch(() => {});
+    await query("UPDATE users SET name = 'Pratik Dilip Tupe' WHERE mobile = '8788562103'").catch(() => {});
     await new Promise((resolve) => {
       server = http.createServer(app);
       server.listen(0, '127.0.0.1', () => {
@@ -173,8 +176,8 @@ describe('Citizen Complaint Submission Flow with Demo & JWT Auth', () => {
       description: 'Checking that read queries never starve write action rate limits',
       priority: 'Medium',
       department_id: 1,
-      latitude: 19.9975,
-      longitude: 73.7898,
+      latitude: 19.9123,
+      longitude: 73.8123,
       location_source: 'live_gps'
     };
 

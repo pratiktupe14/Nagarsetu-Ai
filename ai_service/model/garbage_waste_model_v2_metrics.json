@@ -1,0 +1,12 @@
+{
+  "timestamp": 1791586827.1855843,
+  "training_duration_seconds": 479.62,
+  "device": "cpu",
+  "epochs_trained": 30,
+  "precision": 0.23704889320689274,
+  "recall": 0.44489855090934965,
+  "mAP50": 0.30010939510939505,
+  "mAP50_95": 0.11079766909535552,
+  "original_model_path": "d:\\NAGARSETU\\NAGARSETU 3.1\\ai_service\\model\\best.pt",
+  "v2_model_path": "d:\\NAGARSETU\\NAGARSETU 3.1\\ai_service\\model\\garbage_waste_model_v2.pt"
+}

@@ -188,7 +188,7 @@ describe('Department Head Staff Isolation & Security Suite', () => {
     assert.ok(Array.isArray(data.staff));
     assert.ok(data.staff.length > 0, 'Should return assignable staff');
     for (const staff of data.staff) {
-      assert.ok(staff.employee_id.startsWith('PWD-STF') || String(staff.department_id) === '1');
+      assert.ok(staff.employee_id.startsWith('PWD-STF') || String(staff.department_id) === '1' || String(staff.department_id) === '8ed9f760-1314-427c-a515-c2a54d6df6d8' || staff.department_code === 'PWD');
     }
   });
 
@@ -202,8 +202,8 @@ describe('Department Head Staff Isolation & Security Suite', () => {
     const complaintId = compRes.rows[0].id;
 
     // Dynamically query actual PWD staff and Sanitation staff from database
-    const pwdStaffRow = await query(`SELECT id FROM users WHERE department_id = 1 AND (role = 'service_staff' OR role = 'staff') LIMIT 1`);
-    const sanStaffRow = await query(`SELECT id FROM users WHERE department_id = 2 AND (role = 'service_staff' OR role = 'staff') LIMIT 1`);
+    const pwdStaffRow = await query(`SELECT id FROM users WHERE (department_id = 1 OR department_id = '8ed9f760-1314-427c-a515-c2a54d6df6d8') AND (role = 'service_staff' OR role = 'staff') LIMIT 1`);
+    const sanStaffRow = await query(`SELECT id FROM users WHERE (department_id = 2 OR department_id = '9cabc1f2-fd10-48dd-a5cb-01d05197de22') AND (role = 'service_staff' OR role = 'staff') LIMIT 1`);
     const pwdStaffId = pwdStaffRow.rows[0]?.id || 101;
     const sanStaffId = sanStaffRow.rows[0]?.id || 106;
 

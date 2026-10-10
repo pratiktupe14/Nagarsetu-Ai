@@ -1,0 +1,66 @@
+{
+  "frozen_test_samples_count": 15,
+  "frozen_test_errors": [
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.20.51 AM.jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.20.51 AM.jpeg",
+      "true_label": 1,
+      "predicted_label": 0,
+      "prob_normal": 0.909277617931366,
+      "prob_leak": 0.09072235226631165,
+      "image_dimensions": [
+        1600,
+        1200
+      ],
+      "group": "leak_whatsapp_12_20"
+    },
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.19.20 AM (1).jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.19.20 AM (1).jpeg",
+      "true_label": 1,
+      "predicted_label": 0,
+      "prob_normal": 0.9139828681945801,
+      "prob_leak": 0.08601716160774231,
+      "image_dimensions": [
+        768,
+        432
+      ],
+      "group": "leak_whatsapp_12_19_20"
+    }
+  ],
+  "pool_samples_count": 74,
+  "pool_errors": [
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.32.26 AM.jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.32.26 AM.jpeg",
+      "true_label": 1,
+      "predicted_label": 0,
+      "prob_normal": 0.9696744680404663,
+      "prob_leak": 0.030325554311275482,
+      "image_dimensions": [
+        729,
+        482
+      ],
+      "group": "leak_whatsapp_12_3x"
+    },
+    {
+      "filename": "WhatsApp Image 2026-10-09 at 12.33.38 AM.jpeg",
+      "path": "D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.33.38 AM.jpeg",
+      "true_label": 1,
+      "predicted_label": 0,
+      "prob_normal": 0.7323935031890869,
+      "prob_leak": 0.26760655641555786,
+      "image_dimensions": [
+        768,
+        432
+      ],
+      "group": "leak_whatsapp_12_3x"
+    }
+  ],
+  "root_cause_analysis": {
+    "WhatsApp Image 2026-10-09 at 12.20.51 AM.jpeg": "Subtle hairline crack/leak on pipe joint in outdoor scene; wide-angle viewpoint makes pipe defect occupy a small percentage of pixels. Global resize to 224x224 smooths out thin leakage stream.",
+    "WhatsApp Image 2026-10-09 at 12.19.20 AM (1).jpeg": "Vertical water spray against bright background with overexposure; thin spray texture easily washed out without multi-scale feature attention or specialized contrast tuning.",
+    "images.jpg": "Low resolution image (480x270) with dark pipe and diffuse wet patch; low contrast between wet soil/concrete and dry pipe.",
+    "water-main-pipe-leak-closeup-260nw-2738090293.jpg": "Extreme close-up on pipe clamp/fitting with very localized fine mist/spray."
+  }
+}

@@ -1,0 +1,7048 @@
+{
+  "review_metadata": {
+    "generated_at": "2026-10-09T22:49:52.812Z",
+    "system": "NAGARSETU 3.1 Garbage AI Annotation Review Tool",
+    "export_type": "full_review_audit",
+    "dataset_source": "D:\\NAGARSETU\\garbage waste",
+    "total_images_in_dataset": 30,
+    "reviewed_images_count": 30,
+    "total_boxes_audited": 271,
+    "summary": {
+      "approved_correct_boxes": 192,
+      "rejected_incorrect_boxes": 79,
+      "needs_adjustment_boxes": 0,
+      "pending_boxes": 0,
+      "images_with_missing_garbage": 0
+    }
+  },
+  "images": [
+    {
+      "index": 1,
+      "image_id": "img_1",
+      "filename": "Screenshot 2026-10-01 073203.png",
+      "manifest_key": "Screenshot 2026-10-01 073203.png",
+      "rel_path": "Screenshot 2026-10-01 073203.png",
+      "split": "val",
+      "group": "session_screenshots",
+      "dimensions": {
+        "width": 593,
+        "height": 432
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_1_box_1",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.1971,
+          "xywh_normalized": [
+            0.442597,
+            0.50964,
+            0.443443,
+            0.342199
+          ],
+          "adjusted_xywh": [
+            0.442597,
+            0.50964,
+            0.443443,
+            0.342199
+          ],
+          "pixel_coordinates": [
+            131,
+            146.2,
+            393.9,
+            294.1
+          ],
+          "status": "correct",
+          "adjustment_note": "Roadside mixed garbage pile candidate awaiting confirmation",
+          "reviewed_at": "2026-10-09T22:43:42.031Z"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "image_id": "img_2",
+      "filename": "Screenshot 2026-10-01 073443.png",
+      "manifest_key": "Screenshot 2026-10-01 073443.png",
+      "rel_path": "Screenshot 2026-10-01 073443.png",
+      "split": "val",
+      "group": "session_screenshots",
+      "dimensions": {
+        "width": 281,
+        "height": 193
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_2_box_1",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3339,
+          "xywh_normalized": [
+            0.896465,
+            0.235596,
+            0.095517,
+            0.211473
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            238.5,
+            25.1,
+            265.3,
+            65.9
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:01.178Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_2_box_2",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2182,
+          "xywh_normalized": [
+            0.364967,
+            0.667695,
+            0.242193,
+            0.270935
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            68.5,
+            102.7,
+            136.6,
+            155
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:01.178Z"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "image_id": "img_3",
+      "filename": "WhatsApp Image 2026-09-30 at 1.34.52 AM.jpeg",
+      "manifest_key": "WhatsApp Image 2026-09-30 at 1.34.52 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-09-30 at 1.34.52 AM.jpeg",
+      "split": "train",
+      "group": "session_sept30_whatsapp",
+      "dimensions": {
+        "width": 598,
+        "height": 542
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_3_box_1",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3434,
+          "xywh_normalized": [
+            0.513848,
+            0.53108,
+            0.972304,
+            0.937841
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            16.6,
+            33.7,
+            598,
+            542
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:29.772Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_3_box_2",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3352,
+          "xywh_normalized": [
+            0.687871,
+            0.055181,
+            0.617226,
+            0.110362
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            226.8,
+            0,
+            595.9,
+            59.8
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:29.772Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_3_box_3",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3333,
+          "xywh_normalized": [
+            0.187485,
+            0.134335,
+            0.316324,
+            0.227923
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            17.5,
+            11,
+            206.7,
+            134.6
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:29.772Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_3_box_4",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2998,
+          "xywh_normalized": [
+            0.664776,
+            0.185866,
+            0.669607,
+            0.128494
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            197.3,
+            65.9,
+            597.7,
+            135.6
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:29.772Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_3_box_5",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2215,
+          "xywh_normalized": [
+            0.052473,
+            0.743968,
+            0.102087,
+            0.047997
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.9,
+            390.2,
+            61.9,
+            416.2
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:29.772Z"
+        },
+        {
+          "id": 6,
+          "global_id": "img_3_box_6",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2144,
+          "xywh_normalized": [
+            0.198538,
+            0.072683,
+            0.352963,
+            0.145366
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            13.2,
+            0,
+            224.3,
+            78.8
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:29.772Z"
+        },
+        {
+          "id": 7,
+          "global_id": "img_3_box_7",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2122,
+          "xywh_normalized": [
+            0.163122,
+            0.978389,
+            0.114924,
+            0.039416
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            63.2,
+            519.6,
+            131.9,
+            541
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:29.772Z"
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "image_id": "img_4",
+      "filename": "WhatsApp Image 2026-09-30 at 1.34.53 AM.jpeg",
+      "manifest_key": "WhatsApp Image 2026-09-30 at 1.34.53 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-09-30 at 1.34.53 AM.jpeg",
+      "split": "train",
+      "group": "session_sept30_whatsapp",
+      "dimensions": {
+        "width": 585,
+        "height": 715
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_4_box_1",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2946,
+          "xywh_normalized": [
+            0.506576,
+            0.781746,
+            0.971027,
+            0.435917
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            12.3,
+            403.1,
+            580.4,
+            714.8
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:03.616Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_4_box_2",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.217,
+          "xywh_normalized": [
+            0.830526,
+            0.459837,
+            0.223467,
+            0.077578
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            420.5,
+            301,
+            551.2,
+            356.5
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:03.616Z"
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "image_id": "img_5",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.15 AM.jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.15 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.15 AM.jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part1",
+      "dimensions": {
+        "width": 480,
+        "height": 853
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_5_box_1",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2698,
+          "xywh_normalized": [
+            0.557706,
+            0.574001,
+            0.270563,
+            0.087763
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            202.8,
+            452.2,
+            332.6,
+            527.1
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:40.097Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_5_box_2",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2679,
+          "xywh_normalized": [
+            0.14109,
+            0.501752,
+            0.175893,
+            0.050099
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            25.5,
+            406.6,
+            109.9,
+            449.4
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:40.097Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_5_box_3",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2307,
+          "xywh_normalized": [
+            0.680283,
+            0.485929,
+            0.166249,
+            0.112287
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            286.6,
+            366.6,
+            366.4,
+            462.4
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:40.097Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_5_box_4",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2267,
+          "xywh_normalized": [
+            0.525772,
+            0.433242,
+            0.144844,
+            0.098262
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            217.6,
+            327.6,
+            287.1,
+            411.5
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:40.097Z"
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "image_id": "img_6",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.16 AM (1).jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.16 AM (1).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.16 AM (1).jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part1",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_6_box_1",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.4013,
+          "xywh_normalized": [
+            0.798163,
+            0.779045,
+            0.05636,
+            0.060496
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            985.6,
+            539.1,
+            1057.7,
+            582.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:06.031Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_6_box_2",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2809,
+          "xywh_normalized": [
+            0.796864,
+            0.56808,
+            0.056098,
+            0.048637
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            984.1,
+            391.5,
+            1055.9,
+            426.5
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:06.031Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_6_box_3",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2713,
+          "xywh_normalized": [
+            0.337208,
+            0.849462,
+            0.086595,
+            0.115439
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            376.2,
+            570.1,
+            487,
+            653.2
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:06.031Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_6_box_4",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.252,
+          "xywh_normalized": [
+            0.863286,
+            0.76681,
+            0.054069,
+            0.101358
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1070.4,
+            515.6,
+            1139.6,
+            588.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:06.031Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_6_box_5",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2469,
+          "xywh_normalized": [
+            0.853353,
+            0.445578,
+            0.291922,
+            0.281186
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            905.5,
+            219.6,
+            1279.1,
+            422
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:06.031Z"
+        },
+        {
+          "id": 6,
+          "global_id": "img_6_box_6",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2191,
+          "xywh_normalized": [
+            0.925291,
+            0.552949,
+            0.066758,
+            0.046986
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1141.6,
+            381.2,
+            1227.1,
+            415
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:06.031Z"
+        },
+        {
+          "id": 7,
+          "global_id": "img_6_box_7",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.202,
+          "xywh_normalized": [
+            0.298035,
+            0.645652,
+            0.590622,
+            0.463352
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            3.5,
+            298.1,
+            759.5,
+            631.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:06.031Z"
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "image_id": "img_7",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.16 AM.jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.16 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.16 AM.jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part1",
+      "dimensions": {
+        "width": 1200,
+        "height": 900
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_7_box_1",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.5445,
+          "xywh_normalized": [
+            0.507459,
+            0.498043,
+            0.985082,
+            0.748672
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            17.9,
+            111.3,
+            1200,
+            785.1
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:19:31.213Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_7_box_2",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3428,
+          "xywh_normalized": [
+            0.918361,
+            0.83282,
+            0.161495,
+            0.084178
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1005.1,
+            711.7,
+            1198.9,
+            787.4
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:19:31.213Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_7_box_3",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2482,
+          "xywh_normalized": [
+            0.807196,
+            0.232775,
+            0.065003,
+            0.210495
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            929.6,
+            114.8,
+            1007.6,
+            304.2
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:19:31.213Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_7_box_4",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2099,
+          "xywh_normalized": [
+            0.959971,
+            0.938821,
+            0.07921,
+            0.118974
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1104.4,
+            791.4,
+            1199.5,
+            898.5
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:19:31.213Z"
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "image_id": "img_8",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.18 AM.jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.18 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.18 AM.jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part1",
+      "dimensions": {
+        "width": 800,
+        "height": 600
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_8_box_1",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.4335,
+          "xywh_normalized": [
+            0.599955,
+            0.778423,
+            0.156326,
+            0.105102
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            417.4,
+            435.5,
+            542.5,
+            498.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:13.449Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_8_box_2",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3727,
+          "xywh_normalized": [
+            0.382807,
+            0.174917,
+            0.741862,
+            0.349833
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            9.5,
+            0,
+            603,
+            209.9
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:49:24.651Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_8_box_3",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2625,
+          "xywh_normalized": [
+            0.196808,
+            0.732052,
+            0.114695,
+            0.08221
+          ],
+          "adjusted_xywh": [
+            0.196808,
+            0.732052,
+            0.114695,
+            0.08221
+          ],
+          "pixel_coordinates": [
+            111.6,
+            414.6,
+            203.3,
+            463.9
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:49:28.231Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_8_box_4",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2538,
+          "xywh_normalized": [
+            0.204933,
+            0.246577,
+            0.409867,
+            0.493154
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            0,
+            327.9,
+            295.9
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:49:19.953Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_8_box_5",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.488971,
+            0.750803,
+            0.43711,
+            0.125592
+          ],
+          "adjusted_xywh": [
+            0.488971,
+            0.750803,
+            0.43711,
+            0.125592
+          ],
+          "pixel_coordinates": [
+            216.3,
+            412.8,
+            566,
+            488.2
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:49:45.846Z"
+        },
+        {
+          "id": 6,
+          "global_id": "img_8_box_6",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.565502,
+            0.66544,
+            0.234008,
+            0.076532
+          ],
+          "adjusted_xywh": [
+            0.565502,
+            0.66544,
+            0.234008,
+            0.076532
+          ],
+          "pixel_coordinates": [
+            358.8,
+            376.3,
+            546,
+            422.2
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:49:49.569Z"
+        },
+        {
+          "id": 7,
+          "global_id": "img_8_box_7",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.174016,
+            0.827336,
+            0.192799,
+            0.105968
+          ],
+          "adjusted_xywh": [
+            0.174016,
+            0.827336,
+            0.192799,
+            0.105968
+          ],
+          "pixel_coordinates": [
+            62.1,
+            464.6,
+            216.3,
+            528.2
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:49:52.811Z"
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "image_id": "img_9",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.19 AM (1).jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.19 AM (1).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.19 AM (1).jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part1",
+      "dimensions": {
+        "width": 1200,
+        "height": 1600
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_9_box_1",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.4814,
+          "xywh_normalized": [
+            0.945632,
+            0.874509,
+            0.104062,
+            0.059346
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1072.3,
+            1351.7,
+            1197.2,
+            1446.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:45.320Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_9_box_2",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.4548,
+          "xywh_normalized": [
+            0.095097,
+            0.952929,
+            0.172906,
+            0.094142
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            10.4,
+            1449.4,
+            217.9,
+            1600
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:45.320Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_9_box_3",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.361,
+          "xywh_normalized": [
+            0.712976,
+            0.880445,
+            0.104774,
+            0.071284
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            792.7,
+            1351.7,
+            918.4,
+            1465.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:45.320Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_9_box_4",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3298,
+          "xywh_normalized": [
+            0.316487,
+            0.872605,
+            0.143776,
+            0.087473
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            293.5,
+            1326.2,
+            466.1,
+            1466.1
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:45.320Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_9_box_5",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3015,
+          "xywh_normalized": [
+            0.639944,
+            0.799161,
+            0.087513,
+            0.047708
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            715.4,
+            1240.5,
+            820.4,
+            1316.8
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:45.320Z"
+        },
+        {
+          "id": 6,
+          "global_id": "img_9_box_6",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3,
+          "xywh_normalized": [
+            0.228929,
+            0.844975,
+            0.172388,
+            0.083521
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            171.3,
+            1285.1,
+            378.1,
+            1418.8
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:45.320Z"
+        },
+        {
+          "id": 7,
+          "global_id": "img_9_box_7",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2442,
+          "xywh_normalized": [
+            0.151829,
+            0.697062,
+            0.106279,
+            0.059041
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            118.4,
+            1068.1,
+            246,
+            1162.5
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:45.320Z"
+        },
+        {
+          "id": 8,
+          "global_id": "img_9_box_8",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2336,
+          "xywh_normalized": [
+            0.148907,
+            0.953502,
+            0.297179,
+            0.092996
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.4,
+            1451.2,
+            357,
+            1600
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:45.320Z"
+        },
+        {
+          "id": 9,
+          "global_id": "img_9_box_9",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2336,
+          "xywh_normalized": [
+            0.722748,
+            0.955754,
+            0.102201,
+            0.072208
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            806,
+            1471.4,
+            928.6,
+            1587
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:45.320Z"
+        },
+        {
+          "id": 10,
+          "global_id": "img_9_box_10",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2228,
+          "xywh_normalized": [
+            0.04063,
+            0.841136,
+            0.073768,
+            0.080268
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            4.5,
+            1281.6,
+            93,
+            1410
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:45.320Z"
+        },
+        {
+          "id": 11,
+          "global_id": "img_9_box_11",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2071,
+          "xywh_normalized": [
+            0.106692,
+            0.784387,
+            0.096724,
+            0.082033
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            70,
+            1189.4,
+            186.1,
+            1320.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:45.320Z"
+        },
+        {
+          "id": 12,
+          "global_id": "img_9_box_12",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2064,
+          "xywh_normalized": [
+            0.20497,
+            0.769478,
+            0.135168,
+            0.087211
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            164.9,
+            1161.4,
+            327.1,
+            1300.9
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:45.320Z"
+        },
+        {
+          "id": 13,
+          "global_id": "img_9_box_13",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.310309,
+            0.777276,
+            0.583464,
+            0.441523
+          ],
+          "adjusted_xywh": [
+            0.310309,
+            0.777276,
+            0.583464,
+            0.441523
+          ],
+          "pixel_coordinates": [
+            22.3,
+            890.4,
+            722.4,
+            1596.9
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:49:08.123Z"
+        },
+        {
+          "id": 14,
+          "global_id": "img_9_box_14",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.865123,
+            0.496664,
+            0.269754,
+            0.080455
+          ],
+          "adjusted_xywh": [
+            0.865123,
+            0.496664,
+            0.269754,
+            0.080455
+          ],
+          "pixel_coordinates": [
+            876.3,
+            730.3,
+            1200,
+            859
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:49:11.367Z"
+        },
+        {
+          "id": 15,
+          "global_id": "img_9_box_15",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.819205,
+            0.724294,
+            0.303506,
+            0.127551
+          ],
+          "adjusted_xywh": [
+            0.819205,
+            0.724294,
+            0.303506,
+            0.127551
+          ],
+          "pixel_coordinates": [
+            800.9,
+            1056.8,
+            1165.1,
+            1260.9
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:49:14.506Z"
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "image_id": "img_10",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.19 AM.jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.19 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.19 AM.jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part1",
+      "dimensions": {
+        "width": 1200,
+        "height": 1600
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_10_box_1",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3364,
+          "xywh_normalized": [
+            0.497821,
+            0.691089,
+            0.995642,
+            0.617821
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            611.5,
+            1194.8,
+            1600
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:18.167Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_10_box_2",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3294,
+          "xywh_normalized": [
+            0.272432,
+            0.08494,
+            0.44875,
+            0.168034
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            57.7,
+            1.5,
+            596.2,
+            270.3
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:18.167Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_10_box_3",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2766,
+          "xywh_normalized": [
+            0.745916,
+            0.058063,
+            0.506231,
+            0.11588
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            591.4,
+            0.2,
+            1198.8,
+            185.6
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:18.167Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_10_box_4",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2622,
+          "xywh_normalized": [
+            0.178491,
+            0.252304,
+            0.356229,
+            0.150141
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.5,
+            283.6,
+            427.9,
+            523.8
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:18.167Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_10_box_5",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.252,
+          "xywh_normalized": [
+            0.166458,
+            0.031454,
+            0.332917,
+            0.062704
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            0.2,
+            399.5,
+            100.5
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:18.167Z"
+        },
+        {
+          "id": 6,
+          "global_id": "img_10_box_6",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2326,
+          "xywh_normalized": [
+            0.802106,
+            0.751366,
+            0.047853,
+            0.040713
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            933.8,
+            1169.6,
+            991.2,
+            1234.8
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:18.167Z"
+        },
+        {
+          "id": 7,
+          "global_id": "img_10_box_7",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2221,
+          "xywh_normalized": [
+            0.498808,
+            0.161244,
+            0.986843,
+            0.321283
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            6.5,
+            1,
+            1190.7,
+            515
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:18.167Z"
+        },
+        {
+          "id": 8,
+          "global_id": "img_10_box_8",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.476452,
+            0.874411,
+            0.920984,
+            0.251177
+          ],
+          "adjusted_xywh": [
+            0.476452,
+            0.874411,
+            0.920984,
+            0.251177
+          ],
+          "pixel_coordinates": [
+            19.2,
+            1198.1,
+            1124.3,
+            1600
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:48:45.545Z"
+        },
+        {
+          "id": 9,
+          "global_id": "img_10_box_9",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.077446,
+            0.613422,
+            0.143904,
+            0.22763
+          ],
+          "adjusted_xywh": [
+            0.077446,
+            0.613422,
+            0.143904,
+            0.22763
+          ],
+          "pixel_coordinates": [
+            6.6,
+            799.4,
+            179.3,
+            1163.6
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:48:50.198Z"
+        },
+        {
+          "id": 10,
+          "global_id": "img_10_box_10",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.929095,
+            0.607535,
+            0.125589,
+            0.262951
+          ],
+          "adjusted_xywh": [
+            0.929095,
+            0.607535,
+            0.125589,
+            0.262951
+          ],
+          "pixel_coordinates": [
+            1039.6,
+            761.7,
+            1190.3,
+            1182.4
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:48:54.267Z"
+        },
+        {
+          "id": 11,
+          "global_id": "img_10_box_11",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.957875,
+            0.842033,
+            0.047096,
+            0.147174
+          ],
+          "adjusted_xywh": [
+            0.957875,
+            0.842033,
+            0.047096,
+            0.147174
+          ],
+          "pixel_coordinates": [
+            1121.2,
+            1229.5,
+            1177.7,
+            1465
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:48:57.115Z"
+        },
+        {
+          "id": 12,
+          "global_id": "img_10_box_12",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.611198,
+            0.708595,
+            0.196232,
+            0.155024
+          ],
+          "adjusted_xywh": [
+            0.611198,
+            0.708595,
+            0.196232,
+            0.155024
+          ],
+          "pixel_coordinates": [
+            615.7,
+            1009.7,
+            851.2,
+            1257.8
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:49:01.177Z"
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "image_id": "img_11",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.20 AM (1).jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.20 AM (1).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.20 AM (1).jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part1",
+      "dimensions": {
+        "width": 1280,
+        "height": 960
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_11_box_1",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.4165,
+          "xywh_normalized": [
+            0.478562,
+            0.661977,
+            0.957125,
+            0.676047
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            311,
+            1225.1,
+            960
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:19:22.026Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_11_box_2",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2896,
+          "xywh_normalized": [
+            0.338055,
+            0.661638,
+            0.676109,
+            0.676724
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            310.3,
+            865.4,
+            960
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:19:22.026Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_11_box_3",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2024,
+          "xywh_normalized": [
+            0.531512,
+            0.517559,
+            0.936977,
+            0.964881
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            80.7,
+            33.7,
+            1280,
+            960
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:19:22.026Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_11_box_4",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.37859,
+            0.714499,
+            0.525415,
+            0.547502
+          ],
+          "adjusted_xywh": [
+            0.37859,
+            0.714499,
+            0.525415,
+            0.547502
+          ],
+          "pixel_coordinates": [
+            148.3,
+            423.1,
+            820.9,
+            948.7
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:48:26.491Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_11_box_5",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.814964,
+            0.773371,
+            0.273746,
+            0.378738
+          ],
+          "adjusted_xywh": [
+            0.814964,
+            0.773371,
+            0.273746,
+            0.378738
+          ],
+          "pixel_coordinates": [
+            868,
+            560.6,
+            1218.4,
+            924.2
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:48:33.317Z"
+        }
+      ]
+    },
+    {
+      "index": 12,
+      "image_id": "img_12",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.20 AM (2).jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.20 AM (2).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.20 AM (2).jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part1",
+      "dimensions": {
+        "width": 1600,
+        "height": 1200
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_12_box_1",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3144,
+          "xywh_normalized": [
+            0.331858,
+            0.098392,
+            0.179499,
+            0.192208
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            387.4,
+            2.7,
+            674.6,
+            233.4
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:21.530Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_12_box_2",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3122,
+          "xywh_normalized": [
+            0.254436,
+            0.784803,
+            0.508871,
+            0.430393
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            683.5,
+            814.2,
+            1200
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:21.530Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_12_box_3",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2199,
+          "xywh_normalized": [
+            0.082489,
+            0.344627,
+            0.164607,
+            0.459254
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.3,
+            138,
+            263.7,
+            689.1
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:21.530Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_12_box_4",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2123,
+          "xywh_normalized": [
+            0.048534,
+            0.358061,
+            0.091253,
+            0.333438
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            4.7,
+            229.6,
+            150.7,
+            629.7
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:21.530Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_12_box_5",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2055,
+          "xywh_normalized": [
+            0.056751,
+            0.338234,
+            0.111283,
+            0.413195
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1.8,
+            158,
+            179.8,
+            653.8
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:21.530Z"
+        },
+        {
+          "id": 6,
+          "global_id": "img_12_box_6",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.831153,
+            0.801813,
+            0.309068,
+            0.396375
+          ],
+          "adjusted_xywh": [
+            0.831153,
+            0.801813,
+            0.309068,
+            0.396375
+          ],
+          "pixel_coordinates": [
+            1082.6,
+            724.4,
+            1577.1,
+            1200
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:48:06.189Z"
+        },
+        {
+          "id": 7,
+          "global_id": "img_12_box_7",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.267472,
+            0.856771,
+            0.429751,
+            0.22371
+          ],
+          "adjusted_xywh": [
+            0.267472,
+            0.856771,
+            0.429751,
+            0.22371
+          ],
+          "pixel_coordinates": [
+            84.2,
+            893.9,
+            771.8,
+            1162.4
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:48:14.388Z"
+        },
+        {
+          "id": 8,
+          "global_id": "img_12_box_8",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.563294,
+            0.82243,
+            0.097136,
+            0.300243
+          ],
+          "adjusted_xywh": [
+            0.563294,
+            0.82243,
+            0.097136,
+            0.300243
+          ],
+          "pixel_coordinates": [
+            823.6,
+            806.8,
+            979,
+            1167.1
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:48:18.163Z"
+        },
+        {
+          "id": 9,
+          "global_id": "img_12_box_9",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.58022,
+            0.653666,
+            0.098607,
+            0.052984
+          ],
+          "adjusted_xywh": [
+            0.58022,
+            0.653666,
+            0.098607,
+            0.052984
+          ],
+          "pixel_coordinates": [
+            849.5,
+            752.6,
+            1007.2,
+            816.2
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:48:21.521Z"
+        }
+      ]
+    },
+    {
+      "index": 13,
+      "image_id": "img_13",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.20 AM.jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.20 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.20 AM.jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part1",
+      "dimensions": {
+        "width": 1600,
+        "height": 1200
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_13_box_1",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.6886,
+          "xywh_normalized": [
+            0.628728,
+            0.472636,
+            0.112248,
+            0.129179
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            916.2,
+            489.7,
+            1095.8,
+            644.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:56.262Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_13_box_2",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.6218,
+          "xywh_normalized": [
+            0.88983,
+            0.746167,
+            0.114004,
+            0.116644
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1332.5,
+            825.4,
+            1514.9,
+            965.4
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:56.262Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_13_box_3",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.5333,
+          "xywh_normalized": [
+            0.896666,
+            0.518123,
+            0.158933,
+            0.088054
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1307.5,
+            568.9,
+            1561.8,
+            674.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:56.262Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_13_box_4",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.4759,
+          "xywh_normalized": [
+            0.752712,
+            0.731411,
+            0.061817,
+            0.090709
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1154.9,
+            823.3,
+            1253.8,
+            932.1
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:56.262Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_13_box_5",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.4704,
+          "xywh_normalized": [
+            0.846285,
+            0.43469,
+            0.085291,
+            0.093197
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1285.8,
+            465.7,
+            1422.3,
+            577.5
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:56.262Z"
+        },
+        {
+          "id": 6,
+          "global_id": "img_13_box_6",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.4306,
+          "xywh_normalized": [
+            0.559404,
+            0.691909,
+            0.189136,
+            0.129883
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            743.7,
+            752.4,
+            1046.4,
+            908.2
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:56.262Z"
+        },
+        {
+          "id": 7,
+          "global_id": "img_13_box_7",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.3131,
+          "xywh_normalized": [
+            0.617002,
+            0.486938,
+            0.086308,
+            0.093673
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            918.2,
+            528.1,
+            1056.2,
+            640.5
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:56.262Z"
+        },
+        {
+          "id": 8,
+          "global_id": "img_13_box_8",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.312,
+          "xywh_normalized": [
+            0.690127,
+            0.680859,
+            0.063652,
+            0.070953
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1053.3,
+            774.5,
+            1155.1,
+            859.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:56.262Z"
+        },
+        {
+          "id": 9,
+          "global_id": "img_13_box_9",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2918,
+          "xywh_normalized": [
+            0.520252,
+            0.524182,
+            0.106257,
+            0.144949
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            747.4,
+            542,
+            917.4,
+            716
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:56.262Z"
+        },
+        {
+          "id": 10,
+          "global_id": "img_13_box_10",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2834,
+          "xywh_normalized": [
+            0.772076,
+            0.273139,
+            0.069363,
+            0.08087
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1179.8,
+            279.2,
+            1290.8,
+            376.3
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:56.262Z"
+        },
+        {
+          "id": 11,
+          "global_id": "img_13_box_11",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2738,
+          "xywh_normalized": [
+            0.739574,
+            0.285965,
+            0.090212,
+            0.06362
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1111.1,
+            305,
+            1255.5,
+            381.3
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:56.262Z"
+        },
+        {
+          "id": 12,
+          "global_id": "img_13_box_12",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.265,
+          "xywh_normalized": [
+            0.630831,
+            0.37367,
+            0.110031,
+            0.14701
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            921.3,
+            360.2,
+            1097.4,
+            536.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:56.262Z"
+        },
+        {
+          "id": 13,
+          "global_id": "img_13_box_13",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2461,
+          "xywh_normalized": [
+            0.792556,
+            0.604415,
+            0.052893,
+            0.075618
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1225.8,
+            679.9,
+            1310.4,
+            770.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:56.262Z"
+        },
+        {
+          "id": 14,
+          "global_id": "img_13_box_14",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.228,
+          "xywh_normalized": [
+            0.628081,
+            0.439947,
+            0.112308,
+            0.192147
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            915.1,
+            412.6,
+            1094.8,
+            643.2
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:56.262Z"
+        },
+        {
+          "id": 15,
+          "global_id": "img_13_box_15",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2117,
+          "xywh_normalized": [
+            0.628398,
+            0.402938,
+            0.11234,
+            0.206843
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            915.6,
+            359.4,
+            1095.3,
+            607.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:56.262Z"
+        },
+        {
+          "id": 16,
+          "global_id": "img_13_box_16",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2002,
+          "xywh_normalized": [
+            0.910954,
+            0.747636,
+            0.069476,
+            0.111646
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1401.9,
+            830.2,
+            1513.1,
+            964.2
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:56.262Z"
+        },
+        {
+          "id": 17,
+          "global_id": "img_13_box_17",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.355042,
+            0.223907,
+            0.454771,
+            0.296318
+          ],
+          "adjusted_xywh": [
+            0.355042,
+            0.223907,
+            0.454771,
+            0.296318
+          ],
+          "pixel_coordinates": [
+            204.2,
+            90.9,
+            931.9,
+            446.5
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:47:54.256Z"
+        },
+        {
+          "id": 18,
+          "global_id": "img_13_box_18",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.806869,
+            0.166017,
+            0.342918,
+            0.286506
+          ],
+          "adjusted_xywh": [
+            0.806869,
+            0.166017,
+            0.342918,
+            0.286506
+          ],
+          "pixel_coordinates": [
+            1016.7,
+            27.3,
+            1565.3,
+            371.1
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:47:56.563Z"
+        }
+      ]
+    },
+    {
+      "index": 14,
+      "image_id": "img_14",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.21 AM (1).jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.21 AM (1).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.21 AM (1).jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part1",
+      "dimensions": {
+        "width": 1600,
+        "height": 1200
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_14_box_1",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.4869,
+          "xywh_normalized": [
+            0.753849,
+            0.535132,
+            0.213856,
+            0.568818
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1035.1,
+            300.9,
+            1377.2,
+            983.4
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:24.860Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_14_box_2",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2128,
+          "xywh_normalized": [
+            0.315488,
+            0.414953,
+            0.630976,
+            0.829907
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            0,
+            1009.6,
+            995.9
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:17:24.860Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_14_box_3",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.451441,
+            0.529055,
+            0.385599,
+            0.239409
+          ],
+          "adjusted_xywh": [
+            0.451441,
+            0.529055,
+            0.385599,
+            0.239409
+          ],
+          "pixel_coordinates": [
+            413.8,
+            491.2,
+            1030.8,
+            778.5
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:47:48.542Z"
+        }
+      ]
+    },
+    {
+      "index": 15,
+      "image_id": "img_15",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.21 AM (2).jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.21 AM (2).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.21 AM (2).jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part1",
+      "dimensions": {
+        "width": 1600,
+        "height": 1062
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_15_box_1",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2419,
+          "xywh_normalized": [
+            0.526,
+            0.5,
+            0.947,
+            1
+          ],
+          "adjusted_xywh": [
+            0.526,
+            0.5,
+            0.947,
+            1
+          ],
+          "pixel_coordinates": [
+            84.5,
+            0,
+            1600,
+            1062
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:39:06.283Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_15_box_2",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.534091,
+            0.646231,
+            0.533422,
+            0.298102
+          ],
+          "adjusted_xywh": [
+            0.534091,
+            0.646231,
+            0.533422,
+            0.298102
+          ],
+          "pixel_coordinates": [
+            427.8,
+            528,
+            1281.3,
+            844.6
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:38:58.013Z"
+        }
+      ]
+    },
+    {
+      "index": 16,
+      "image_id": "img_16",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.21 AM (3).jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.21 AM (3).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.21 AM (3).jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part1",
+      "dimensions": {
+        "width": 1600,
+        "height": 1200
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_16_box_1",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2616,
+          "xywh_normalized": [
+            0.055112,
+            0.863329,
+            0.11009,
+            0.098367
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.1,
+            977,
+            176.3,
+            1095
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:02.549Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_16_box_2",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2571,
+          "xywh_normalized": [
+            0.78946,
+            0.303775,
+            0.12985,
+            0.172386
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1159.3,
+            261.1,
+            1367,
+            468
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:06.261Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_16_box_3",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2446,
+          "xywh_normalized": [
+            0.169703,
+            0.80219,
+            0.107322,
+            0.075264
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            185.7,
+            917.5,
+            357.4,
+            1007.8
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:47:08.223Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_16_box_4",
+          "class_id": 1,
+          "class_name": "CARDBOARD",
+          "confidence": 0.2267,
+          "xywh_normalized": [
+            0.091101,
+            0.58172,
+            0.172427,
+            0.171137
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            7.8,
+            595.4,
+            283.7,
+            800.7
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:47:11.507Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_16_box_5",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.690601,
+            0.647779,
+            0.616664,
+            0.288469
+          ],
+          "adjusted_xywh": [
+            0.690601,
+            0.647779,
+            0.616664,
+            0.288469
+          ],
+          "pixel_coordinates": [
+            611.6,
+            604.3,
+            1598.3,
+            950.4
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:47:21.893Z"
+        },
+        {
+          "id": 6,
+          "global_id": "img_16_box_6",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.311625,
+            0.661515,
+            0.126571,
+            0.27277
+          ],
+          "adjusted_xywh": [
+            0.311625,
+            0.661515,
+            0.126571,
+            0.27277
+          ],
+          "pixel_coordinates": [
+            397.3,
+            630.2,
+            599.9,
+            957.5
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:47:27.931Z"
+        },
+        {
+          "id": 7,
+          "global_id": "img_16_box_7",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.747263,
+            0.85579,
+            0.161893,
+            0.202124
+          ],
+          "adjusted_xywh": [
+            0.747263,
+            0.85579,
+            0.161893,
+            0.202124
+          ],
+          "pixel_coordinates": [
+            1066.1,
+            905.7,
+            1325.1,
+            1148.2
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:47:31.114Z"
+        },
+        {
+          "id": 8,
+          "global_id": "img_16_box_8",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.072465,
+            0.732161,
+            0.086833,
+            0.076532
+          ],
+          "adjusted_xywh": [
+            0.072465,
+            0.732161,
+            0.086833,
+            0.076532
+          ],
+          "pixel_coordinates": [
+            46.5,
+            832.7,
+            185.4,
+            924.5
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:47:35.541Z"
+        },
+        {
+          "id": 9,
+          "global_id": "img_16_box_9",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.190205,
+            0.718424,
+            0.078003,
+            0.076532
+          ],
+          "adjusted_xywh": [
+            0.190205,
+            0.718424,
+            0.078003,
+            0.076532
+          ],
+          "pixel_coordinates": [
+            241.9,
+            816.2,
+            366.7,
+            908
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:47:38.932Z"
+        }
+      ]
+    },
+    {
+      "index": 17,
+      "image_id": "img_17",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.21 AM.jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.21 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.21 AM.jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part1",
+      "dimensions": {
+        "width": 1200,
+        "height": 1600
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_17_box_1",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3402,
+          "xywh_normalized": [
+            0.49805,
+            0.501672,
+            0.996099,
+            0.996656
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            5.4,
+            1195.3,
+            1600
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:19:06.827Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_17_box_2",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.445055,
+            0.168956,
+            0.727368,
+            0.19427
+          ],
+          "adjusted_xywh": [
+            0.445055,
+            0.168956,
+            0.727368,
+            0.19427
+          ],
+          "pixel_coordinates": [
+            97.6,
+            114.9,
+            970.5,
+            425.7
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:46:58.723Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_17_box_3",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.250131,
+            0.462323,
+            0.405547,
+            0.247253
+          ],
+          "adjusted_xywh": [
+            0.250131,
+            0.462323,
+            0.405547,
+            0.247253
+          ],
+          "pixel_coordinates": [
+            56.8,
+            541.9,
+            543.5,
+            937.5
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:47:02.873Z"
+        }
+      ]
+    },
+    {
+      "index": 18,
+      "image_id": "img_18",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.22 AM.jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.22 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.22 AM.jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part2",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_18_box_1",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2169,
+          "xywh_normalized": [
+            0.777846,
+            0.085679,
+            0.092945,
+            0.162013
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            936.2,
+            3.4,
+            1055.1,
+            120
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:10.939Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_18_box_2",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.679144,
+            0.670648,
+            0.44385,
+            0.622698
+          ],
+          "adjusted_xywh": [
+            0.679144,
+            0.670648,
+            0.44385,
+            0.622698
+          ],
+          "pixel_coordinates": [
+            585.2,
+            258.7,
+            1153.4,
+            707
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:46:50.925Z"
+        }
+      ]
+    },
+    {
+      "index": 19,
+      "image_id": "img_19",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.23 AM (1).jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.23 AM (1).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.23 AM (1).jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part2",
+      "dimensions": {
+        "width": 1440,
+        "height": 970
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_19_box_1",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3487,
+          "xywh_normalized": [
+            0.17783,
+            0.113114,
+            0.130466,
+            0.226229
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            162.1,
+            0,
+            350,
+            219.4
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:15.369Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_19_box_2",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.3067,
+          "xywh_normalized": [
+            0.114825,
+            0.291667,
+            0.077429,
+            0.218066
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            109.6,
+            177.2,
+            221.1,
+            388.7
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:46:24.159Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_19_box_3",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2891,
+          "xywh_normalized": [
+            0.970887,
+            0.402433,
+            0.05801,
+            0.235695
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1356.3,
+            276,
+            1439.8,
+            504.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:15.369Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_19_box_4",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2673,
+          "xywh_normalized": [
+            0.926262,
+            0.894893,
+            0.147476,
+            0.20147
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1227.6,
+            770.3,
+            1440,
+            965.8
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:15.369Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_19_box_5",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.26,
+          "xywh_normalized": [
+            0.909174,
+            0.405117,
+            0.180648,
+            0.282682
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1179.1,
+            255.9,
+            1439.3,
+            530.1
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:46:34.097Z"
+        },
+        {
+          "id": 6,
+          "global_id": "img_19_box_6",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2501,
+          "xywh_normalized": [
+            0.842278,
+            0.378686,
+            0.031575,
+            0.204607
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1190.1,
+            268.1,
+            1235.6,
+            466.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:15.369Z"
+        },
+        {
+          "id": 7,
+          "global_id": "img_19_box_7",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.248,
+          "xywh_normalized": [
+            0.762139,
+            0.738883,
+            0.060875,
+            0.09004
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1053.7,
+            673,
+            1141.3,
+            760.4
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:15.369Z"
+        },
+        {
+          "id": 8,
+          "global_id": "img_19_box_8",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2472,
+          "xywh_normalized": [
+            0.307037,
+            0.085664,
+            0.170308,
+            0.170058
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            319.5,
+            0.6,
+            564.8,
+            165.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:15.369Z"
+        },
+        {
+          "id": 9,
+          "global_id": "img_19_box_9",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2356,
+          "xywh_normalized": [
+            0.715691,
+            0.324038,
+            0.025873,
+            0.084257
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1012,
+            273.5,
+            1049.2,
+            355.2
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:46:37.485Z"
+        },
+        {
+          "id": 10,
+          "global_id": "img_19_box_10",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2348,
+          "xywh_normalized": [
+            0.829374,
+            0.721963,
+            0.093894,
+            0.102003
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1126.7,
+            650.8,
+            1261.9,
+            749.8
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:15.369Z"
+        },
+        {
+          "id": 11,
+          "global_id": "img_19_box_11",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2333,
+          "xywh_normalized": [
+            0.648773,
+            0.717572,
+            0.079285,
+            0.092525
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            877.1,
+            651.2,
+            991.3,
+            740.9
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:15.369Z"
+        },
+        {
+          "id": 12,
+          "global_id": "img_19_box_12",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2251,
+          "xywh_normalized": [
+            0.828021,
+            0.722084,
+            0.094539,
+            0.103875
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1124.3,
+            650,
+            1260.4,
+            750.8
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:15.369Z"
+        },
+        {
+          "id": 13,
+          "global_id": "img_19_box_13",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2242,
+          "xywh_normalized": [
+            0.713718,
+            0.706373,
+            0.055557,
+            0.10851
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            987.8,
+            632.6,
+            1067.8,
+            737.8
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:15.369Z"
+        },
+        {
+          "id": 14,
+          "global_id": "img_19_box_14",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2149,
+          "xywh_normalized": [
+            0.83961,
+            0.388897,
+            0.043278,
+            0.223291
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1177.9,
+            268.9,
+            1240.2,
+            485.5
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:15.369Z"
+        },
+        {
+          "id": 15,
+          "global_id": "img_19_box_15",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2022,
+          "xywh_normalized": [
+            0.122385,
+            0.492149,
+            0.031317,
+            0.229801
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            153.7,
+            365.9,
+            198.8,
+            588.8
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:46:27.479Z"
+        },
+        {
+          "id": 16,
+          "global_id": "img_19_box_16",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.433824,
+            0.450977,
+            0.118984,
+            0.17267
+          ],
+          "adjusted_xywh": [
+            0.433824,
+            0.450977,
+            0.118984,
+            0.17267
+          ],
+          "pixel_coordinates": [
+            539,
+            353.7,
+            710.4,
+            521.2
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:46:21.109Z"
+        },
+        {
+          "id": 17,
+          "global_id": "img_19_box_17",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.851604,
+            0.637541,
+            0.240642,
+            0.232212
+          ],
+          "adjusted_xywh": [
+            0.851604,
+            0.637541,
+            0.240642,
+            0.232212
+          ],
+          "pixel_coordinates": [
+            1053,
+            505.8,
+            1399.6,
+            731
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:46:43.039Z"
+        }
+      ]
+    },
+    {
+      "index": 20,
+      "image_id": "img_20",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.23 AM (2).jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.23 AM (2).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.23 AM (2).jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part2",
+      "dimensions": {
+        "width": 1600,
+        "height": 1200
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_20_box_1",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.4571,
+          "xywh_normalized": [
+            0.409983,
+            0.604079,
+            0.092614,
+            0.188074
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            581.9,
+            612.1,
+            730.1,
+            837.7
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:20:41.406Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_20_box_2",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2259,
+          "xywh_normalized": [
+            0.480561,
+            0.499818,
+            0.961122,
+            0.999636
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            0,
+            1537.8,
+            1199.6
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:20:41.406Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_20_box_3",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.653071,
+            0.536905,
+            0.247254,
+            0.129517
+          ],
+          "adjusted_xywh": [
+            0.653071,
+            0.536905,
+            0.247254,
+            0.129517
+          ],
+          "pixel_coordinates": [
+            847.1,
+            566.6,
+            1242.7,
+            722
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:46:04.537Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_20_box_4",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.582427,
+            0.671327,
+            0.164836,
+            0.151103
+          ],
+          "adjusted_xywh": [
+            0.582427,
+            0.671327,
+            0.164836,
+            0.151103
+          ],
+          "pixel_coordinates": [
+            800,
+            714.9,
+            1063.8,
+            896.3
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:46:09.479Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_20_box_5",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.229207,
+            0.684083,
+            0.270802,
+            0.125592
+          ],
+          "adjusted_xywh": [
+            0.229207,
+            0.684083,
+            0.270802,
+            0.125592
+          ],
+          "pixel_coordinates": [
+            150.1,
+            745.5,
+            583.4,
+            896.3
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:46:15.167Z"
+        }
+      ]
+    },
+    {
+      "index": 21,
+      "image_id": "img_21",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.23 AM.jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.23 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.23 AM.jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part2",
+      "dimensions": {
+        "width": 335,
+        "height": 597
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_21_box_1",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2736,
+          "xywh_normalized": [
+            0.777704,
+            0.366272,
+            0.429,
+            0.133982
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            188.7,
+            178.7,
+            332.4,
+            258.7
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:58.843Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_21_box_2",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2519,
+          "xywh_normalized": [
+            0.507066,
+            0.714526,
+            0.985869,
+            0.568003
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            4.7,
+            257,
+            335,
+            596.1
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:58.843Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_21_box_3",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2463,
+          "xywh_normalized": [
+            0.84655,
+            0.484697,
+            0.302104,
+            0.112501
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            233,
+            255.8,
+            334.2,
+            322.9
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:58.843Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_21_box_4",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.291922,
+            0.526112,
+            0.304249,
+            0.111855
+          ],
+          "adjusted_xywh": [
+            0.291922,
+            0.526112,
+            0.304249,
+            0.111855
+          ],
+          "pixel_coordinates": [
+            46.8,
+            280.7,
+            148.8,
+            347.5
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:45:53.605Z"
+        }
+      ]
+    },
+    {
+      "index": 22,
+      "image_id": "img_22",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.24 AM (1).jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.24 AM (1).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.24 AM (1).jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part2",
+      "dimensions": {
+        "width": 395,
+        "height": 480
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_22_box_1",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.6283,
+          "xywh_normalized": [
+            0.053561,
+            0.807538,
+            0.102863,
+            0.064018
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.8,
+            372.3,
+            41.5,
+            403
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_22_box_2",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.4506,
+          "xywh_normalized": [
+            0.175107,
+            0.702247,
+            0.12554,
+            0.107938
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            44.4,
+            311.2,
+            94,
+            363
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_22_box_3",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.4279,
+          "xywh_normalized": [
+            0.241231,
+            0.750402,
+            0.078922,
+            0.094746
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            79.7,
+            337.5,
+            110.9,
+            382.9
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_22_box_4",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.4258,
+          "xywh_normalized": [
+            0.223914,
+            0.837988,
+            0.13016,
+            0.087807
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            62.7,
+            381.2,
+            114.2,
+            423.3
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_22_box_5",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3823,
+          "xywh_normalized": [
+            0.094292,
+            0.866779,
+            0.119647,
+            0.083553
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            13.6,
+            396,
+            60.9,
+            436.1
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 6,
+          "global_id": "img_22_box_6",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3437,
+          "xywh_normalized": [
+            0.025486,
+            0.861456,
+            0.04881,
+            0.058427
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.4,
+            399.5,
+            19.7,
+            427.5
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 7,
+          "global_id": "img_22_box_7",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3238,
+          "xywh_normalized": [
+            0.120521,
+            0.945535,
+            0.079054,
+            0.063285
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            32,
+            438.7,
+            63.2,
+            469
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 8,
+          "global_id": "img_22_box_8",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3085,
+          "xywh_normalized": [
+            0.051156,
+            0.961295,
+            0.07512,
+            0.067031
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            5.4,
+            445.3,
+            35,
+            477.5
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 9,
+          "global_id": "img_22_box_9",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2588,
+          "xywh_normalized": [
+            0.073695,
+            0.625112,
+            0.143863,
+            0.087643
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.7,
+            279,
+            57.5,
+            321.1
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 10,
+          "global_id": "img_22_box_10",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2566,
+          "xywh_normalized": [
+            0.248611,
+            0.621226,
+            0.140174,
+            0.104477
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            70.5,
+            273.1,
+            125.9,
+            323.3
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 11,
+          "global_id": "img_22_box_11",
+          "class_id": 1,
+          "class_name": "CARDBOARD",
+          "confidence": 0.2472,
+          "xywh_normalized": [
+            0.253571,
+            0.167665,
+            0.478915,
+            0.334766
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            5.6,
+            0.1,
+            194.7,
+            160.8
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 12,
+          "global_id": "img_22_box_12",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2389,
+          "xywh_normalized": [
+            0.675289,
+            0.05206,
+            0.158268,
+            0.10412
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            235.5,
+            0,
+            298,
+            50
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 13,
+          "global_id": "img_22_box_13",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2382,
+          "xywh_normalized": [
+            0.533265,
+            0.508102,
+            0.088383,
+            0.088637
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            193.2,
+            222.6,
+            228.1,
+            265.2
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 14,
+          "global_id": "img_22_box_14",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2348,
+          "xywh_normalized": [
+            0.061552,
+            0.71825,
+            0.119923,
+            0.120713
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.6,
+            315.8,
+            48,
+            373.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 15,
+          "global_id": "img_22_box_15",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2308,
+          "xywh_normalized": [
+            0.247745,
+            0.746782,
+            0.066043,
+            0.086586
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            84.8,
+            337.7,
+            110.9,
+            379.2
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 16,
+          "global_id": "img_22_box_16",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.22,
+          "xywh_normalized": [
+            0.145181,
+            0.794817,
+            0.093873,
+            0.085619
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            38.8,
+            361,
+            75.9,
+            402.1
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 17,
+          "global_id": "img_22_box_17",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2177,
+          "xywh_normalized": [
+            0.355015,
+            0.70957,
+            0.088709,
+            0.068958
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            122.7,
+            324,
+            157.8,
+            357.1
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 18,
+          "global_id": "img_22_box_18",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2159,
+          "xywh_normalized": [
+            0.074099,
+            0.618401,
+            0.142848,
+            0.09985
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1.1,
+            272.9,
+            57.5,
+            320.8
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 19,
+          "global_id": "img_22_box_19",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2052,
+          "xywh_normalized": [
+            0.250466,
+            0.621883,
+            0.135946,
+            0.107444
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            72.1,
+            272.7,
+            125.8,
+            324.3
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 20,
+          "global_id": "img_22_box_20",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2001,
+          "xywh_normalized": [
+            0.44782,
+            0.453849,
+            0.131577,
+            0.067846
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            150.9,
+            201.6,
+            202.9,
+            234.1
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:19.192Z"
+        },
+        {
+          "id": 21,
+          "global_id": "img_22_box_21",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.721519,
+            0.358958,
+            0.18481,
+            0.214583
+          ],
+          "adjusted_xywh": [
+            0.721519,
+            0.358958,
+            0.18481,
+            0.214583
+          ],
+          "pixel_coordinates": [
+            248.5,
+            120.8,
+            321.5,
+            223.8
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:45:36.261Z"
+        },
+        {
+          "id": 22,
+          "global_id": "img_22_box_22",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.6,
+            0.344375,
+            0.073418,
+            0.139583
+          ],
+          "adjusted_xywh": [
+            0.6,
+            0.344375,
+            0.073418,
+            0.139583
+          ],
+          "pixel_coordinates": [
+            222.5,
+            131.8,
+            251.5,
+            198.8
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:45:42.131Z"
+        }
+      ]
+    },
+    {
+      "index": 23,
+      "image_id": "img_23",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.24 AM (2).jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.24 AM (2).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.24 AM (2).jpeg",
+      "split": "train",
+      "group": "session_oct10_burst_part2",
+      "dimensions": {
+        "width": 715,
+        "height": 429
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_23_box_1",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.3948,
+          "xywh_normalized": [
+            0.307261,
+            0.334549,
+            0.151268,
+            0.401105
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            165.6,
+            57.5,
+            273.8,
+            229.6
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:19:51.062Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_23_box_2",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3782,
+          "xywh_normalized": [
+            0.228196,
+            0.700283,
+            0.063889,
+            0.077284
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            140.3,
+            283.8,
+            186,
+            317
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:20:48.109Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_23_box_3",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3224,
+          "xywh_normalized": [
+            0.104701,
+            0.407469,
+            0.209094,
+            0.525423
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.1,
+            62.1,
+            149.6,
+            287.5
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:19:47.452Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_23_box_4",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2521,
+          "xywh_normalized": [
+            0.924172,
+            0.262362,
+            0.15104,
+            0.523524
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            606.8,
+            0.3,
+            714.8,
+            224.8
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:50.717Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_23_box_5",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2313,
+          "xywh_normalized": [
+            0.029108,
+            0.944414,
+            0.057375,
+            0.084844
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.3,
+            387,
+            41.3,
+            423.4
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:20:58.541Z"
+        },
+        {
+          "id": 6,
+          "global_id": "img_23_box_6",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2256,
+          "xywh_normalized": [
+            0.863777,
+            0.304574,
+            0.089746,
+            0.331803
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            585.5,
+            59.5,
+            649.7,
+            201.8
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:20:54.795Z"
+        },
+        {
+          "id": 7,
+          "global_id": "img_23_box_7",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2231,
+          "xywh_normalized": [
+            0.229334,
+            0.873089,
+            0.096792,
+            0.127841
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            129.4,
+            347.1,
+            198.6,
+            402
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:20:06.299Z"
+        },
+        {
+          "id": 8,
+          "global_id": "img_23_box_8",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.547552,
+            0.698835,
+            0.475524,
+            0.263403
+          ],
+          "adjusted_xywh": [
+            0.547552,
+            0.698835,
+            0.475524,
+            0.263403
+          ],
+          "pixel_coordinates": [
+            221.5,
+            243.3,
+            561.5,
+            356.3
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:45:22.621Z"
+        },
+        {
+          "id": 9,
+          "global_id": "img_23_box_9",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.693007,
+            0.598601,
+            0.366434,
+            0.198135
+          ],
+          "adjusted_xywh": [
+            0.693007,
+            0.598601,
+            0.366434,
+            0.198135
+          ],
+          "pixel_coordinates": [
+            364.5,
+            214.3,
+            626.5,
+            299.3
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:45:26.955Z"
+        }
+      ]
+    },
+    {
+      "index": 24,
+      "image_id": "img_24",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.24 AM.jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.24 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.24 AM.jpeg",
+      "split": "val",
+      "group": "session_oct10_burst_part3",
+      "dimensions": {
+        "width": 1600,
+        "height": 1200
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_24_box_1",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.5179,
+          "xywh_normalized": [
+            0.421904,
+            0.49967,
+            0.843808,
+            0.999339
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            0,
+            1350.1,
+            1199.2
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:21:01.804Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_24_box_2",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2474,
+          "xywh_normalized": [
+            0.823068,
+            0.822855,
+            0.279886,
+            0.273326
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1093,
+            823.4,
+            1540.8,
+            1151.4
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:21:01.804Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_24_box_3",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2186,
+          "xywh_normalized": [
+            0.709942,
+            0.114224,
+            0.076535,
+            0.202676
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1074.7,
+            15.5,
+            1197.1,
+            258.7
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:21:01.804Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_24_box_4",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2068,
+          "xywh_normalized": [
+            0.893209,
+            0.823213,
+            0.151158,
+            0.266855
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1308.2,
+            827.7,
+            1550.1,
+            1148
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:21:01.804Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_24_box_5",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.113674,
+            0.596757,
+            0.186912,
+            0.1982
+          ],
+          "adjusted_xywh": [
+            0.113674,
+            0.596757,
+            0.186912,
+            0.1982
+          ],
+          "pixel_coordinates": [
+            32.3,
+            597.2,
+            331.4,
+            835
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:44:58.219Z"
+        },
+        {
+          "id": 6,
+          "global_id": "img_24_box_6",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.491915,
+            0.795938,
+            0.110381,
+            0.109893
+          ],
+          "adjusted_xywh": [
+            0.491915,
+            0.795938,
+            0.110381,
+            0.109893
+          ],
+          "pixel_coordinates": [
+            698.8,
+            889.2,
+            875.4,
+            1021.1
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:45:02.203Z"
+        },
+        {
+          "id": 7,
+          "global_id": "img_24_box_7",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.367552,
+            0.676233,
+            0.088305,
+            0.117742
+          ],
+          "adjusted_xywh": [
+            0.367552,
+            0.676233,
+            0.088305,
+            0.117742
+          ],
+          "pixel_coordinates": [
+            517.4,
+            740.8,
+            658.7,
+            882.1
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:45:08.933Z"
+        }
+      ]
+    },
+    {
+      "index": 25,
+      "image_id": "img_25",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.25 AM.jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.25 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.25 AM.jpeg",
+      "split": "val",
+      "group": "session_oct10_burst_part3",
+      "dimensions": {
+        "width": 1600,
+        "height": 1200
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_25_box_1",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.4858,
+          "xywh_normalized": [
+            0.364754,
+            0.277018,
+            0.108879,
+            0.255107
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            496.5,
+            179.4,
+            670.7,
+            485.5
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:35.285Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_25_box_2",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.4846,
+          "xywh_normalized": [
+            0.184308,
+            0.725307,
+            0.131618,
+            0.227783
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            189.6,
+            733.7,
+            400.2,
+            1007
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:35.285Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_25_box_3",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3952,
+          "xywh_normalized": [
+            0.148261,
+            0.128976,
+            0.296521,
+            0.197847
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            36.1,
+            474.4,
+            273.5
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:35.285Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_25_box_4",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3919,
+          "xywh_normalized": [
+            0.049557,
+            0.655998,
+            0.099114,
+            0.40017
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            547.1,
+            158.6,
+            1027.3
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:35.285Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_25_box_5",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3878,
+          "xywh_normalized": [
+            0.27139,
+            0.413345,
+            0.047312,
+            0.229554
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            396.4,
+            358.3,
+            472.1,
+            633.7
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:35.285Z"
+        },
+        {
+          "id": 6,
+          "global_id": "img_25_box_6",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.342,
+          "xywh_normalized": [
+            0.586902,
+            0.5,
+            0.826196,
+            1
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            278.1,
+            0,
+            1600,
+            1200
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:35.285Z"
+        },
+        {
+          "id": 7,
+          "global_id": "img_25_box_7",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3316,
+          "xywh_normalized": [
+            0.15573,
+            0.263536,
+            0.311459,
+            0.117929
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            245.5,
+            498.3,
+            387
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:35.285Z"
+        },
+        {
+          "id": 8,
+          "global_id": "img_25_box_8",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.3265,
+          "xywh_normalized": [
+            0.22571,
+            0.459091,
+            0.039148,
+            0.29532
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            329.8,
+            373.7,
+            392.5,
+            728.1
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:35.285Z"
+        },
+        {
+          "id": 9,
+          "global_id": "img_25_box_9",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2908,
+          "xywh_normalized": [
+            0.244807,
+            0.094563,
+            0.078551,
+            0.189126
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            328.9,
+            0,
+            454.5,
+            227
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:35.285Z"
+        },
+        {
+          "id": 10,
+          "global_id": "img_25_box_10",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2511,
+          "xywh_normalized": [
+            0.101297,
+            0.580455,
+            0.201507,
+            0.531497
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.9,
+            377.6,
+            323.3,
+            1015.4
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:35.285Z"
+        },
+        {
+          "id": 11,
+          "global_id": "img_25_box_11",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2442,
+          "xywh_normalized": [
+            0.048248,
+            0.579098,
+            0.096495,
+            0.23981
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            551,
+            154.4,
+            838.8
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:35.285Z"
+        },
+        {
+          "id": 12,
+          "global_id": "img_25_box_12",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2282,
+          "xywh_normalized": [
+            0.364424,
+            0.050289,
+            0.123873,
+            0.100578
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            484,
+            0,
+            682.2,
+            120.7
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:35.285Z"
+        },
+        {
+          "id": 13,
+          "global_id": "img_25_box_13",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.396251,
+            0.778277,
+            0.292879,
+            0.270807
+          ],
+          "adjusted_xywh": [
+            0.396251,
+            0.778277,
+            0.292879,
+            0.270807
+          ],
+          "pixel_coordinates": [
+            399.7,
+            771.4,
+            868.3,
+            1096.4
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:44:47.711Z"
+        }
+      ]
+    },
+    {
+      "index": 26,
+      "image_id": "img_26",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.27 AM (1).jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.27 AM (1).jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.27 AM (1).jpeg",
+      "split": "test",
+      "group": "session_oct10_burst_test",
+      "dimensions": {
+        "width": 1600,
+        "height": 1200
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_26_box_1",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.4866,
+          "xywh_normalized": [
+            0.516235,
+            0.330657,
+            0.083308,
+            0.141629
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            759.3,
+            311.8,
+            892.6,
+            481.8
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:20:19.557Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_26_box_2",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2547,
+          "xywh_normalized": [
+            0.953245,
+            0.109386,
+            0.092576,
+            0.176329
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1451.1,
+            25.5,
+            1599.3,
+            237.1
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:20:19.557Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_26_box_3",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2155,
+          "xywh_normalized": [
+            0.12061,
+            0.66961,
+            0.241127,
+            0.446694
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.1,
+            535.5,
+            385.9,
+            1071.5
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:20:19.557Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_26_box_4",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2016,
+          "xywh_normalized": [
+            0.952505,
+            0.294515,
+            0.094237,
+            0.154068
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1448.6,
+            261,
+            1599.4,
+            445.9
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:20:19.557Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_26_box_5",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.161506,
+            0.736086,
+            0.088305,
+            0.170726
+          ],
+          "adjusted_xywh": [
+            0.161506,
+            0.736086,
+            0.088305,
+            0.170726
+          ],
+          "pixel_coordinates": [
+            187.8,
+            780.9,
+            329.1,
+            985.7
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:44:33.905Z"
+        },
+        {
+          "id": 6,
+          "global_id": "img_26_box_6",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.773755,
+            0.741973,
+            0.094192,
+            0.072608
+          ],
+          "adjusted_xywh": [
+            0.773755,
+            0.741973,
+            0.094192,
+            0.072608
+          ],
+          "pixel_coordinates": [
+            1162.7,
+            846.8,
+            1313.4,
+            933.9
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:44:37.834Z"
+        }
+      ]
+    },
+    {
+      "index": 27,
+      "image_id": "img_27",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.27 AM.jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.27 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.27 AM.jpeg",
+      "split": "test",
+      "group": "session_oct10_burst_test",
+      "dimensions": {
+        "width": 1600,
+        "height": 1200
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_27_box_1",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.6251,
+          "xywh_normalized": [
+            0.12137,
+            0.327475,
+            0.077753,
+            0.106291
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            132,
+            329.2,
+            256.4,
+            456.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_27_box_2",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.5099,
+          "xywh_normalized": [
+            0.83583,
+            0.835189,
+            0.057548,
+            0.117697
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1291.3,
+            931.6,
+            1383.4,
+            1072.8
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_27_box_3",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.5075,
+          "xywh_normalized": [
+            0.672269,
+            0.68465,
+            0.06248,
+            0.091514
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1025.6,
+            766.7,
+            1125.6,
+            876.5
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_27_box_4",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.4829,
+          "xywh_normalized": [
+            0.162347,
+            0.502098,
+            0.125868,
+            0.115531
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            159.1,
+            533.2,
+            360.4,
+            671.8
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_27_box_5",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.453,
+          "xywh_normalized": [
+            0.101052,
+            0.628281,
+            0.140477,
+            0.084697
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            49.3,
+            703.1,
+            274.1,
+            804.8
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 6,
+          "global_id": "img_27_box_6",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.447,
+          "xywh_normalized": [
+            0.701288,
+            0.41626,
+            0.066261,
+            0.092136
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1069.1,
+            444.2,
+            1175.1,
+            554.8
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 7,
+          "global_id": "img_27_box_7",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.4406,
+          "xywh_normalized": [
+            0.342033,
+            0.690745,
+            0.08811,
+            0.071362
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            476.8,
+            786.1,
+            617.7,
+            871.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 8,
+          "global_id": "img_27_box_8",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.4292,
+          "xywh_normalized": [
+            0.079646,
+            0.5177,
+            0.133649,
+            0.122234
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            20.5,
+            547.9,
+            234.4,
+            694.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 9,
+          "global_id": "img_27_box_9",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3815,
+          "xywh_normalized": [
+            0.78111,
+            0.680651,
+            0.082637,
+            0.12135
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1183.7,
+            744,
+            1315.9,
+            889.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 10,
+          "global_id": "img_27_box_10",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.375,
+          "xywh_normalized": [
+            0.977282,
+            0.782261,
+            0.045031,
+            0.061983
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1527.6,
+            901.5,
+            1599.7,
+            975.9
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 11,
+          "global_id": "img_27_box_11",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3497,
+          "xywh_normalized": [
+            0.104014,
+            0.513973,
+            0.182175,
+            0.126512
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            20.7,
+            540.9,
+            312.2,
+            692.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 12,
+          "global_id": "img_27_box_12",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3496,
+          "xywh_normalized": [
+            0.021398,
+            0.275454,
+            0.042609,
+            0.036409
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.1,
+            308.7,
+            68.3,
+            352.4
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 13,
+          "global_id": "img_27_box_13",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3495,
+          "xywh_normalized": [
+            0.921906,
+            0.774141,
+            0.079933,
+            0.109369
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1411.1,
+            863.3,
+            1539,
+            994.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 14,
+          "global_id": "img_27_box_14",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3444,
+          "xywh_normalized": [
+            0.846351,
+            0.719197,
+            0.066541,
+            0.119438
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1300.9,
+            791.4,
+            1407.4,
+            934.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 15,
+          "global_id": "img_27_box_15",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3415,
+          "xywh_normalized": [
+            0.125682,
+            0.635532,
+            0.094876,
+            0.069213
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            125.2,
+            721.1,
+            277,
+            804.2
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 16,
+          "global_id": "img_27_box_16",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3308,
+          "xywh_normalized": [
+            0.187785,
+            0.689127,
+            0.057813,
+            0.08938
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            254.2,
+            773.3,
+            346.7,
+            880.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 17,
+          "global_id": "img_27_box_17",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3293,
+          "xywh_normalized": [
+            0.902429,
+            0.46462,
+            0.059407,
+            0.072988
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1396.4,
+            513.8,
+            1491.4,
+            601.3
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 18,
+          "global_id": "img_27_box_18",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3238,
+          "xywh_normalized": [
+            0.718872,
+            0.609803,
+            0.072757,
+            0.110479
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1092,
+            665.5,
+            1208.4,
+            798.1
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 19,
+          "global_id": "img_27_box_19",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3231,
+          "xywh_normalized": [
+            0.685589,
+            0.761891,
+            0.061967,
+            0.086827
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1047.4,
+            862.2,
+            1146.5,
+            966.4
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 20,
+          "global_id": "img_27_box_20",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3228,
+          "xywh_normalized": [
+            0.773448,
+            0.813512,
+            0.060341,
+            0.106988
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1189.2,
+            912,
+            1285.8,
+            1040.4
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 21,
+          "global_id": "img_27_box_21",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3224,
+          "xywh_normalized": [
+            0.044656,
+            0.426975,
+            0.089287,
+            0.075872
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            466.8,
+            142.9,
+            557.9
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 22,
+          "global_id": "img_27_box_22",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3206,
+          "xywh_normalized": [
+            0.253481,
+            0.289374,
+            0.088076,
+            0.079581
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            335.1,
+            299.5,
+            476,
+            395
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 23,
+          "global_id": "img_27_box_23",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3152,
+          "xywh_normalized": [
+            0.020694,
+            0.502409,
+            0.041185,
+            0.10779
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.2,
+            538.2,
+            66.1,
+            667.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 24,
+          "global_id": "img_27_box_24",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3039,
+          "xywh_normalized": [
+            0.073524,
+            0.756449,
+            0.147049,
+            0.158122
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            812.9,
+            235.3,
+            1002.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 25,
+          "global_id": "img_27_box_25",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3021,
+          "xywh_normalized": [
+            0.214718,
+            0.236029,
+            0.059822,
+            0.053951
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            295.7,
+            250.9,
+            391.4,
+            315.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 26,
+          "global_id": "img_27_box_26",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3021,
+          "xywh_normalized": [
+            0.746234,
+            0.338257,
+            0.106017,
+            0.086789
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1109.2,
+            353.8,
+            1278.8,
+            458
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 27,
+          "global_id": "img_27_box_27",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.3015,
+          "xywh_normalized": [
+            0.356623,
+            0.430839,
+            0.08323,
+            0.09258
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            504,
+            461.5,
+            637.2,
+            572.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 28,
+          "global_id": "img_27_box_28",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2959,
+          "xywh_normalized": [
+            0.513627,
+            0.481389,
+            0.972747,
+            0.961897
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            43.6,
+            0.5,
+            1600,
+            1154.8
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 29,
+          "global_id": "img_27_box_29",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2905,
+          "xywh_normalized": [
+            0.510376,
+            0.719358,
+            0.073738,
+            0.090736
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            757.6,
+            808.8,
+            875.6,
+            917.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 30,
+          "global_id": "img_27_box_30",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2851,
+          "xywh_normalized": [
+            0.048411,
+            0.627444,
+            0.086692,
+            0.096781
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            8.1,
+            694.9,
+            146.8,
+            811
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 31,
+          "global_id": "img_27_box_31",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2805,
+          "xywh_normalized": [
+            0.112707,
+            0.701706,
+            0.088831,
+            0.072316
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            109.3,
+            798.7,
+            251.4,
+            885.4
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 32,
+          "global_id": "img_27_box_32",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2799,
+          "xywh_normalized": [
+            0.159123,
+            0.567003,
+            0.027408,
+            0.051729
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            232.7,
+            649.4,
+            276.5,
+            711.4
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 33,
+          "global_id": "img_27_box_33",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.271,
+          "xywh_normalized": [
+            0.971235,
+            0.53445,
+            0.057134,
+            0.128521
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1508.3,
+            564.2,
+            1599.7,
+            718.5
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 34,
+          "global_id": "img_27_box_34",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2708,
+          "xywh_normalized": [
+            0.668887,
+            0.547585,
+            0.109702,
+            0.173434
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            982.5,
+            553,
+            1158,
+            761.2
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 35,
+          "global_id": "img_27_box_35",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.265,
+          "xywh_normalized": [
+            0.674515,
+            0.872186,
+            0.050942,
+            0.077533
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1038.5,
+            1000.1,
+            1120,
+            1093.1
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 36,
+          "global_id": "img_27_box_36",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2647,
+          "xywh_normalized": [
+            0.775109,
+            0.453524,
+            0.111144,
+            0.144977
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1151.3,
+            457.2,
+            1329.1,
+            631.2
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 37,
+          "global_id": "img_27_box_37",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.263,
+          "xywh_normalized": [
+            0.076214,
+            0.921541,
+            0.055662,
+            0.046882
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            77.4,
+            1077.7,
+            166.5,
+            1134
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 38,
+          "global_id": "img_27_box_38",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.26,
+          "xywh_normalized": [
+            0.072946,
+            0.759101,
+            0.144218,
+            0.157562
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1.3,
+            816.4,
+            232.1,
+            1005.5
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 39,
+          "global_id": "img_27_box_39",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2582,
+          "xywh_normalized": [
+            0.025121,
+            0.788365,
+            0.049628,
+            0.095086
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.5,
+            889,
+            79.9,
+            1003.1
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 40,
+          "global_id": "img_27_box_40",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2574,
+          "xywh_normalized": [
+            0.192462,
+            0.906776,
+            0.033362,
+            0.043577
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            281.2,
+            1062,
+            334.6,
+            1114.3
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 41,
+          "global_id": "img_27_box_41",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.257,
+          "xywh_normalized": [
+            0.599677,
+            0.654548,
+            0.086498,
+            0.184349
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            890.3,
+            674.8,
+            1028.7,
+            896.1
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 42,
+          "global_id": "img_27_box_42",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2503,
+          "xywh_normalized": [
+            0.206161,
+            0.737754,
+            0.089145,
+            0.091154
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            258.5,
+            830.6,
+            401.2,
+            940
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 43,
+          "global_id": "img_27_box_43",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2501,
+          "xywh_normalized": [
+            0.510368,
+            0.87959,
+            0.091961,
+            0.081172
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            743,
+            1006.8,
+            890.2,
+            1104.2
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 44,
+          "global_id": "img_27_box_44",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2392,
+          "xywh_normalized": [
+            0.025258,
+            0.788226,
+            0.050515,
+            0.094648
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            889.1,
+            80.8,
+            1002.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 45,
+          "global_id": "img_27_box_45",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2368,
+          "xywh_normalized": [
+            0.944253,
+            0.148254,
+            0.111042,
+            0.288943
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1422,
+            4.5,
+            1599.6,
+            351.3
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 46,
+          "global_id": "img_27_box_46",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2367,
+          "xywh_normalized": [
+            0.025271,
+            0.789249,
+            0.050542,
+            0.094688
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            890.3,
+            80.9,
+            1003.9
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 47,
+          "global_id": "img_27_box_47",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2352,
+          "xywh_normalized": [
+            0.618135,
+            0.840795,
+            0.066622,
+            0.110563
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            935.7,
+            942.6,
+            1042.3,
+            1075.3
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 48,
+          "global_id": "img_27_box_48",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2351,
+          "xywh_normalized": [
+            0.303454,
+            0.642679,
+            0.073063,
+            0.105567
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            427.1,
+            707.9,
+            544,
+            834.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 49,
+          "global_id": "img_27_box_49",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2341,
+          "xywh_normalized": [
+            0.535053,
+            0.545341,
+            0.091676,
+            0.10461
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            782.7,
+            591.6,
+            929.4,
+            717.2
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 50,
+          "global_id": "img_27_box_50",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2315,
+          "xywh_normalized": [
+            0.113691,
+            0.703153,
+            0.09108,
+            0.072225
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            109,
+            800.4,
+            254.8,
+            887.1
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 51,
+          "global_id": "img_27_box_51",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2314,
+          "xywh_normalized": [
+            0.067665,
+            0.92308,
+            0.039826,
+            0.041934
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            76.4,
+            1082.5,
+            140.1,
+            1132.9
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 52,
+          "global_id": "img_27_box_52",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2282,
+          "xywh_normalized": [
+            0.034035,
+            0.721263,
+            0.068069,
+            0.088643
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0,
+            812.3,
+            108.9,
+            918.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 53,
+          "global_id": "img_27_box_53",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2266,
+          "xywh_normalized": [
+            0.772158,
+            0.822797,
+            0.059648,
+            0.087401
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1187.7,
+            934.9,
+            1283.2,
+            1039.8
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 54,
+          "global_id": "img_27_box_54",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2252,
+          "xywh_normalized": [
+            0.926399,
+            0.62287,
+            0.089149,
+            0.103745
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1410.9,
+            685.2,
+            1553.6,
+            809.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 55,
+          "global_id": "img_27_box_55",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.225,
+          "xywh_normalized": [
+            0.546422,
+            0.393788,
+            0.101875,
+            0.099768
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            792.8,
+            412.7,
+            955.8,
+            532.4
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 56,
+          "global_id": "img_27_box_56",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2225,
+          "xywh_normalized": [
+            0.012317,
+            0.574014,
+            0.024345,
+            0.056408
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.2,
+            655,
+            39.2,
+            722.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 57,
+          "global_id": "img_27_box_57",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2225,
+          "xywh_normalized": [
+            0.348,
+            0.584189,
+            0.078718,
+            0.099988
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            493.8,
+            641,
+            619.8,
+            761
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 58,
+          "global_id": "img_27_box_58",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2109,
+          "xywh_normalized": [
+            0.010878,
+            0.207569,
+            0.021396,
+            0.058047
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.3,
+            214.3,
+            34.5,
+            283.9
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 59,
+          "global_id": "img_27_box_59",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.208,
+          "xywh_normalized": [
+            0.36038,
+            0.793522,
+            0.090859,
+            0.132184
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            503.9,
+            872.9,
+            649.3,
+            1031.5
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 60,
+          "global_id": "img_27_box_60",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2063,
+          "xywh_normalized": [
+            0.930564,
+            0.912688,
+            0.137879,
+            0.123101
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            1378.6,
+            1021.4,
+            1599.2,
+            1169.1
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        },
+        {
+          "id": 61,
+          "global_id": "img_27_box_61",
+          "class_id": 2,
+          "class_name": "GLASS",
+          "confidence": 0.2015,
+          "xywh_normalized": [
+            0.428583,
+            0.81069,
+            0.041506,
+            0.056482
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            652.5,
+            938.9,
+            718.9,
+            1006.7
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:30.853Z"
+        }
+      ]
+    },
+    {
+      "index": 28,
+      "image_id": "img_28",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.28 AM.jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.28 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.28 AM.jpeg",
+      "split": "test",
+      "group": "session_oct10_burst_test",
+      "dimensions": {
+        "width": 1600,
+        "height": 1200
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_28_box_1",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.4107,
+          "xywh_normalized": [
+            0.437199,
+            0.737685,
+            0.094236,
+            0.092342
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            624.1,
+            829.8,
+            774.9,
+            940.6
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:22.403Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_28_box_2",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3353,
+          "xywh_normalized": [
+            0.501996,
+            0.813843,
+            0.076524,
+            0.0956
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            742,
+            919.3,
+            864.4,
+            1034
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:22.403Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_28_box_3",
+          "class_id": 5,
+          "class_name": "PLASTIC",
+          "confidence": 0.2688,
+          "xywh_normalized": [
+            0.526408,
+            0.5,
+            0.947183,
+            1
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            84.5,
+            0,
+            1600,
+            1200
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:44:08.069Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_28_box_4",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2646,
+          "xywh_normalized": [
+            0.066552,
+            0.345948,
+            0.13287,
+            0.691896
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            0.2,
+            0,
+            212.8,
+            830.3
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:22.403Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_28_box_5",
+          "class_id": 4,
+          "class_name": "PAPER",
+          "confidence": 0.2501,
+          "xywh_normalized": [
+            0.246117,
+            0.129567,
+            0.161453,
+            0.247727
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            264.6,
+            6.8,
+            522.9,
+            304.1
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:22.403Z"
+        },
+        {
+          "id": 6,
+          "global_id": "img_28_box_6",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2447,
+          "xywh_normalized": [
+            0.161354,
+            0.951224,
+            0.070135,
+            0.091624
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            202.1,
+            1086.5,
+            314.3,
+            1196.4
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:22.403Z"
+        },
+        {
+          "id": 7,
+          "global_id": "img_28_box_7",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2055,
+          "xywh_normalized": [
+            0.621892,
+            0.941026,
+            0.086034,
+            0.090074
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            926.2,
+            1075.2,
+            1063.9,
+            1183.3
+          ],
+          "status": "correct",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:22.403Z"
+        },
+        {
+          "id": 8,
+          "global_id": "img_28_box_8",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.512519,
+            0.854809,
+            0.43711,
+            0.247259
+          ],
+          "adjusted_xywh": [
+            0.512519,
+            0.854809,
+            0.43711,
+            0.247259
+          ],
+          "pixel_coordinates": [
+            470.3,
+            877.4,
+            1169.7,
+            1174.1
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:44:18.064Z"
+        }
+      ]
+    },
+    {
+      "index": 29,
+      "image_id": "img_29",
+      "filename": "WhatsApp Image 2026-10-10 at 1.41.30 AM.jpeg",
+      "manifest_key": "WhatsApp Image 2026-10-10 at 1.41.30 AM.jpeg",
+      "rel_path": "WhatsApp Image 2026-10-10 at 1.41.30 AM.jpeg",
+      "split": "test",
+      "group": "session_oct10_burst_test",
+      "dimensions": {
+        "width": 1600,
+        "height": 1200
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_29_box_1",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.2013,
+          "xywh_normalized": [
+            0.451868,
+            0.878802,
+            0.08558,
+            0.060209
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            654.5,
+            1018.4,
+            791.5,
+            1090.7
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:39:36.372Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_29_box_2",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.483084,
+            0.854417,
+            0.766783,
+            0.290431
+          ],
+          "adjusted_xywh": [
+            0.483084,
+            0.854417,
+            0.766783,
+            0.290431
+          ],
+          "pixel_coordinates": [
+            159.5,
+            851,
+            1386.4,
+            1199.6
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:39:30.955Z"
+        }
+      ]
+    },
+    {
+      "index": 30,
+      "image_id": "img_30",
+      "filename": "images.jpg",
+      "manifest_key": "images.jpg",
+      "rel_path": "images.jpg",
+      "split": "val",
+      "group": "session_web_image",
+      "dimensions": {
+        "width": 392,
+        "height": 280
+      },
+      "missing_garbage_flag": false,
+      "notes": "",
+      "is_fully_reviewed": true,
+      "boxes": [
+        {
+          "id": 1,
+          "global_id": "img_30_box_1",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.3616,
+          "xywh_normalized": [
+            0.094761,
+            0.308842,
+            0.095221,
+            0.367979
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            18.5,
+            35,
+            55.8,
+            138
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:27.482Z"
+        },
+        {
+          "id": 2,
+          "global_id": "img_30_box_2",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.3569,
+          "xywh_normalized": [
+            0.861939,
+            0.595447,
+            0.275409,
+            0.284282
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            283.9,
+            126.9,
+            391.9,
+            206.5
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:27.482Z"
+        },
+        {
+          "id": 3,
+          "global_id": "img_30_box_3",
+          "class_id": 0,
+          "class_name": "BIODEGRADABLE",
+          "confidence": 0.3417,
+          "xywh_normalized": [
+            0.547966,
+            0.126318,
+            0.087169,
+            0.238384
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            197.7,
+            2,
+            231.9,
+            68.7
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:27.482Z"
+        },
+        {
+          "id": 4,
+          "global_id": "img_30_box_4",
+          "class_id": 3,
+          "class_name": "METAL",
+          "confidence": 0.2456,
+          "xywh_normalized": [
+            0.894024,
+            0.40778,
+            0.211951,
+            0.122044
+          ],
+          "adjusted_xywh": null,
+          "pixel_coordinates": [
+            308.9,
+            97.1,
+            392,
+            131.3
+          ],
+          "status": "incorrect",
+          "adjustment_note": "",
+          "reviewed_at": "2026-10-09T22:18:27.482Z"
+        },
+        {
+          "id": 5,
+          "global_id": "img_30_box_5",
+          "class_id": 5,
+          "class_name": "PLASTIC (Mixed Waste)",
+          "confidence": 1,
+          "xywh_normalized": [
+            0.503827,
+            0.558214,
+            0.390306,
+            0.253571
+          ],
+          "adjusted_xywh": [
+            0.503827,
+            0.558214,
+            0.390306,
+            0.253571
+          ],
+          "pixel_coordinates": [
+            121,
+            120.8,
+            274,
+            191.8
+          ],
+          "status": "correct",
+          "adjustment_note": "Manually drawn box",
+          "reviewed_at": "2026-10-09T22:44:00.179Z"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "model_version": "v2.0-candidate",
+  "candidate_model_path": "D:\\NAGARSETU\\NAGARSETU 3.1\\ai_service\\model\\water_pipe_model_v2.pt",
+  "baseline_model_path": "D:\\NAGARSETU\\NAGARSETU 3.1\\ai_service\\model\\water_pipe_model.pt",
+  "training_timestamp": "2026-10-10 01:01:50",
+  "training_duration_seconds": 67.67,
+  "dataset_inventory": {
+    "normal_pipe_count": 28,
+    "damaged_or_leaking_pipe_count": 61,
+    "total_unique_images": 89,
+    "excluded_duplicates": [
+      "images (21).jpg"
+    ],
+    "class_mapping": {
+      "0": "normal_pipe",
+      "1": "damaged_or_leaking_pipe"
+    }
+  },
+  "data_splits": {
+    "train_count": 57,
+    "val_count": 17,
+    "test_count": 15,
+    "total_count": 89
+  },
+  "test_evaluation": {
+    "accuracy": 0.8667,
+    "macro_f1": 0.8611,
+    "confusion_matrix": {
+      "TN_normal_correct": 5,
+      "FP_normal_called_leak": 0,
+      "FN_leak_called_normal": 2,
+      "TP_leak_correct": 8,
+      "matrix_2x2": [
+        [
+          5,
+          0
+        ],
+        [
+          2,
+          8
+        ]
+      ]
+    },
+    "damaged_or_leaking_pipe": {
+      "precision": 1.0,
+      "recall": 0.8,
+      "f1": 0.8889,
+      "support": 10
+    },
+    "normal_pipe": {
+      "precision": 0.7143,
+      "recall": 1.0,
+      "f1": 0.8333,
+      "false_positive_rate": 0.0,
+      "support": 5
+    }
+  },
+  "full_dataset_evaluation": {
+    "accuracy": 0.9551,
+    "macro_f1": 0.9497,
+    "confusion_matrix": {
+      "TN_normal_correct": 28,
+      "FP_normal_called_leak": 0,
+      "FN_leak_called_normal": 4,
+      "TP_leak_correct": 57,
+      "matrix_2x2": [
+        [
+          28,
+          0
+        ],
+        [
+          4,
+          57
+        ]
+      ]
+    },
+    "damaged_or_leaking_pipe": {
+      "precision": 1.0,
+      "recall": 0.9344,
+      "f1": 0.9661,
+      "support": 61
+    },
+    "normal_pipe": {
+      "precision": 0.875,
+      "recall": 1.0,
+      "f1": 0.9333,
+      "false_positive_rate": 0.0,
+      "support": 28
+    }
+  },
+  "baseline_test_comparison": {
+    "accuracy": 0.8667,
+    "macro_f1": 0.8611,
+    "confusion_matrix": {
+      "TN_normal_correct": 5,
+      "FP_normal_called_leak": 0,
+      "FN_leak_called_normal": 2,
+      "TP_leak_correct": 8,
+      "matrix_2x2": [
+        [
+          5,
+          0
+        ],
+        [
+          2,
+          8
+        ]
+      ]
+    },
+    "damaged_or_leaking_pipe": {
+      "precision": 1.0,
+      "recall": 0.8,
+      "f1": 0.8889,
+      "support": 10
+    },
+    "normal_pipe": {
+      "precision": 0.7143,
+      "recall": 1.0,
+      "f1": 0.8333,
+      "false_positive_rate": 0.0,
+      "support": 5
+    }
+  },
+  "improvements": {
+    "test_accuracy_diff": "+0.00%",
+    "test_f1_diff": "+0.0000",
+    "full_accuracy_diff": "+2.25%",
+    "full_f1_diff": "+0.0239",
+    "full_false_negatives_reduced": "2 fewer missed leaking pipes"
+  },
+  "baseline_full_comparison": {
+    "accuracy": 0.9326,
+    "macro_f1": 0.9258,
+    "confusion_matrix": {
+      "TN_normal_correct": 28,
+      "FP_normal_called_leak": 0,
+      "FN_leak_called_normal": 6,
+      "TP_leak_correct": 55,
+      "matrix_2x2": [
+        [
+          28,
+          0
+        ],
+        [
+          6,
+          55
+        ]
+      ]
+    },
+    "damaged_or_leaking_pipe": {
+      "precision": 1.0,
+      "recall": 0.9016,
+      "f1": 0.9483,
+      "support": 61
+    },
+    "normal_pipe": {
+      "precision": 0.8235,
+      "recall": 1.0,
+      "f1": 0.9032,
+      "false_positive_rate": 0.0,
+      "support": 28
+    }
+  }
+}

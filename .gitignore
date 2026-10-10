@@ -51,4 +51,6 @@ scratch/
 *.backup
 supabase/.temp/
 *.timestamp-*.mjs
+runs/
+**/runs/
 

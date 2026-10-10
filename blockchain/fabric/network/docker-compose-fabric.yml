@@ -1,0 +1,201 @@
+version: '3.8'
+
+networks:
+  nagarsetu-fabric:
+    name: nagarsetu-fabric
+
+volumes:
+  orderer1.nagarsetu.gov.in:
+  orderer2.nagarsetu.gov.in:
+  orderer3.nagarsetu.gov.in:
+  peer0.municipal.nagarsetu.gov.in:
+  peer1.municipal.nagarsetu.gov.in:
+  peer0.auditor.nagarsetu.gov.in:
+
+services:
+  # =========================================================================
+  # ORDERING SERVICE — 3-Node Raft Cluster
+  # =========================================================================
+  orderer1.nagarsetu.gov.in:
+    image: hyperledger/fabric-orderer:2.5
+    container_name: orderer1.nagarsetu.gov.in
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7050
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_BOOTSTRAPMETHOD=none
+      - ORDERER_CHANNELPARTICIPATION_ENABLED=true
+      - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:7053
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+      - ./crypto-config/ordererOrganizations/nagarsetu.gov.in/orderers/orderer1.nagarsetu.gov.in/msp:/var/hyperledger/orderer/msp
+      - ./crypto-config/ordererOrganizations/nagarsetu.gov.in/orderers/orderer1.nagarsetu.gov.in/tls:/var/hyperledger/orderer/tls
+      - orderer1.nagarsetu.gov.in:/var/hyperledger/production/orderer
+    ports:
+      - "7050:7050"
+      - "7053:7053"
+    networks:
+      - nagarsetu-fabric
+
+  orderer2.nagarsetu.gov.in:
+    image: hyperledger/fabric-orderer:2.5
+    container_name: orderer2.nagarsetu.gov.in
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7050
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_BOOTSTRAPMETHOD=none
+      - ORDERER_CHANNELPARTICIPATION_ENABLED=true
+      - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:7053
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+      - ./crypto-config/ordererOrganizations/nagarsetu.gov.in/orderers/orderer2.nagarsetu.gov.in/msp:/var/hyperledger/orderer/msp
+      - ./crypto-config/ordererOrganizations/nagarsetu.gov.in/orderers/orderer2.nagarsetu.gov.in/tls:/var/hyperledger/orderer/tls
+      - orderer2.nagarsetu.gov.in:/var/hyperledger/production/orderer
+    ports:
+      - "7054:7050"
+    networks:
+      - nagarsetu-fabric
+
+  orderer3.nagarsetu.gov.in:
+    image: hyperledger/fabric-orderer:2.5
+    container_name: orderer3.nagarsetu.gov.in
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7050
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_BOOTSTRAPMETHOD=none
+      - ORDERER_CHANNELPARTICIPATION_ENABLED=true
+      - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:7053
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+      - ./crypto-config/ordererOrganizations/nagarsetu.gov.in/orderers/orderer3.nagarsetu.gov.in/msp:/var/hyperledger/orderer/msp
+      - ./crypto-config/ordererOrganizations/nagarsetu.gov.in/orderers/orderer3.nagarsetu.gov.in/tls:/var/hyperledger/orderer/tls
+      - orderer3.nagarsetu.gov.in:/var/hyperledger/production/orderer
+    ports:
+      - "7055:7050"
+    networks:
+      - nagarsetu-fabric
+
+  # =========================================================================
+  # ORGANIZATION 1 — Municipal Authority (MunicipalAuthorityMSP)
+  # =========================================================================
+  peer0.municipal.nagarsetu.gov.in:
+    image: hyperledger/fabric-peer:2.5
+    container_name: peer0.municipal.nagarsetu.gov.in
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_PEER_ID=peer0.municipal.nagarsetu.gov.in
+      - CORE_PEER_ADDRESS=peer0.municipal.nagarsetu.gov.in:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.municipal.nagarsetu.gov.in:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.municipal.nagarsetu.gov.in:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.municipal.nagarsetu.gov.in:7051
+      - CORE_PEER_LOCALMSPID=MunicipalAuthorityMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./crypto-config/peerOrganizations/municipal.nagarsetu.gov.in/peers/peer0.municipal.nagarsetu.gov.in/msp:/etc/hyperledger/fabric/msp
+      - ./crypto-config/peerOrganizations/municipal.nagarsetu.gov.in/peers/peer0.municipal.nagarsetu.gov.in/tls:/etc/hyperledger/fabric/tls
+      - peer0.municipal.nagarsetu.gov.in:/var/hyperledger/production
+    ports:
+      - "7051:7051"
+    networks:
+      - nagarsetu-fabric
+
+  peer1.municipal.nagarsetu.gov.in:
+    image: hyperledger/fabric-peer:2.5
+    container_name: peer1.municipal.nagarsetu.gov.in
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_PEER_ID=peer1.municipal.nagarsetu.gov.in
+      - CORE_PEER_ADDRESS=peer1.municipal.nagarsetu.gov.in:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer1.municipal.nagarsetu.gov.in:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.municipal.nagarsetu.gov.in:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.municipal.nagarsetu.gov.in:7051
+      - CORE_PEER_LOCALMSPID=MunicipalAuthorityMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./crypto-config/peerOrganizations/municipal.nagarsetu.gov.in/peers/peer1.municipal.nagarsetu.gov.in/msp:/etc/hyperledger/fabric/msp
+      - ./crypto-config/peerOrganizations/municipal.nagarsetu.gov.in/peers/peer1.municipal.nagarsetu.gov.in/tls:/etc/hyperledger/fabric/tls
+      - peer1.municipal.nagarsetu.gov.in:/var/hyperledger/production
+    ports:
+      - "7061:7051"
+    networks:
+      - nagarsetu-fabric
+
+  # =========================================================================
+  # ORGANIZATION 2 — Independent Auditor (AuditorMSP)
+  # =========================================================================
+  peer0.auditor.nagarsetu.gov.in:
+    image: hyperledger/fabric-peer:2.5
+    container_name: peer0.auditor.nagarsetu.gov.in
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_PEER_ID=peer0.auditor.nagarsetu.gov.in
+      - CORE_PEER_ADDRESS=peer0.auditor.nagarsetu.gov.in:8051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:8051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.auditor.nagarsetu.gov.in:8052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.auditor.nagarsetu.gov.in:8051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.auditor.nagarsetu.gov.in:8051
+      - CORE_PEER_LOCALMSPID=AuditorMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./crypto-config/peerOrganizations/auditor.nagarsetu.gov.in/peers/peer0.auditor.nagarsetu.gov.in/msp:/etc/hyperledger/fabric/msp
+      - ./crypto-config/peerOrganizations/auditor.nagarsetu.gov.in/peers/peer0.auditor.nagarsetu.gov.in/tls:/etc/hyperledger/fabric/tls
+      - peer0.auditor.nagarsetu.gov.in:/var/hyperledger/production
+    ports:
+      - "8051:8051"
+    networks:
+      - nagarsetu-fabric

@@ -20,10 +20,11 @@ const ALLOWED_MIME_EXT_MAP = {
   'image/jpeg': '.jpg',
   'image/png': '.png',
   'image/gif': '.gif',
-  'image/webp': '.webp'
+  'image/webp': '.webp',
+  'image/avif': '.avif'
 };
 
-const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif'];
 const MAX_FILE_SIZE = parseInt(process.env.MAX_UPLOAD_SIZE_BYTES, 10) || (parseInt(process.env.MAX_UPLOAD_SIZE_MB, 10) || 10) * 1024 * 1024;
 
 // Magic byte signature patterns for safe image formats
@@ -46,8 +47,9 @@ function isValidImageMagicBytes(buffer) {
   const isPng  = MAGIC_BYTES.png.every((byte, i) => buffer[i] === byte);
   const isGif  = MAGIC_BYTES.gif.every((byte, i) => buffer[i] === byte);
   const isWebp = MAGIC_BYTES.webp.every((byte, i) => buffer[i] === byte) && buffer.slice(8, 12).toString('ascii') === 'WEBP';
+  const isAvif = buffer.length >= 12 && buffer.slice(4, 8).toString('ascii') === 'ftyp' && ['avif', 'avis', 'mif1'].includes(buffer.slice(8, 12).toString('ascii'));
 
-  return isJpeg || isPng || isGif || isWebp;
+  return isJpeg || isPng || isGif || isWebp || isAvif;
 }
 
 const storage = multer.memoryStorage();
@@ -61,7 +63,7 @@ const fileFilter = (req, file, cb) => {
   const mimetype = (file.mimetype || '').toLowerCase();
 
   if (!ALLOWED_MIME_EXT_MAP[mimetype] && !ALLOWED_EXTENSIONS.includes(ext)) {
-    return cb(new Error('Only valid image files (.jpg, .jpeg, .png, .webp, .gif) are allowed!'), false);
+    return cb(new Error('Only valid image files (.jpg, .jpeg, .png, .webp, .gif, .avif) are allowed!'), false);
   }
 
   cb(null, true);
