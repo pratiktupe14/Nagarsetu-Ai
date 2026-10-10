@@ -79,10 +79,11 @@ test.before(async () => {
               success: true, condition: 'normal', drain_condition: 'normal', detected: false, confidence: 0.95, ai_status: 'confirmed_normal', model: 'drainage_model.pt', reviewRequired: false, department_code: null, complaint: null
             }));
           }
+          const isDamaged = str.includes('damaged') || str.includes('slab') || str.includes('broken');
           return res.end(JSON.stringify({
-            success: true, detected: true, confidence: 0.88, category: 'Drainage', model: 'drainage_model.pt', ai_status: 'confirmed', drain_condition: 'blocked',
-            complaint: { category: 'Drainage', issueType: 'Blocked Drain', departmentName: 'Drainage & Sewage Department', departmentCode: 'DRN', severity: 'High', priority: 'High', confidenceScore: 0.88 },
-            primaryDetection: { class: 'blocked_drain' }, detections: [{ class: 'blocked_drain' }]
+            success: true, detected: true, confidence: 0.88, category: 'Drainage', model: 'drainage_model.pt', ai_status: 'confirmed', drain_condition: isDamaged ? 'damaged' : 'blocked',
+            complaint: { category: 'Drainage', issueType: isDamaged ? 'Damaged Drain / Broken Slab' : 'Blocked Drain', departmentName: 'Drainage & Sewage Department', departmentCode: 'DRN', severity: 'High', priority: 'High', confidenceScore: 0.88 },
+            primaryDetection: { class: isDamaged ? 'damaged_drain' : 'blocked_drain' }, detections: [{ class: isDamaged ? 'damaged_drain' : 'blocked_drain' }]
           }));
         });
         return;

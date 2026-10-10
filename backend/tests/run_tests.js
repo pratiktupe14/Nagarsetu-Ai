@@ -95,8 +95,23 @@ async function main() {
               confidence: 0.25,
               reviewRequired: true,
               ai_status: 'manual_review',
+              road_condition: 'uncertain',
               department_code: null,
               departmentCode: null
+            }));
+          }
+
+          if (bodyStr.includes('grass') || bodyStr.includes('non_road')) {
+            return res.end(JSON.stringify({
+              success: true,
+              detected: false,
+              confidence: 0.2,
+              reviewRequired: true,
+              ai_status: 'manual_review',
+              road_condition: 'non_road',
+              department_code: null,
+              departmentCode: null,
+              explanation: { reason: 'Image does not contain a recognizable road surface.' }
             }));
           }
 
@@ -118,6 +133,7 @@ async function main() {
           }
 
           if (bodyStr.includes('drainage') || bodyStr.includes('drain') || bodyStr.includes('blocked_drain') || bodyStr.includes('damaged_drain') || bodyStr.includes('overflow')) {
+            const isDamaged = bodyStr.includes('damaged') || bodyStr.includes('slab') || bodyStr.includes('broken');
             return res.end(JSON.stringify({
               success: true,
               detected: true,
@@ -125,18 +141,18 @@ async function main() {
               category: 'Drainage',
               model: 'drainage_model.pt',
               ai_status: 'confirmed',
-              drain_condition: 'blocked',
+              drain_condition: isDamaged ? 'damaged' : 'blocked',
               complaint: {
                 category: 'Drainage',
-                issueType: 'Blocked Drain',
+                issueType: isDamaged ? 'Damaged Drain / Broken Slab' : 'Blocked Drain',
                 departmentName: 'Drainage & Sewage Department',
                 departmentCode: 'DRN',
                 severity: 'High',
                 priority: 'High',
                 confidenceScore: 0.88
               },
-              primaryDetection: { class: 'blocked_drain' },
-              detections: [{ class: 'blocked_drain' }]
+              primaryDetection: { class: isDamaged ? 'damaged_drain' : 'blocked_drain' },
+              detections: [{ class: isDamaged ? 'damaged_drain' : 'blocked_drain' }]
             }));
           }
 
@@ -158,7 +174,8 @@ async function main() {
           }
 
           if (bodyStr.includes('pipe') || bodyStr.includes('water') || bodyStr.includes('leak') || bodyStr.includes('burst')) {
-            const isBurst = bodyStr.includes('burst') || bodyStr.includes('broken') || bodyStr.includes('114662673');
+            const isLeak = bodyStr.includes('industrial-hose') || bodyStr.includes('images (20)') || bodyStr.includes('images (3)');
+            const isBurst = !isLeak && (bodyStr.includes('burst') || bodyStr.includes('broken') || bodyStr.includes('114662673') || bodyStr.includes('images (6)') || bodyStr.includes('12.32.25'));
             return res.end(JSON.stringify({
               success: true,
               detected: true,
@@ -181,7 +198,7 @@ async function main() {
             }));
           }
 
-          if (bodyStr.includes('clean.jpg') || (bodyStr.includes('road') && bodyStr.includes('clean'))) {
+          if (bodyStr.includes('clean.jpg') || bodyStr.includes('repaired_patch') || bodyStr.includes('shadow') || bodyStr.includes('lane_markings') || (bodyStr.includes('road') && bodyStr.includes('clean'))) {
             return res.end(JSON.stringify({
               success: true,
               road_condition: 'clean',
@@ -237,8 +254,8 @@ async function main() {
               priority: 'High',
               confidenceScore: 0.89
             },
-            primaryDetection: { class: 'pothole' },
-            detections: [{ class: 'pothole' }]
+            primaryDetection: { class: 'Pothole' },
+            detections: [{ class: 'Pothole' }]
           }));
         });
         return;
