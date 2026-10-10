@@ -1,2 +1,19 @@
+[project]
+name = "nagarsetu-ai-service"
+version = "1.0.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "fastapi>=0.100.0",
+    "uvicorn>=0.22.0",
+    "pydantic>=2.0.0",
+    "python-multipart>=0.0.6",
+    "Pillow>=10.0.0",
+    "requests>=2.31.0",
+    "ultralytics>=8.0.0",
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
+    "langgraph>=0.2.0",
+]
+
 [tool.vercel]
 entrypoint = "main:app"
