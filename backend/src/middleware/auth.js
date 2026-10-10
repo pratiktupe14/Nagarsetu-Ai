@@ -18,8 +18,6 @@ function getJwtSecret() {
   return (secret && secret.trim()) ? secret.trim() : 'dev_test_only_local_fallback_secret_key_2026_minimum_32_characters';
 }
 
-const JWT_SECRET = getJwtSecret();
-
 const ALLOWED_SUPABASE_PROJECT_REFS = ['ozeiymkbxtrqqdoxtmhm', 'botecyzkfptsrziwkkpe'];
 
 let supabaseClientInstance = null;
@@ -71,7 +69,7 @@ function generateToken(user) {
       department_code: user.department_code,
       language_pref: user.language_pref
     },
-    JWT_SECRET,
+    getJwtSecret(),
     { expiresIn: '8h' }
   );
 }
@@ -269,7 +267,7 @@ async function authenticateToken(req, res, next) {
 
   // 1. Synchronously attempt Express JWT verification using JWT_SECRET
   try {
-    const verifiedUser = jwt.verify(token, JWT_SECRET);
+    const verifiedUser = jwt.verify(token, getJwtSecret());
     if (verifiedUser) {
       req.user = verifiedUser;
       req.user.role = normalizeRole(req.user.role);
@@ -448,7 +446,7 @@ async function optionalAuthenticateToken(req, res, next) {
   }
 
   try {
-    const verifiedUser = jwt.verify(token, JWT_SECRET);
+    const verifiedUser = jwt.verify(token, getJwtSecret());
     if (verifiedUser) {
       req.user = verifiedUser;
       return next();
@@ -460,7 +458,10 @@ async function optionalAuthenticateToken(req, res, next) {
 }
 
 module.exports = {
-  JWT_SECRET,
+  get JWT_SECRET() {
+    return getJwtSecret();
+  },
+  getJwtSecret,
   generateToken,
   authenticateToken,
   optionalAuthenticateToken,
