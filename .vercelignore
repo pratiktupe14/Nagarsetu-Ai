@@ -3,7 +3,6 @@ node_modules
 .github
 tests
 backend/tests
-ai_service
 *.sqlite
 backend/nagarsetu.sqlite*
 *.log
