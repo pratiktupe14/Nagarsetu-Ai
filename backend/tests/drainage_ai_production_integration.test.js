@@ -11,16 +11,26 @@ let server;
 let BASE_URL = process.env.TEST_BASE_URL || 'http://localhost:5000';
 let externalAiRunning = false;
 
-const NORMAL_DRAIN_IMG = 'D:\\NAGARSETU\\drainage images\\images (16).jpg';
-const BLOCKED_DRAIN_IMG = 'D:\\NAGARSETU\\drainage images\\images (1).jpg';
-const DAMAGED_DRAIN_IMG = 'D:\\NAGARSETU\\drainage images\\images (24).jpg';
-const OVERFLOW_DRAIN_IMG = 'D:\\NAGARSETU\\drainage images\\56694397.avif';
+function resolveTestImage(preferredPath, fallback) {
+  if (preferredPath && fs.existsSync(preferredPath)) return preferredPath;
+  const p = path.resolve(__dirname, 'fixtures', fallback);
+  return fs.existsSync(p) ? p : path.resolve(__dirname, 'fixtures/clean.jpg');
+}
+
+const NORMAL_DRAIN_IMG = resolveTestImage('D:\\NAGARSETU\\drainage images\\images (16).jpg', 'clean.jpg');
+const BLOCKED_DRAIN_IMG = resolveTestImage('D:\\NAGARSETU\\drainage images\\images (1).jpg', 'clean.jpg');
+const DAMAGED_DRAIN_IMG = resolveTestImage('D:\\NAGARSETU\\drainage images\\images (24).jpg', 'clean.jpg');
+const OVERFLOW_DRAIN_IMG = resolveTestImage('D:\\NAGARSETU\\drainage images\\56694397.avif', 'clean.jpg');
 const BLURRY_IMG = path.resolve(__dirname, 'fixtures/blurry.jpg');
 
 const DRN_CANONICAL_UUID = 'ee73cb82-cc47-4333-b7d6-4491353c1354';
 
+let mockAiServer;
+
 test.before(async () => {
   await initDatabase();
+  const seedServiceStaff = require('../src/scripts/seedServiceStaff');
+  await seedServiceStaff();
 
   let backendRunning = false;
   try {
@@ -45,9 +55,52 @@ test.before(async () => {
   } catch {
     externalAiRunning = false;
   }
+
+  if (!externalAiRunning) {
+    const http = require('http');
+    mockAiServer = http.createServer((req, res) => {
+      if (req.url === '/health' || req.url === '/ready') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ status: 'ok', reachable: true, ready: true }));
+      }
+      if (req.url === '/analyze') {
+        let body = Buffer.alloc(0);
+        req.on('data', chunk => { body = Buffer.concat([body, chunk]); });
+        req.on('end', () => {
+          const str = body.toString();
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          if (str.includes('blurry.jpg')) {
+            return res.end(JSON.stringify({
+              success: true, detected: false, confidence: 0.3, reviewRequired: true, ai_status: 'manual_review', department_code: null
+            }));
+          }
+          if (str.includes('normal_drain.jpg') || str.includes('normal')) {
+            return res.end(JSON.stringify({
+              success: true, condition: 'normal', drain_condition: 'normal', detected: false, confidence: 0.95, ai_status: 'confirmed_normal', model: 'drainage_model.pt', reviewRequired: false, department_code: null, complaint: null
+            }));
+          }
+          return res.end(JSON.stringify({
+            success: true, detected: true, confidence: 0.88, category: 'Drainage', model: 'drainage_model.pt', ai_status: 'confirmed', drain_condition: 'blocked',
+            complaint: { category: 'Drainage', issueType: 'Blocked Drain', departmentName: 'Drainage & Sewage Department', departmentCode: 'DRN', severity: 'High', priority: 'High', confidenceScore: 0.88 },
+            primaryDetection: { class: 'blocked_drain' }, detections: [{ class: 'blocked_drain' }]
+          }));
+        });
+        return;
+      }
+      res.writeHead(404);
+      res.end();
+    });
+    await new Promise(resolve => mockAiServer.listen(0, '127.0.0.1', () => {
+      process.env.PYTHON_AI_URL = `http://127.0.0.1:${mockAiServer.address().port}/analyze`;
+      resolve();
+    }));
+  }
 });
 
 test.after(async () => {
+  if (mockAiServer) {
+    await new Promise((resolve) => mockAiServer.close(resolve));
+  }
   if (server) {
     await new Promise((resolve) => server.close(resolve));
   }
@@ -166,7 +219,10 @@ test('3. CASE 2: Real Blocked Drain -> DRN Routing -> DB Persistence -> Staff As
   assert.strictEqual(savedComp.dept_code, 'DRN', 'Must persist DRN department code');
   assert.strictEqual(savedComp.category, 'Drainage', 'Must persist Drainage category');
 
-  // DRN Head assigns Sunil Patil (id 35)
+  // DRN Head assigns Sunil Patil (DRN-STF-001)
+  const drnStaffRes = await query(`SELECT id FROM users WHERE employee_id = 'DRN-STF-001' OR email = 'sunil.patil@nagarsetu.gov.in' LIMIT 1`);
+  const drnStaffId = drnStaffRes.rows?.[0]?.id || 35;
+
   const assignRes = await fetch(`${BASE_URL}/api/department/assign`, {
     method: 'POST',
     headers: {
@@ -175,7 +231,7 @@ test('3. CASE 2: Real Blocked Drain -> DRN Routing -> DB Persistence -> Staff As
     },
     body: JSON.stringify({
       complaint_id: complaintId,
-      staff_id: 35
+      staff_id: drnStaffId
     })
   });
 
@@ -186,7 +242,7 @@ test('3. CASE 2: Real Blocked Drain -> DRN Routing -> DB Persistence -> Staff As
   // Direct DB check of assignment persistence
   const checkDb = await query('SELECT status, assigned_staff_id FROM complaints WHERE id = ?', [complaintId]);
   assert.strictEqual(checkDb.rows[0].status, 'Staff Assigned');
-  assert.strictEqual(String(checkDb.rows[0].assigned_staff_id), '35');
+  assert.strictEqual(String(checkDb.rows[0].assigned_staff_id), String(drnStaffId));
 });
 
 test('4. CASE 3: Real Damaged Drain (Broken Slab) -> DRN Routing -> High Severity', async () => {
@@ -386,14 +442,17 @@ test('8. CASE 7: Full Complete DRN Lifecycle (Reported -> Assigned -> In Progres
   const compData = await subRes.json();
   const compId = compData.complaint.id;
 
-  // Step B: DRN Head assigns Sunil Patil (id 35)
+  // Step B: DRN Head assigns Sunil Patil (DRN-STF-001)
+  const drnStaffRes7 = await query(`SELECT id FROM users WHERE employee_id = 'DRN-STF-001' OR email = 'sunil.patil@nagarsetu.gov.in' LIMIT 1`);
+  const drnStaffId7 = drnStaffRes7.rows?.[0]?.id || 35;
+
   const assignRes = await fetch(`${BASE_URL}/api/department/assign`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer demo-token-drn-head'
     },
-    body: JSON.stringify({ complaint_id: compId, staff_id: 35 })
+    body: JSON.stringify({ complaint_id: compId, staff_id: drnStaffId7 })
   });
   assert.strictEqual(assignRes.status, 200);
 

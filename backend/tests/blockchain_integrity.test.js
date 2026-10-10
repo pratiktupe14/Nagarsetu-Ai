@@ -62,6 +62,12 @@ describe('NAGARSETU 3.1 — Blockchain Data Integrity & Privacy Protection (17 F
   before(async () => {
     await ledgerAdapter.ensureSchema();
 
+    // Ensure super admin account exists in database for strict middleware check
+    await query(`
+      INSERT OR REPLACE INTO users (id, name, email, mobile, password_hash, role, status)
+      VALUES (?, ?, ?, ?, 'hash', 'super_admin', 'active')
+    `, ['999999', 'Super Admin Developer', 'developer@nagarsetu.gov.in', '9999999999']).catch(() => {});
+
     // Clean up any stale records from test citizen
     await query(`DELETE FROM blockchain_transactions WHERE entity_id IN (SELECT CAST(id AS TEXT) FROM complaints WHERE citizen_id = ?)`, [testCitizenId]).catch(() => {});
     await query(`DELETE FROM complaints WHERE citizen_id = ?`, [testCitizenId]).catch(() => {});

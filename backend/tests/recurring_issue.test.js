@@ -2,7 +2,7 @@ const { test, describe, before, after } = require('node:test');
 const assert = require('node:assert');
 const http = require('http');
 require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
-const { query } = require('../src/config/db');
+const { query, initDatabase } = require('../src/config/db');
 const { generateToken } = require('../src/middleware/auth');
 const {
   detectRecurringIssue,
@@ -73,6 +73,12 @@ describe('NAGARSETU 3.1 — 3-Tier Geolocation-Based Recurring Issue Detection (
   let submittedComplaintId;
 
   before(async () => {
+    if (initDatabase) await initDatabase();
+    try {
+      await query(`DELETE FROM recurring_issue_links WHERE current_complaint_id IN (SELECT id FROM complaints WHERE citizen_id IN (?, ?, ?)) OR previous_complaint_id IN (SELECT id FROM complaints WHERE citizen_id IN (?, ?, ?))`, [citizenA_Id, citizenB_Id, '987679', citizenA_Id, citizenB_Id, '987679']);
+      await query(`DELETE FROM complaints WHERE citizen_id IN (?, ?, ?) OR title LIKE 'TEST-%' OR complaint_number LIKE 'TEST-%'`, [citizenA_Id, citizenB_Id, '987679']);
+    } catch (e) {}
+
     // 1. Citizen A reported pothole at base location -> Resolved & verified 25 days ago
     const resA = await query(`
       INSERT INTO complaints (

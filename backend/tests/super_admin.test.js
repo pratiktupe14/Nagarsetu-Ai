@@ -3,7 +3,7 @@ const assert = require('node:assert');
 const http = require('http');
 const bcrypt = require('bcryptjs');
 require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
-const { query } = require('../src/config/db');
+const { query, initDatabase } = require('../src/config/db');
 const { generateToken } = require('../src/middleware/auth');
 
 function request(options, body = null) {
@@ -52,6 +52,13 @@ describe('NAGARSETU 3.1 — Developer Super Admin Control Center Focused Verific
   let testComplaintNumber;
 
   before(async () => {
+    if (initDatabase) await initDatabase();
+    try {
+      await query(`DELETE FROM super_admin_audit_logs WHERE admin_email = ?`, [superAdminEmail]);
+      await query(`DELETE FROM complaint_evidence_versions WHERE complaint_id IN (SELECT id FROM complaints WHERE citizen_id = ?)`, [testCitizenId]);
+      await query(`DELETE FROM complaints WHERE citizen_id = ? OR complaint_number LIKE 'TEST-SA-%'`, [testCitizenId]);
+    } catch (e) {}
+
     // 1. Bootstrap isolated Super Admin user in DB
     const salt = await bcrypt.genSalt(10);
     const passHash = await bcrypt.hash(superAdminPassword, salt);

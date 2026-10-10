@@ -827,10 +827,10 @@ async function analyzeComplaintPhoto(fileInput, options = {}) {
     const isDrain = Boolean(options.domain && ['drain', 'drainage', 'sewage', 'gutter'].includes(options.domain.toLowerCase()));
     const isWaste = Boolean(options.domain && ['waste', 'garbage', 'sanitation', 'trash'].includes(options.domain.toLowerCase()));
 
-    let fallbackCat = 'Roads';
-    let fallbackDept = 'Public Works Department';
-    let fallbackCode = 'PWD';
-    let fallbackId = 1;
+    let fallbackCat = 'Other Civic Issue';
+    let fallbackDept = null;
+    let fallbackCode = null;
+    let fallbackId = null;
 
     if (isPipe) {
       fallbackCat = 'Water';
@@ -847,11 +847,11 @@ async function analyzeComplaintPhoto(fileInput, options = {}) {
       fallbackDept = 'Sanitation & Waste Management';
       fallbackCode = 'SAN';
       fallbackId = CANONICAL_DEPT_IDS['SAN'] || 2;
-    } else if (options.domain && !['road', 'roads'].includes(options.domain.toLowerCase())) {
-      fallbackCat = 'Other Civic Issue';
-      fallbackDept = null;
-      fallbackCode = null;
-      fallbackId = null;
+    } else if (options.domain && ['road', 'roads'].includes(options.domain.toLowerCase())) {
+      fallbackCat = 'Roads';
+      fallbackDept = 'Public Works Department';
+      fallbackCode = 'PWD';
+      fallbackId = 1;
     }
 
     return {

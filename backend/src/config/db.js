@@ -383,12 +383,15 @@ function setupSqlite(resolve, reject) {
   const isVercel = process.env.VERCEL || process.env.NODE_ENV === 'production';
   let dbPath;
   if (isTest) {
+    const isSharedTestDb = !!process.env.TEST_DB_PATH;
     dbPath = process.env.TEST_DB_PATH || path.join(require('os').tmpdir(), `nagarsetu-test-${process.pid}.sqlite`);
-    process.on('exit', () => {
-      try {
-        if (fs.existsSync(dbPath)) fs.unlinkSync(dbPath);
-      } catch (e) {}
-    });
+    if (!isSharedTestDb) {
+      process.on('exit', () => {
+        try {
+          if (fs.existsSync(dbPath)) fs.unlinkSync(dbPath);
+        } catch (e) {}
+      });
+    }
   } else if (isVercel) {
     dbPath = path.join('/tmp', 'nagarsetu.sqlite');
   } else {

@@ -61,6 +61,7 @@ describe('Nearby Duplicate Detection, Merge, Ranking, and Repeat-Complaint Restr
     process.env.NODE_ENV = 'test';
     process.env.JWT_SECRET = JWT_SECRET;
     await initDatabase();
+    await query(`DELETE FROM complaints WHERE latitude BETWEEN 18.515 AND 18.525 AND longitude BETWEEN 73.850 AND 73.865`).catch(() => {});
 
     app = express();
     app.use(express.json());

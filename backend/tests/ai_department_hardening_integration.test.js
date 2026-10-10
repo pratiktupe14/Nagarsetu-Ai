@@ -291,7 +291,13 @@ test('5. Staff Assignment by Canonical Department', async () => {
   assert.ok(pwdCompRes.rows && pwdCompRes.rows.length > 0, 'Should have at least 1 PWD complaint');
   const pwdCompId = pwdCompRes.rows[0].id;
 
-  // 1. Assign PWD staff (Rohit More, id 23, employee_id PWD-STF-004)
+  // 1. Assign PWD staff (Rohit More, employee_id PWD-STF-004)
+  const rohitRes = await query(`SELECT id FROM users WHERE employee_id = 'PWD-STF-004' OR email = 'rohit.more@nagarsetu.gov.in' LIMIT 1`);
+  const rohitId = rohitRes.rows?.[0]?.id || 23;
+
+  const sanRes = await query(`SELECT id FROM users WHERE employee_id = 'SAN-STF-001' OR email = 'prashant.mane@nagarsetu.gov.in' LIMIT 1`);
+  const sanStaffId = sanRes.rows?.[0]?.id || 26;
+
   const assignRes = await fetch(`${BASE_URL}/api/department/assign`, {
     method: 'POST',
     headers: {
@@ -300,7 +306,7 @@ test('5. Staff Assignment by Canonical Department', async () => {
     },
     body: JSON.stringify({
       complaint_id: pwdCompId,
-      staff_id: 23
+      staff_id: rohitId
     })
   });
 
@@ -313,9 +319,9 @@ test('5. Staff Assignment by Canonical Department', async () => {
   // Verify in database directly
   const checkDb = await query('SELECT status, assigned_staff_id, assigned_staff_name FROM complaints WHERE id = ?', [pwdCompId]);
   assert.strictEqual(checkDb.rows[0].status, 'Staff Assigned');
-  assert.strictEqual(String(checkDb.rows[0].assigned_staff_id), '23');
+  assert.strictEqual(String(checkDb.rows[0].assigned_staff_id), String(rohitId));
 
-  // 2. Security Check: Attempting to assign SAN staff (id 26, Prashant Mane) to PWD complaint MUST FAIL
+  // 2. Security Check: Attempting to assign SAN staff to PWD complaint MUST FAIL
   const invalidAssignRes = await fetch(`${BASE_URL}/api/department/assign`, {
     method: 'POST',
     headers: {
@@ -324,7 +330,7 @@ test('5. Staff Assignment by Canonical Department', async () => {
     },
     body: JSON.stringify({
       complaint_id: pwdCompId,
-      staff_id: 26 // Sanitation staff
+      staff_id: sanStaffId // Sanitation staff
     })
   });
 
@@ -364,14 +370,17 @@ test('6. Complete Citizen Lifecycle: Submit -> Staff Assigned -> In Progress -> 
   const compData = await subRes.json();
   const compId = compData.complaint.id;
 
-  // 2. Department Head assigns Rohit More (id 23)
+  // 2. Department Head assigns Rohit More (PWD)
+  const rohitRes6 = await query(`SELECT id FROM users WHERE employee_id = 'PWD-STF-004' OR email = 'rohit.more@nagarsetu.gov.in' LIMIT 1`);
+  const rohitId6 = rohitRes6.rows?.[0]?.id || 23;
+
   const assignRes = await fetch(`${BASE_URL}/api/department/assign`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer demo-token-dept-head'
     },
-    body: JSON.stringify({ complaint_id: compId, staff_id: 23 })
+    body: JSON.stringify({ complaint_id: compId, staff_id: rohitId6 })
   });
   assert.strictEqual(assignRes.status, 200);
 

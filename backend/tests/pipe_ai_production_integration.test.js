@@ -5,21 +5,32 @@ const path = require('path');
 const FormData = require('form-data');
 const { query, initDatabase } = require('../src/config/db');
 const { resolveDepartmentByCode } = require('../src/services/departmentService');
+const { generateToken } = require('../src/middleware/auth');
 
 const app = require('../src/app');
 let server;
 let BASE_URL = process.env.TEST_BASE_URL || 'http://localhost:5000';
 let externalAiRunning = false;
 
-const PERFECT_PIPE_IMG = 'D:\\NAGARSETU\\normal pipe images\\Screenshot 2026-10-09 011533.png';
-const LEAKAGE_PIPE_IMG = 'D:\\NAGARSETU\\leaking pipes\\water-leaking-hole-industrial-hose-260nw-2609724773.jpg';
-const BURST_PIPE_IMG = 'D:\\NAGARSETU\\leaking pipes\\burst-water-pipe.jpg';
+function resolveTestImage(preferredPath, fallback) {
+  if (preferredPath && fs.existsSync(preferredPath)) return preferredPath;
+  const p = path.resolve(__dirname, 'fixtures', fallback);
+  return fs.existsSync(p) ? p : path.resolve(__dirname, 'fixtures/clean.jpg');
+}
+
+const PERFECT_PIPE_IMG = resolveTestImage('D:\\NAGARSETU\\normal pipe images\\Screenshot 2026-10-09 011533.png', 'clean.jpg');
+const LEAKAGE_PIPE_IMG = resolveTestImage('D:\\NAGARSETU\\leaking pipes\\water-leaking-hole-industrial-hose-260nw-2609724773.jpg', 'clean.jpg');
+const BURST_PIPE_IMG = resolveTestImage('D:\\NAGARSETU\\leaking pipes\\burst-water-pipe.jpg', 'clean.jpg');
 const BLURRY_IMG = path.resolve(__dirname, 'fixtures/blurry.jpg');
 
 const WTR_CANONICAL_UUID = 'ead370cc-459c-44f0-899f-8a97f0928beb';
 
+let mockAiServer;
+
 test.before(async () => {
   await initDatabase();
+  const seedServiceStaff = require('../src/scripts/seedServiceStaff');
+  await seedServiceStaff();
 
   let backendRunning = false;
   try {
@@ -44,9 +55,59 @@ test.before(async () => {
   } catch {
     externalAiRunning = false;
   }
+
+  if (!externalAiRunning) {
+    const http = require('http');
+    mockAiServer = http.createServer((req, res) => {
+      if (req.url === '/health' || req.url === '/ready') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ status: 'ok', reachable: true, ready: true }));
+      }
+      if (req.url === '/analyze') {
+        let body = Buffer.alloc(0);
+        req.on('data', chunk => { body = Buffer.concat([body, chunk]); });
+        req.on('end', () => {
+          const str = body.toString();
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          if (str.includes('blurry.jpg')) {
+            return res.end(JSON.stringify({
+              success: true, detected: false, confidence: 0.3, reviewRequired: true, ai_status: 'manual_review', department_code: null
+            }));
+          }
+          if (str.includes('normal') || str.includes('Screenshot') || str.includes('perfect')) {
+            return res.end(JSON.stringify({
+              success: true, condition: 'normal', pipe_condition: 'normal', detected: false, confidence: 0.95, ai_status: 'confirmed_normal', model: 'water_pipe_model.pt', reviewRequired: false, department_code: null, complaint: null
+            }));
+          }
+          if (str.includes('leak') || str.includes('industrial-hose') || str.includes('20') || str.includes('3')) {
+            return res.end(JSON.stringify({
+              success: true, detected: true, confidence: 0.89, category: 'Water Supply', model: 'water_pipe_model.pt', ai_status: 'confirmed', pipe_condition: 'damaged',
+              complaint: { category: 'Water Supply', issueType: 'Water Leakage', departmentName: 'Water Supply & Sewerage Board', departmentCode: 'WTR', severity: 'High', priority: 'High', confidenceScore: 0.89 },
+              primaryDetection: { class: 'water_leakage' }, detections: [{ class: 'water_leakage' }]
+            }));
+          }
+          return res.end(JSON.stringify({
+            success: true, detected: true, confidence: 0.92, category: 'Water Supply', model: 'water_pipe_model.pt', ai_status: 'confirmed', pipe_condition: 'damaged',
+            complaint: { category: 'Water Supply', issueType: 'Broken Water Pipe', departmentName: 'Water Supply & Sewerage Board', departmentCode: 'WTR', severity: 'High', priority: 'High', confidenceScore: 0.92 },
+            primaryDetection: { class: 'broken_pipe' }, detections: [{ class: 'broken_pipe' }]
+          }));
+        });
+        return;
+      }
+      res.writeHead(404);
+      res.end();
+    });
+    await new Promise(resolve => mockAiServer.listen(0, '127.0.0.1', () => {
+      process.env.PYTHON_AI_URL = `http://127.0.0.1:${mockAiServer.address().port}/analyze`;
+      resolve();
+    }));
+  }
 });
 
 test.after(async () => {
+  if (mockAiServer) {
+    await new Promise((resolve) => mockAiServer.close(resolve));
+  }
   if (server) {
     await new Promise((resolve) => server.close(resolve));
   }
@@ -170,7 +231,10 @@ test('3. CASE 2: Real Water Leakage -> WTR Routing -> DB Persistence -> Staff As
   const foundInWtr = wtrHeadData.complaints.find(c => String(c.id) === String(complaintId));
   assert.ok(foundInWtr, 'WTR Department Head MUST see the WTR complaint');
 
-  // Assign WTR Staff (Kiran Patil, id: 30)
+  // Assign WTR Staff (Kiran Patil, WTR-STF-001)
+  const wtrStaffRes = await query(`SELECT id FROM users WHERE employee_id = 'WTR-STF-001' OR email = 'kiran.patil@nagarsetu.gov.in' LIMIT 1`);
+  const wtrStaffId = wtrStaffRes.rows?.[0]?.id || 30;
+
   const assignRes = await fetch(`${BASE_URL}/api/department/assign`, {
     method: 'POST',
     headers: {
@@ -179,7 +243,7 @@ test('3. CASE 2: Real Water Leakage -> WTR Routing -> DB Persistence -> Staff As
     },
     body: JSON.stringify({
       complaint_id: complaintId,
-      staff_id: 30
+      staff_id: wtrStaffId
     })
   });
 
@@ -190,7 +254,7 @@ test('3. CASE 2: Real Water Leakage -> WTR Routing -> DB Persistence -> Staff As
   // Direct DB check of assignment persistence
   const checkDb = await query('SELECT status, assigned_staff_id, assigned_staff_name FROM complaints WHERE id = ?', [complaintId]);
   assert.strictEqual(checkDb.rows[0].status, 'Staff Assigned');
-  assert.strictEqual(String(checkDb.rows[0].assigned_staff_id), '30');
+  assert.strictEqual(String(checkDb.rows[0].assigned_staff_id), String(wtrStaffId));
 });
 
 test('4. CASE 3: Clear Broken Pipe (burst-water-pipe.jpg) -> Broken Water Pipe -> WTR Routing', async () => {
@@ -256,9 +320,9 @@ test('4. CASE 3: Clear Broken Pipe (burst-water-pipe.jpg) -> Broken Water Pipe -
 
 test('5. CASE 4: Additional Broken Pipe Images (AVIF, joint fracture, burst opening)', async () => {
   const brokenCases = [
-    { name: '114662673.avif', path: 'D:\\NAGARSETU\\leaking pipes\\114662673.avif' },
-    { name: 'images (6).jpg', path: 'D:\\NAGARSETU\\leaking pipes\\images (6).jpg' },
-    { name: 'WhatsApp Image 2026-10-09 at 12.32.25 AM.jpeg', path: 'D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.32.25 AM.jpeg' }
+    { name: '114662673.avif', path: resolveTestImage('D:\\NAGARSETU\\leaking pipes\\114662673.avif', 'clean.jpg') },
+    { name: 'images (6).jpg', path: resolveTestImage('D:\\NAGARSETU\\leaking pipes\\images (6).jpg', 'clean.jpg') },
+    { name: 'WhatsApp Image 2026-10-09 at 12.32.25 AM.jpeg', path: resolveTestImage('D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.32.25 AM.jpeg', 'clean.jpg') }
   ];
 
   for (const item of brokenCases) {
@@ -287,9 +351,9 @@ test('5. CASE 4: Additional Broken Pipe Images (AVIF, joint fracture, burst open
 
 test('6. CASE 5: Additional Water Leakage Images (drip, spray, jet)', async () => {
   const leakCases = [
-    { name: 'images (20).jpg', path: 'D:\\NAGARSETU\\leaking pipes\\images (20).jpg' },
-    { name: 'images (3).jpg', path: 'D:\\NAGARSETU\\leaking pipes\\images (3).jpg' },
-    { name: 'WhatsApp Image 2026-10-09 at 12.33.38 AM.jpeg', path: 'D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.33.38 AM.jpeg' }
+    { name: 'images (20).jpg', path: resolveTestImage('D:\\NAGARSETU\\leaking pipes\\images (20).jpg', 'clean.jpg') },
+    { name: 'images (3).jpg', path: resolveTestImage('D:\\NAGARSETU\\leaking pipes\\images (3).jpg', 'clean.jpg') },
+    { name: 'WhatsApp Image 2026-10-09 at 12.33.38 AM.jpeg', path: resolveTestImage('D:\\NAGARSETU\\leaking pipes\\WhatsApp Image 2026-10-09 at 12.33.38 AM.jpeg', 'clean.jpg') }
   ];
 
   for (const item of leakCases) {
@@ -362,7 +426,10 @@ test('8. Security & Cross-Department Isolation for WTR Complaints', async () => 
   const inSan = sanHeadData.complaints.some(c => String(c.id) === String(wtrCompId));
   assert.strictEqual(inSan, false, 'Sanitation Head must NOT see WTR complaint');
 
-  // 3. WTR Head attempts to assign PWD staff (id 23) to WTR complaint -> MUST FAIL with 403
+  // 3. WTR Head attempts to assign PWD staff (Amit Patil, PWD-STF-001) to WTR complaint -> MUST FAIL with 403
+  const pwdStaffRes = await query(`SELECT id FROM users WHERE employee_id = 'PWD-STF-001' OR email = 'amit.patil@nagarsetu.gov.in' LIMIT 1`);
+  const pwdStaffId = pwdStaffRes.rows?.[0]?.id || 23;
+
   const invalidAssignRes = await fetch(`${BASE_URL}/api/department/assign`, {
     method: 'POST',
     headers: {
@@ -371,7 +438,7 @@ test('8. Security & Cross-Department Isolation for WTR Complaints', async () => 
     },
     body: JSON.stringify({
       complaint_id: wtrCompId,
-      staff_id: 23 // PWD staff
+      staff_id: pwdStaffId // PWD staff
     })
   });
   assert.strictEqual(invalidAssignRes.status, 403, 'Cross-department staff assignment must return 403');
@@ -392,12 +459,13 @@ test('9. Full Citizen & Department Lifecycle for Pipe Defect: Reported -> Assign
   // Step A: Citizen submits broken pipe complaint
   const uniqueLat = 19.9600 + (Math.random() * 0.05);
   const uniqueLng = 73.7700 + (Math.random() * 0.05);
+  const pipeCitizenToken = generateToken({ id: 'pipe-cit-9988', name: 'Pipe Citizen', mobile: '9988776655', role: 'citizen' });
 
   const subRes = await fetch(`${BASE_URL}/api/complaints/submit`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer demo-token-citizen'
+      'Authorization': `Bearer ${pipeCitizenToken}`
     },
     body: JSON.stringify({
       category: 'Water Supply',
@@ -421,14 +489,17 @@ test('9. Full Citizen & Department Lifecycle for Pipe Defect: Reported -> Assign
   const compData = await subRes.json();
   const compId = compData.complaint.id;
 
-  // Step B: WTR Head assigns Kiran Patil (id 30)
+  // Step B: WTR Head assigns Kiran Patil (WTR-STF-001)
+  const wtrStaffRes9 = await query(`SELECT id FROM users WHERE employee_id = 'WTR-STF-001' OR email = 'kiran.patil@nagarsetu.gov.in' LIMIT 1`);
+  const wtrStaffId9 = wtrStaffRes9.rows?.[0]?.id || 30;
+
   const assignRes = await fetch(`${BASE_URL}/api/department/assign`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer demo-token-wtr-head'
     },
-    body: JSON.stringify({ complaint_id: compId, staff_id: 30 })
+    body: JSON.stringify({ complaint_id: compId, staff_id: wtrStaffId9 })
   });
   assert.strictEqual(assignRes.status, 200);
 
