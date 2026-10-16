@@ -155,7 +155,7 @@ export const AdminDepartmentDashboardPage: React.FC = () => {
     };
   }, [loadData]);
 
-  const now = new Date();
+  const now = useMemo(() => new Date(), []);
 
   // Helper matching complaint to selected department (using authoritative matching layer)
   const isComplaintMatch = useCallback((c: Complaint, deptId: string) => {

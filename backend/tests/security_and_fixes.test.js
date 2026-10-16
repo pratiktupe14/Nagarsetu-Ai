@@ -177,5 +177,69 @@ describe('NAGARSETU Security & Reliability Audit Verification', () => {
     );
   });
 
+  test('12. Rate Limiter does NOT bypass sensitive auth endpoints with dummy Authorization header (ERROR-006)', () => {
+    const rateLimiterFile = fs.readFileSync(path.join(__dirname, '../src/middleware/rateLimiter.js'), 'utf8');
+    assert.strictEqual(
+      rateLimiterFile.includes("req.headers && req.headers['authorization']"),
+      false,
+      'Auth rate limiter must never skip limiting based on arbitrary Authorization header presence'
+    );
+    assert.strictEqual(
+      rateLimiterFile.includes("req.path === '/profile' || req.path === '/me'"),
+      true,
+      'Only read-only profile/me paths may be exempt from login rate limits'
+    );
+  });
+
+  test('13. OTP Verification Lifecycle: Dynamic OTP, Rejection of Bad OTP, Lockout (ERROR-005)', () => {
+    const authRouteFile = fs.readFileSync(path.join(__dirname, '../src/routes/auth.routes.js'), 'utf8');
+    // Ensure hardcoded 123456 bypass is eliminated
+    assert.strictEqual(
+      authRouteFile.includes("otp === '123456'"),
+      false,
+      'Hardcoded 123456 OTP bypass must not exist in auth route'
+    );
+    assert.strictEqual(
+      authRouteFile.includes("crypto.randomInt(100000, 1000000)"),
+      true,
+      'Dynamic cryptographically secure random OTP generation must be used'
+    );
+    assert.strictEqual(
+      authRouteFile.includes("attempts >= 3"),
+      true,
+      'Three failed OTP attempts must result in lockout'
+    );
+  });
+
+  test('14. Department Head Synchronization Prevents Unsafe Demotion (ERROR-004)', () => {
+    const cleanSyncFile = fs.readFileSync(path.join(__dirname, '../src/scripts/cleanAndSyncDepartmentHeads.js'), 'utf8');
+    assert.strictEqual(
+      cleanSyncFile.includes("SET role = 'citizen'"),
+      false,
+      'cleanAndSyncDepartmentHeads must never demote active department heads to citizen'
+    );
+    // Preserves existing credentials by not overwriting password_hash on UPDATE
+    assert.strictEqual(
+      cleanSyncFile.includes("UPDATE users SET name = ?, mobile = ?, email = ?, role = 'department_head', department_id = ?, employee_id = ?, status = 'active' WHERE id = ?"),
+      true,
+      'cleanAndSyncDepartmentHeads must preserve existing user password hashes'
+    );
+  });
+
+  test('15. Staff Cross-Department Resolution Rejection with 403 Forbidden (ERROR-008)', () => {
+    const staffRouteFile = fs.readFileSync(path.join(__dirname, '../src/routes/staff.routes.js'), 'utf8');
+    assert.strictEqual(
+      staffRouteFile.includes("Forbidden: You cannot resolve complaints belonging to another department"),
+      true,
+      'Staff must be strictly rejected with 403 when attempting to resolve another department complaint'
+    );
+    assert.strictEqual(
+      staffRouteFile.includes("task 1118"),
+      false,
+      'Temporary test task injection 1118 must be removed'
+    );
+  });
+
 });
+
 

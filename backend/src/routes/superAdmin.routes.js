@@ -4,10 +4,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { query } = require('../config/db');
 const { requireSuperAdmin } = require('../middleware/superAdminAuth');
+const { getJwtSecret } = require('../middleware/auth');
 const { logSuperAdminAction, getAuditLogs } = require('../services/superAdminAuditService');
 const { resolveDepartmentByCode, resolveDepartmentByCodeSync } = require('../services/departmentService');
-
-const JWT_SECRET = process.env.JWT_SECRET || 'nagarsetu-jwt-secret-key-2024-secure';
 
 // Dedicated Super Admin Login (Strict: email + password, checks super_admin role)
 router.post('/auth/login', async (req, res) => {
@@ -51,7 +50,7 @@ router.post('/auth/login', async (req, res) => {
         name: user.name,
         role: 'super_admin'
       },
-      JWT_SECRET,
+      getJwtSecret(),
       { expiresIn: '8h' }
     );
 

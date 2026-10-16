@@ -1,34 +1,35 @@
 import { createClient } from '@supabase/supabase-js';
 import { getApiUrl } from '../config/apiConfig';
 
-const FALLBACK_SUPABASE_URL = 'https://ozeiymkbxtrqqdoxtmhm.supabase.co';
-const FALLBACK_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96ZWl5bWtieHRycXFkb3h0bWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyMjk1MzEsImV4cCI6MjEwMjgwNTUzMX0.6nQemY46XsG89kK5f_ONpAvrmI_buXX-VlpgLRY_sqs';
-
 const rawUrl = (import.meta.env.VITE_SUPABASE_URL || '').trim();
 const rawKey = (import.meta.env.VITE_SUPABASE_ANON_KEY || '').trim();
+
+// Unconfigured client placeholder to prevent crashes on module evaluation
+const PLACEHOLDER_URL = 'https://unconfigured.supabase.co';
+const PLACEHOLDER_KEY = 'unconfigured-anon-key';
 
 export const SUPABASE_PROJECT_URL =
   (rawUrl && !rawUrl.includes('placeholder'))
     ? rawUrl
-    : FALLBACK_SUPABASE_URL;
+    : '';
 
 export const SUPABASE_ANON_KEY =
   (rawKey && !rawKey.includes('placeholder'))
     ? rawKey
-    : FALLBACK_SUPABASE_ANON_KEY;
+    : '';
 
 export const isSupabaseConfigured = (): boolean => {
   return Boolean(
-    SUPABASE_PROJECT_URL &&
-    SUPABASE_ANON_KEY &&
-    !SUPABASE_PROJECT_URL.includes('placeholder') &&
-    !SUPABASE_ANON_KEY.includes('placeholder')
+    rawUrl &&
+    rawKey &&
+    !rawUrl.includes('placeholder') &&
+    !rawKey.includes('placeholder')
   );
 };
 
 export const supabase = createClient(
-  SUPABASE_PROJECT_URL,
-  SUPABASE_ANON_KEY
+  SUPABASE_PROJECT_URL || PLACEHOLDER_URL,
+  SUPABASE_ANON_KEY || PLACEHOLDER_KEY
 );
 
 export const isValidUuid = (val?: string | null): boolean => {

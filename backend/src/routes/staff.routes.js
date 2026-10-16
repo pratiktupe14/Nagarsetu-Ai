@@ -199,32 +199,6 @@ router.post('/task/:id/resolve', uploadSingleImage('photo'), async (req, res) =>
       );
     }
 
-    if (!compRes.rows || compRes.rows.length === 0) {
-      if (targetId === '1118' || String(targetId) === '1118') {
-        // Auto-seed task 1118 for test verification if not already present
-        await query(
-          `INSERT OR IGNORE INTO complaints (id, complaint_number, citizen_id, photo_before_url, category, title, description, priority, status, department_id)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-          [1118, 'CMP-1118', 1, '/uploads/sample.jpg', 'Road Damage / Pothole', 'Pothole on Main Road', 'Pothole requiring asphalt patch', 'High', 'In Progress', 1]
-        ).catch(() => {});
-        await query(
-          `INSERT INTO complaints (id, complaint_number, citizen_id, photo_before_url, category, title, description, priority, status, department_id)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-           ON CONFLICT DO NOTHING`,
-          [1118, 'CMP-1118', 1, '/uploads/sample.jpg', 'Road Damage / Pothole', 'Pothole on Main Road', 'Pothole requiring asphalt patch', 'High', 'In Progress', 1]
-        ).catch(() => {});
-        await query(
-          `INSERT OR IGNORE INTO assignments (id, complaint_id, staff_id) VALUES (?, ?, ?)`,
-          [1118, 1118, req.user?.id || 1]
-        ).catch(() => {});
-        await query(
-          `INSERT INTO assignments (id, complaint_id, staff_id) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING`,
-          [1118, 1118, req.user?.id || 1]
-        ).catch(() => {});
-
-        compRes = await query(`SELECT * FROM complaints WHERE id = $1 OR CAST(id AS TEXT) = $1 LIMIT 1`, [targetId]);
-      }
-    }
 
     if (!compRes.rows || compRes.rows.length === 0) {
       console.log('========== [RESOLVE DEBUG] ==========');
@@ -237,18 +211,31 @@ router.post('/task/:id/resolve', uploadSingleImage('photo'), async (req, res) =>
     const complaint = compRes.rows[0];
     const isStaffRole = req.user.role === 'staff' || req.user.role === 'service_staff';
     if (isStaffRole) {
+      // 1. Department boundary check: staff cannot resolve complaints belonging to another department
+      if (complaint.department_id && req.user.department_id && String(complaint.department_id) !== String(req.user.department_id)) {
+        return res.status(403).json({ error: 'Forbidden: You cannot resolve complaints belonging to another department.' });
+      }
+
+      // 2. Assignment check:
       const assignRes = await query(
         `SELECT id FROM assignments WHERE (CAST(complaint_id AS TEXT) = $1 OR complaint_id = $2 OR id = $2) AND (CAST(staff_id AS TEXT) = $3 OR staff_id = $3)`,
         [String(complaint.id), String(targetId), String(req.user.id)]
       );
-      const isAssigned = (complaint.assigned_staff_id && String(complaint.assigned_staff_id) === String(req.user.id)) ||
-        (complaint.assigned_staff_email && complaint.assigned_staff_email.toLowerCase() === (req.user.email || '').toLowerCase()) ||
-        (assignRes.rows && assignRes.rows.length > 0) ||
-        (!complaint.assigned_staff_id && !complaint.assigned_staff_email) ||
-        (complaint.department_id && req.user.department_id && String(complaint.department_id) === String(req.user.department_id));
 
-      if (!isAssigned) {
-        console.log(`[RESOLVE NOTE] Field staff ${req.user.id} completing resolution for task ${targetId}`);
+      const isDirectlyAssigned = (complaint.assigned_staff_id && String(complaint.assigned_staff_id) === String(req.user.id)) ||
+        (complaint.assigned_staff_email && complaint.assigned_staff_email.toLowerCase() === (req.user.email || '').toLowerCase()) ||
+        (assignRes.rows && assignRes.rows.length > 0);
+
+      const isDeptMember = complaint.department_id && req.user.department_id && String(complaint.department_id) === String(req.user.department_id);
+
+      // If assigned specifically to someone else, reject
+      if (!isDirectlyAssigned && (complaint.assigned_staff_id || complaint.assigned_staff_email)) {
+        return res.status(403).json({ error: 'Forbidden: This task is assigned to another staff member.' });
+      }
+
+      // If neither directly assigned nor member of the handling department, reject
+      if (!isDirectlyAssigned && !isDeptMember) {
+        return res.status(403).json({ error: 'Forbidden: You are not authorized to resolve this complaint.' });
       }
     }
 

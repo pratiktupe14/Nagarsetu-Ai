@@ -229,6 +229,8 @@ async function createTablesPostgres() {
         comment TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
+      CREATE OR REPLACE VIEW complaint_feedback AS SELECT * FROM feedback;
+      CREATE OR REPLACE VIEW task_assignments AS SELECT * FROM assignments;
     `);
 
     await pgPool.query(`
@@ -517,6 +519,9 @@ function createTablesSqlite() {
           FOREIGN KEY (complaint_id) REFERENCES complaints(id)
         );
       `);
+
+      sqliteDb.run(`CREATE VIEW IF NOT EXISTS complaint_feedback AS SELECT * FROM feedback;`);
+      sqliteDb.run(`CREATE VIEW IF NOT EXISTS task_assignments AS SELECT * FROM assignments;`);
 
       sqliteDb.run(`
         CREATE TABLE IF NOT EXISTS notifications (
@@ -878,8 +883,10 @@ async function query(sql, params = []) {
       pgSql = pgSql.replace(/\?/g, () => `$${paramIndex++}`);
 
       const trimmed = pgSql.trim();
-      if (trimmed.toUpperCase().startsWith('INSERT') && !trimmed.toUpperCase().includes('RETURNING')) {
-        pgSql += ' RETURNING id';
+      const isInsert = /^\s*INSERT\s+INTO\b/i.test(trimmed);
+      const hasReturning = /\bRETURNING\b/i.test(trimmed);
+      if (isInsert && !hasReturning) {
+        pgSql = pgSql.trim().replace(/;+\s*$/, '') + ' RETURNING id';
       }
 
       return await pgPool.query(pgSql, params);

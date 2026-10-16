@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { query } = require('../config/db');
-
-const JWT_SECRET = process.env.JWT_SECRET || 'nagarsetu-jwt-secret-key-2024-secure';
+const { getJwtSecret } = require('./auth');
 
 /**
  * Super Admin strict authentication & authorization middleware.
@@ -30,7 +29,7 @@ async function requireSuperAdmin(req, res, next) {
 
     let decoded;
     try {
-      decoded = jwt.verify(token, JWT_SECRET);
+      decoded = jwt.verify(token, getJwtSecret());
     } catch (jwtErr) {
       return res.status(401).json({
         error: 'Unauthorized: Invalid or expired Super Admin token.'

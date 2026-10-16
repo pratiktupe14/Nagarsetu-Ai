@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const { query } = require('../config/db');
 const { authenticateToken, requireRole, normalizeRole } = require('../middleware/auth');
+const { notifyStatusChange } = require('../services/notificationService');
 
 // No-cache middleware for dynamic department data
 router.use((req, res, next) => {
@@ -1018,12 +1019,14 @@ router.post('/verify', authenticateToken, requireRole(['department_head', 'admin
 
     try {
       await query(
-        `UPDATE complaint_assignments 
-         SET status = 'completed', completed_at = CURRENT_TIMESTAMP 
-         WHERE CAST(complaint_id AS TEXT) = $1 OR complaint_id = (SELECT id FROM complaints WHERE complaint_number = $1 LIMIT 1)`,
+        `UPDATE assignments 
+         SET resolved_at = CURRENT_TIMESTAMP 
+         WHERE (complaint_id = $1 OR CAST(complaint_id AS TEXT) = $1 OR complaint_id = (SELECT id FROM complaints WHERE complaint_number = $1 LIMIT 1))`,
         [complaint_id]
       );
-    } catch (assignErr) {}
+    } catch (assignErr) {
+      console.warn('Assignment resolved_at update note:', assignErr.message);
+    }
 
     const verifyRes = await query(
       `SELECT id, complaint_number, status, updated_at FROM complaints WHERE CAST(id AS TEXT) = $1 OR complaint_number = $1`,
@@ -1040,6 +1043,23 @@ router.post('/verify', authenticateToken, requireRole(['department_head', 'admin
         [complaint.id || complaint_id, targetStatus, `Department Head verified repair proof and approved resolution.`, userDept?.name || 'Department Operations', req.user.name || 'Department Head']
       );
     } catch (histErr) {}
+
+    // Dispatch citizen resolution notification
+    try {
+      const citizenId = complaint.citizen_id;
+      if (citizenId) {
+        const existingNotif = await query(
+          `SELECT id FROM notifications WHERE (complaint_id = ? OR CAST(complaint_id AS TEXT) = ?) AND (user_id = ? OR CAST(user_id AS TEXT) = ?) AND message LIKE ? LIMIT 1`,
+          [complaint.id || complaint_id, String(complaint.id || complaint_id), citizenId, String(citizenId), `%${targetStatus}%`]
+        ).catch(() => ({ rows: [] }));
+
+        if (!existingNotif.rows || existingNotif.rows.length === 0) {
+          await notifyStatusChange(complaint.id || complaint_id, targetStatus, citizenId);
+        }
+      }
+    } catch (notifErr) {
+      console.warn('Resolution notification delivery note:', notifErr.message);
+    }
 
     return res.status(200).json({
       success: true,

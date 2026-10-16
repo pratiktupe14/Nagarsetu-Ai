@@ -38,6 +38,8 @@ router.get('/dashboard', validateInput(officerDashboardSchema), async (req, res)
           targetDeptId = dhRes.rows[0].department_id;
         }
       }
+    } else if (req.user.role === 'officer' && req.user.department_id) {
+      targetDeptId = req.user.department_id;
     }
 
     if (targetDeptId) {

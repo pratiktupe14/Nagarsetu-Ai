@@ -153,7 +153,7 @@ export const StaffOverdueTasksPage: React.FC = () => {
     loadData();
   }, [loadData]));
 
-  const now = new Date();
+  const now = useMemo(() => new Date(), []);
 
   // Filter ONLY overdue tasks
   const overdueListAll = useMemo(() => {

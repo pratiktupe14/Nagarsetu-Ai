@@ -39,8 +39,8 @@ if (cleanupTimer && typeof cleanupTimer.unref === 'function') {
  * Enforces per-IP and per-account limits with progressive retry delays instead of hard lockout.
  */
 function authRateLimiter(req, res, next) {
-  // Authenticated profile operations and session inspection are not credential-guessing attempts
-  if (req.path === '/profile' || req.path === '/me' || (req.headers && req.headers['authorization'])) {
+  // Only authenticated profile operations and session inspection are exempted from credential-guessing limits
+  if (req.path === '/profile' || req.path === '/me') {
     return next();
   }
 
@@ -48,7 +48,9 @@ function authRateLimiter(req, res, next) {
   const maxAttempts = getEnvInt('RATE_LIMIT_AUTH_MAX', 5); // Allow 5 free attempts before backoff
   const baseBackoffSec = getEnvInt('RATE_LIMIT_AUTH_BACKOFF_BASE_SEC', 30); // 30s base multiplier
 
-  const ip = req.ip || req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '127.0.0.1';
+  // Express evaluates trusted reverse proxies via 'trust proxy'.
+  // Using req.ip prevents client-side IP spoofing via arbitrary X-Forwarded-For headers.
+  const ip = req.ip || req.socket?.remoteAddress || '127.0.0.1';
   const identifier = req.body && (req.body.mobile || req.body.email || req.body.mobileOrEmail);
   const cleanId = identifier ? String(identifier).trim().toLowerCase() : '';
 
@@ -117,7 +119,7 @@ function authRateLimiter(req, res, next) {
  * Does NOT trust unverified token decodes from headers.
  */
 function getAuthedClientKey(req) {
-  const ip = req.ip || req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '127.0.0.1';
+  const ip = req.ip || req.socket?.remoteAddress || '127.0.0.1';
 
   if (req.user && req.user.id) {
     return `user_${req.user.id}_${ip}`;
@@ -209,5 +211,6 @@ module.exports = {
   authedRateLimiter,
   authenticatedRateLimiter: authedRateLimiter,
   complaintSubmitLimiter,
-  getAuthedClientKey
+  getAuthedClientKey,
+  resetAuthLimits: () => authAttemptTracker.clear()
 };

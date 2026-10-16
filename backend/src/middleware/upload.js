@@ -130,17 +130,30 @@ function uploadSingleImage(fieldName) {
         } catch (supabaseErr) {
           console.warn('[UPLOAD WARN] Supabase upload failed:', supabaseErr.message);
 
+          const isProduction = process.env.NODE_ENV === 'production' || Boolean(process.env.VERCEL);
+
+          if (isProduction && (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY)) {
+            return res.status(503).json({
+              error: 'Storage Service Unavailable: Durable storage credentials are not configured for production.'
+            });
+          }
+
           req.file.filename = randomFilename;
           req.file.publicUrl = `/uploads/${randomFilename}`;
           req.file.supabaseUrl = `/uploads/${randomFilename}`;
 
-          // Local filesystem fallback (gracefully catch read-only filesystem on Vercel serverless)
+          // Local filesystem fallback for development
           try {
             const diskPath = path.join(UPLOADS_DIR, randomFilename);
             fs.writeFileSync(diskPath, req.file.buffer);
             req.file.path = diskPath;
           } catch (writeErr) {
-            console.warn('[UPLOAD WARN] Serverless read-only filesystem (in-memory buffer preserved for AI analysis):', writeErr.message);
+            console.warn('[UPLOAD WARN] Filesystem write failed:', writeErr.message);
+            if (isProduction) {
+              return res.status(503).json({
+                error: 'Storage Service Unavailable: Unable to persist evidence file to durable storage.'
+              });
+            }
           }
         }
       }

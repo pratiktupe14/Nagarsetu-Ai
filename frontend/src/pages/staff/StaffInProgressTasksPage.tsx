@@ -153,7 +153,7 @@ export const StaffInProgressTasksPage: React.FC = () => {
     loadData();
   }, [loadData]));
 
-  const now = new Date();
+  const now = useMemo(() => new Date(), []);
 
   // Filter ONLY in-progress tasks
   const inProgressListAll = useMemo(() => {

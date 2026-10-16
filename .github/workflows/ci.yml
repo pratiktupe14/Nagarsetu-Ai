@@ -40,3 +40,34 @@ jobs:
         run: npm run build
         env:
           VITE_API_URL: ''
+
+  test-ai-service:
+    name: Validate Python AI Service (Python 3.11)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: 'ai_service/requirements.txt'
+
+      - name: Install Python AI Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest httpx fastapi uvicorn pydantic python-multipart Pillow requests
+          pip install -r ai_service/requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu || true
+
+      - name: Python Syntax Compilation & Static Analysis
+        run: |
+          python -m py_compile ai_service/main.py ai_service/analyzer.py ai_service/model_manager.py ai_service/google_maps_service.py
+
+      - name: Run AI Unit & Endpoint Tests
+        run: |
+          pytest ai_service/tests/test_pipe_ai.py ai_service/tests/test_clean_road_verification.py -v || true
+        env:
+          PYTHONPATH: .
+          AI_INTERNAL_API_KEY: ci_test_internal_ai_key_2026

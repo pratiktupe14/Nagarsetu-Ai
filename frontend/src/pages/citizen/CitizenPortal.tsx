@@ -68,7 +68,7 @@ export const CitizenPortal: React.FC = () => {
     } finally {
       if (isInitial) setLoading(false);
     }
-  }, [user, language]);
+  }, [user]);
 
   useEffect(() => {
     loadComplaints(true);

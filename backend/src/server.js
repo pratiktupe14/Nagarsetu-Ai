@@ -24,17 +24,11 @@ async function seedDefaultUsers() {
       `SELECT id FROM users WHERE mobile = '8788562103' OR mobile = '+918788562103' OR mobile = '+91 8788562103' OR LOWER(email) = 'citizen8788562103@nagarsetu.gov.in'`
     );
     if (citizenCheck.rows && citizenCheck.rows.length > 0) {
-      for (const row of citizenCheck.rows) {
-        await query(
-          `UPDATE users SET name = 'Pratik Dilip Tupe', password_hash = ?, role = 'citizen', status = 'active' WHERE id = ?`,
-          [citizenHash, row.id]
-        );
-      }
-      console.log('Seeded citizen 8788562103 updated with bcrypt hash.');
+      console.log('Seeded citizen 8788562103 exists (retaining existing credentials).');
     } else {
       await query(
         `INSERT INTO users (name, mobile, email, password_hash, role, language_pref, status) VALUES (?, ?, ?, ?, 'citizen', 'en', 'active')`,
-        ['Demo Citizen', '8788562103', 'citizen8788562103@nagarsetu.gov.in', citizenHash]
+        ['Pratik Dilip Tupe', '8788562103', 'citizen8788562103@nagarsetu.gov.in', citizenHash]
       );
       console.log('Seeded citizen 8788562103 inserted.');
     }
@@ -44,13 +38,7 @@ async function seedDefaultUsers() {
       `SELECT id FROM users WHERE LOWER(email) = 'admin@nagarsetu.gov.in' OR mobile = '9876543213' OR mobile = '+919876543213'`
     );
     if (adminCheck.rows && adminCheck.rows.length > 0) {
-      for (const row of adminCheck.rows) {
-        await query(
-          `UPDATE users SET password_hash = ?, role = 'city_admin', status = 'active' WHERE id = ?`,
-          [adminHash, row.id]
-        );
-      }
-      console.log('City Admin updated with admin@123 bcrypt hash.');
+      console.log('City Admin exists (retaining existing credentials).');
     } else {
       await query(
         `INSERT INTO users (name, mobile, email, password_hash, role, language_pref, status) VALUES (?, ?, ?, ?, 'city_admin', 'en', 'active')`,
@@ -85,6 +73,10 @@ const seed7DemoDepartmentHeads = require('./scripts/seedDemoDepartmentHeads');
 const seedServiceStaff = require('./scripts/seedServiceStaff');
 
 async function seedAll() {
+  if (process.env.NODE_ENV === 'production' && process.env.SEED_DEMO_DATA !== 'true') {
+    console.log('[SECURITY] Production environment detected: Skipping automatic demo seed scripts to protect live database.');
+    return;
+  }
   await seedDefaultUsers();
   await seed7DemoDepartmentHeads();
   await seedServiceStaff();

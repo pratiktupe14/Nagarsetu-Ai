@@ -48,7 +48,7 @@ In Vercel **Project Settings** → **Environment Variables**, add the following 
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase Service Role Key (Backend Only) | `your_supabase_service_role_key` |
 | `SUPABASE_ANON_KEY` | Supabase Anonymous Key | `your_supabase_anon_key` |
 | `FRONTEND_URL` | Deployed Frontend Origin URL for CORS | `https://your-frontend-site.netlify.app` |
-| `PYTHON_AI_URL` | Local / Containerized Python AI Vision URL | `http://localhost:8000/analyze` |
+| `PYTHON_AI_URL` | Deployed Python AI Vision Service URL (Must NOT be localhost in production) | `https://your-ai-service.onrender.com/analyze` |
 | `GOOGLE_MAPS_API_KEY` | Google Maps API Key | `your_google_maps_api_key` |
 
 > [!CAUTION]

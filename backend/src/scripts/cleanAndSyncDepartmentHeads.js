@@ -83,6 +83,11 @@ function isValidUuid(str) {
 }
 
 async function cleanAndSyncDepartmentHeads() {
+  if (process.env.NODE_ENV === 'production' && process.env.ALLOW_SEED_IN_PRODUCTION !== 'true') {
+    console.log('[SECURITY] Production environment detected: Skipping cleanAndSyncDepartmentHeads to protect live user roles and accounts.');
+    return true;
+  }
+
   console.log('================================================================');
   console.log(' PERMANENT DATABASE CLEANUP & SYNC: 7 ACTIVE DEPARTMENT HEADS   ');
   console.log('================================================================');
@@ -131,20 +136,6 @@ async function cleanAndSyncDepartmentHeads() {
       );
     }
 
-    const obsoleteUsers = await query(
-      `SELECT id, email, name FROM users WHERE role = 'department_head'`
-    );
-    if (obsoleteUsers.rows) {
-      for (const u of obsoleteUsers.rows) {
-        if (!u.email || !OFFICIAL_EMAILS.includes(u.email.toLowerCase())) {
-          console.log(`[LOCAL DB] Demoting obsolete user: '${u.name}' (${u.email}) to role = 'citizen'`);
-          await query(
-            `UPDATE users SET role = 'citizen', status = 'inactive', department_id = NULL WHERE id = ?`,
-            [u.id]
-          );
-        }
-      }
-    }
 
     // 3. Upsert 7 Official Active Department Heads in local DB
     const salt = await bcrypt.genSalt(10);
@@ -160,8 +151,8 @@ async function cleanAndSyncDepartmentHeads() {
       if (userCheck.rows && userCheck.rows.length > 0) {
         userId = userCheck.rows[0].id;
         await query(
-          `UPDATE users SET name = ?, mobile = ?, email = ?, password_hash = ?, role = 'department_head', department_id = ?, employee_id = ?, status = 'active' WHERE id = ?`,
-          [dMeta.headName, dMeta.mobile, cleanEmail, passwordHash, targetDeptId, dMeta.employeeId, userId]
+          `UPDATE users SET name = ?, mobile = ?, email = ?, role = 'department_head', department_id = ?, employee_id = ?, status = 'active' WHERE id = ?`,
+          [dMeta.headName, dMeta.mobile, cleanEmail, targetDeptId, dMeta.employeeId, userId]
         );
       } else {
         const insUser = await query(
@@ -195,18 +186,17 @@ async function cleanAndSyncDepartmentHeads() {
       return;
     }
 
-    const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || 'https://ozeiymkbxtrqqdoxtmhm.supabase.co';
-    const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96ZWl5bWtieHRycXFkb3h0bWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyMjk1MzEsImV4cCI6MjEwMjgwNTUzMX0.6nQemY46XsG89kK5f_ONpAvrmI_buXX-VlpgLRY_sqs';
+    const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+    const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
 
     let supabase = null;
-    try {
-      const { createClient } = require('../../frontend/node_modules/@supabase/supabase-js');
-      supabase = createClient(supabaseUrl, supabaseAnonKey);
-    } catch (e) {
+    if (supabaseUrl && supabaseAnonKey && !supabaseUrl.includes('placeholder')) {
       try {
         const { createClient } = require('@supabase/supabase-js');
         supabase = createClient(supabaseUrl, supabaseAnonKey);
-      } catch (err) {}
+      } catch (err) {
+        console.warn('[SUPABASE SYNC NOTE] Supabase client unavailable:', err.message);
+      }
     }
 
     if (supabase) {
@@ -243,19 +233,8 @@ async function cleanAndSyncDepartmentHeads() {
         }
       }
 
-      // 4c. Demote obsolete profiles in Supabase `profiles`
-      const { data: allSupaProfiles } = await supabase.from('profiles').select('*').eq('role', 'department_head');
-      if (allSupaProfiles) {
-        for (const p of allSupaProfiles) {
-          if (!p.email || !OFFICIAL_EMAILS.includes(p.email.toLowerCase())) {
-            console.log(`[SUPABASE DB] Demoting obsolete profile: '${p.full_name}' (${p.email}) to role = 'citizen'`);
-            await supabase
-              .from('profiles')
-              .update({ role: 'citizen', status: 'inactive', updated_at: new Date().toISOString() })
-              .eq('id', p.id);
-          }
-        }
-      }
+      // 4c. Preserve legitimate accounts: Never demote or deactivate user profiles.
+      // (User roles are managed exclusively through authoritative municipal admin channels)
 
       // 4d. Upsert the official active Department Heads into Supabase `department_heads` & `profiles`
       for (const dMeta of OFFICIAL_DEPARTMENTS) {

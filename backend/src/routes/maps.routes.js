@@ -9,56 +9,49 @@ const {
   validateLocationSchema
 } = require('../schemas/maps.schemas');
 
-const AI_SERVICE_URL = process.env.AI_SERVICE_URL || 'http://localhost:8000';
+function getAiBaseUrl() {
+  const raw = (process.env.AI_SERVICE_URL || process.env.PYTHON_AI_URL || 'http://localhost:8000').trim();
+  return raw.replace(/\/analyze\/?$/, '').replace(/\/+$/, '');
+}
 
-function postToPythonService(endpoint, body) {
-  return new Promise((resolve) => {
-    try {
-      const url = new URL(`${AI_SERVICE_URL}${endpoint}`);
-      const data = JSON.stringify(body);
+async function postToPythonService(endpoint, body) {
+  try {
+    const baseUrl = getAiBaseUrl();
+    const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+    const url = `${baseUrl}${cleanEndpoint}`;
 
-      const req = http.request(
-        url,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': Buffer.byteLength(data)
-          },
-          timeout: 5000
-        },
-        (res) => {
-          let responseData = '';
-          res.on('data', (chunk) => (responseData += chunk));
-          res.on('end', () => {
-            try {
-              resolve(JSON.parse(responseData));
-            } catch (e) {
-              console.error('[MAPS SERVICE ERROR] Invalid JSON from python maps service:', e.message);
-              resolve({ status: 'ERROR', message: 'Unable to process map request at this time.' });
-            }
-          });
-        }
-      );
-
-      req.on('error', (err) => {
-        console.error('[MAPS SERVICE ERROR] Network connection error:', err.message);
-        resolve({ status: 'SERVICE_UNAVAILABLE', message: 'Maps service is currently unavailable.' });
-      });
-
-      req.on('timeout', () => {
-        req.destroy();
-        console.error('[MAPS SERVICE TIMEOUT] Request timed out after 5s');
-        resolve({ status: 'TIMEOUT', message: 'Google Maps service request timed out.' });
-      });
-
-      req.write(data);
-      req.end();
-    } catch (err) {
-      console.error('[MAPS SERVICE EXCEPTION]:', err.message);
-      resolve({ status: 'ERROR', message: 'Unable to process map request.' });
+    const headers = { 'Content-Type': 'application/json' };
+    const apiKey = process.env.AI_INTERNAL_API_KEY || process.env.AI_SERVICE_API_KEY;
+    if (apiKey) {
+      headers['X-Internal-API-Key'] = apiKey;
     }
-  });
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+    const res = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      console.error(`[MAPS SERVICE ERROR] Python service returned status ${res.status}:`, errText);
+      return { status: 'ERROR', message: 'Unable to process map request at this time.' };
+    }
+
+    return await res.json();
+  } catch (err) {
+    if (err.name === 'AbortError') {
+      console.error('[MAPS SERVICE TIMEOUT] Request timed out after 5s');
+      return { status: 'TIMEOUT', message: 'Google Maps service request timed out.' };
+    }
+    console.error('[MAPS SERVICE EXCEPTION]:', err.message);
+    return { status: 'SERVICE_UNAVAILABLE', message: 'Maps service is currently unavailable.' };
+  }
 }
 
 // POST /api/maps/geocode

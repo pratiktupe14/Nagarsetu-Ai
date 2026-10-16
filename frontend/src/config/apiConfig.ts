@@ -5,7 +5,7 @@
 export const getApiUrl = (): string => {
   const isBrowser = typeof window !== 'undefined';
   const isLocalhost = isBrowser && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  const envUrl = (import.meta.env.VITE_API_URL || '').trim().replace(/\/$/, '');
+  const envUrl = (import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || '').trim().replace(/\/$/, '');
 
   // In production browser environments, ignore any localhost URL and use same-origin relative /api
   if (isBrowser && !isLocalhost) {

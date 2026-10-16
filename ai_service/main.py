@@ -228,7 +228,7 @@ def geocode(req: GeocodeRequest):
     return gms.geocode_address(req.address)
 
 
-@app.post("/google-maps/reverse-geocode")
+@app.post("/google-maps/reverse-geocode", dependencies=[Depends(verify_internal_api_key)])
 def reverse_geocode(req: ReverseGeocodeRequest):
     return gms.reverse_geocode(req.latitude, req.longitude)
 
@@ -244,7 +244,7 @@ def get_directions(req: DirectionsRequest):
     )
 
 
-@app.post("/google-maps/validate")
+@app.post("/google-maps/validate", dependencies=[Depends(verify_internal_api_key)])
 def validate_location(req: ValidateLocationRequest):
     is_valid = gms.is_within_nashik_bounds(req.latitude, req.longitude)
     return {

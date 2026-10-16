@@ -87,7 +87,7 @@ function getCurrentModel() {
  * Resolves the Python AI microservice inference URL safely, preventing duplicate /analyze segments
  */
 function resolveAiAnalyzeUrl() {
-  const raw = (process.env.PYTHON_AI_URL || 'http://localhost:8000/analyze').trim().replace(/\/+$/, '');
+  const raw = (process.env.PYTHON_AI_URL || process.env.AI_SERVICE_URL || 'http://localhost:8000/analyze').trim().replace(/\/+$/, '');
   return raw.endsWith('/analyze') ? raw : `${raw}/analyze`;
 }
 
@@ -104,13 +104,21 @@ async function callLocalAiService(fileBuffer, mimeType, originalName, domain = n
     formData.append('domain', domain);
   }
 
+  const isProd = process.env.NODE_ENV === 'production';
+  const isLocalhost = pythonUrl.includes('localhost') || pythonUrl.includes('127.0.0.1');
+  if (isProd && isLocalhost) {
+    console.warn('[AI SERVICE CONFIG NOTE] PYTHON_AI_URL is pointing to localhost in production. Please set PYTHON_AI_URL to the deployed microservice endpoint.');
+  }
+
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 25000); // 25 second timeout for model loading
+  const timeoutMs = isProd && isLocalhost ? 3000 : 25000;
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     const headers = {};
-    if (process.env.AI_INTERNAL_API_KEY) {
-      headers['X-Internal-API-Key'] = process.env.AI_INTERNAL_API_KEY;
+    const apiKey = process.env.AI_INTERNAL_API_KEY || process.env.AI_SERVICE_API_KEY;
+    if (apiKey) {
+      headers['X-Internal-API-Key'] = apiKey;
     }
 
     const response = await fetch(pythonUrl, {

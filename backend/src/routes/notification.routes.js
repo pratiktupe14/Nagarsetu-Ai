@@ -31,9 +31,9 @@ router.post('/mark-read', validateInput(markReadSchema), async (req, res) => {
   try {
     const { notification_id } = req.body;
     if (notification_id) {
-      await query(`UPDATE notifications SET is_read = 1 WHERE id = ? AND user_id = ?`, [notification_id, req.user.id]);
+      await query(`UPDATE notifications SET is_read = TRUE WHERE id = ? AND user_id = ?`, [notification_id, req.user.id]);
     } else {
-      await query(`UPDATE notifications SET is_read = 1 WHERE user_id = ?`, [req.user.id]);
+      await query(`UPDATE notifications SET is_read = TRUE WHERE user_id = ?`, [req.user.id]);
     }
     return res.json({ message: 'Notifications marked as read' });
   } catch (err) {

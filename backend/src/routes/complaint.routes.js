@@ -39,26 +39,6 @@ async function resolveAuthorizedCitizenIds(user) {
     ids.add(Number(rawId));
   }
 
-  const isPratik =
-    rawId === '58' ||
-    rawId === 'e2a4338c-5d49-4ae3-b766-40d99fb26f87' ||
-    rawId === 'c-8788562103' ||
-    rawId === '1' ||
-    mobile.includes('8788562103') ||
-    email.includes('8788') ||
-    email.includes('tupe') ||
-    name.includes('tupe') ||
-    name.includes('pratik');
-
-  if (isPratik) {
-    ids.add('58');
-    ids.add(58);
-    ids.add('e2a4338c-5d49-4ae3-b766-40d99fb26f87');
-    ids.add('c-8788562103');
-    ids.add('1');
-    ids.add(1);
-  }
-
   if (mobile || email) {
     try {
       const uRes = await query('SELECT id FROM users WHERE mobile = ? OR LOWER(email) = ?', [mobile, email]);
@@ -66,6 +46,24 @@ async function resolveAuthorizedCitizenIds(user) {
         for (const row of uRes.rows) {
           ids.add(String(row.id));
           ids.add(Number(row.id));
+        }
+      }
+    } catch (e) {}
+
+    try {
+      const { DEMO_USER_TOKENS } = require('../middleware/auth');
+      if (DEMO_USER_TOKENS) {
+        for (const dt of Object.values(DEMO_USER_TOKENS)) {
+          if ((mobile && dt.mobile === mobile) || (email && dt.email && dt.email.toLowerCase() === email)) {
+            if (dt.id) {
+              ids.add(String(dt.id));
+              if (!isNaN(Number(dt.id))) ids.add(Number(dt.id));
+            }
+            if (dt.legacy_id) {
+              ids.add(String(dt.legacy_id));
+              ids.add(Number(dt.legacy_id));
+            }
+          }
         }
       }
     } catch (e) {}
@@ -657,13 +655,30 @@ const submitComplaintHandler = async (req, res) => {
           '3': 'ead370cc-459c-44f0-899f-8a97f0928beb',
           '4': 'ee73cb82-cc47-4333-b7d6-4491353c1354',
           '5': '31842723-23ac-490b-912b-9f6d9afbdfb3',
+          '6': 'ae5e4d0c-996f-4d81-9528-d642664c93ae',
+          '7': '71542723-23ac-490b-912b-9f6d9afbdfb7',
           PWD: '8ed9f760-1314-427c-a515-c2a54d6df6d8',
           SAN: '9cabc1f2-fd10-48dd-a5cb-01d05197de22',
           WTR: 'ead370cc-459c-44f0-899f-8a97f0928beb',
           DRN: 'ee73cb82-cc47-4333-b7d6-4491353c1354',
-          ELE: '31842723-23ac-490b-912b-9f6d9afbdfb3'
+          ELE: '31842723-23ac-490b-912b-9f6d9afbdfb3',
+          TRF: 'ae5e4d0c-996f-4d81-9528-d642664c93ae',
+          MNT: '71542723-23ac-490b-912b-9f6d9afbdfb7'
         };
-        const supaDeptId = DEPT_UUID_MAP[String(finalDeptId)] || (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(department_id)) ? String(department_id) : '8ed9f760-1314-427c-a515-c2a54d6df6d8');
+        const canonicalResolvedDept = resolveDepartmentByCodeSync(String(finalDeptId)) || resolveDepartmentByCodeSync(String(department_id));
+        const supaDeptId = DEPT_UUID_MAP[String(finalDeptId)] || (canonicalResolvedDept ? canonicalResolvedDept.id : (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(department_id)) ? String(department_id) : '8ed9f760-1314-427c-a515-c2a54d6df6d8'));
+
+        let supaCitizenId = null;
+        if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(citizenId))) {
+          supaCitizenId = String(citizenId);
+        } else if (req.user && req.user.supabase_uid && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(req.user.supabase_uid))) {
+          supaCitizenId = String(req.user.supabase_uid);
+        } else if (req.user && req.user.email) {
+          try {
+            const { data: supaProf } = await supabase.from('profiles').select('id').eq('email', req.user.email.toLowerCase()).maybeSingle();
+            if (supaProf && supaProf.id) supaCitizenId = supaProf.id;
+          } catch (e) {}
+        }
 
         let parsedAnglePhotos = null;
         try { if (finalAnglePhotos) parsedAnglePhotos = JSON.parse(finalAnglePhotos); } catch {}
@@ -672,7 +687,7 @@ const submitComplaintHandler = async (req, res) => {
 
         const { data: supaComp, error: supaErr } = await supabase.from('complaints').insert([{
           complaint_number: finalComplaintNumber,
-          citizen_id: citizenId,
+          citizen_id: supaCitizenId,
           photo_before_url: finalPhotoUrl,
           photo_front_url: finalPhotoFront,
           photo_left_url: finalPhotoLeft,
@@ -705,7 +720,7 @@ const submitComplaintHandler = async (req, res) => {
         if (supaErr && supaErr.message && supaErr.message.includes('additional_photos')) {
           const { data: supaCompRetry, error: supaRetryErr } = await supabase.from('complaints').insert([{
             complaint_number: finalComplaintNumber,
-            citizen_id: citizenId,
+            citizen_id: supaCitizenId,
             photo_before_url: finalPhotoUrl,
             photo_front_url: finalPhotoFront,
             photo_left_url: finalPhotoLeft,

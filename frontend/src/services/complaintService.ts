@@ -328,7 +328,7 @@ export async function getAllComplaints(): Promise<Complaint[]> {
 
   // 4. DB state is authoritative when backend or Supabase query succeeds
   if (responseStatus === 200) {
-    let finalComplaints = list.filter((c) => !isDemoComplaint(c));
+    const finalComplaints = list.filter((c) => !isDemoComplaint(c));
 
     // Run location audit & Nominatim repair in background so complaint loading is never delayed
     if (typeof window !== 'undefined') {
@@ -704,7 +704,7 @@ export async function getComplaintById(idOrNumber: string): Promise<Complaint | 
 
   // 1. Try local Express Backend API first
   try {
-    let token =
+    const token =
       localStorage.getItem('nagarsetu_token_citizen') ||
       sessionStorage.getItem('nagarsetu_token_citizen') ||
       localStorage.getItem('nagarsetu_token_city_admin') ||
@@ -959,7 +959,7 @@ export async function createComplaint(payload: Omit<Complaint, 'id' | 'created_a
         } catch (dtErr) {}
       }
 
-      if (!refreshedToken && token !== 'demo-token-citizen') {
+      if (!refreshedToken && (import.meta.env.MODE === 'development' || import.meta.env.MODE === 'test') && token !== 'demo-token-citizen') {
         refreshedToken = 'demo-token-citizen';
       }
 
@@ -1312,7 +1312,7 @@ export async function submitStaffResolution(
         supaQuery = supaQuery.eq('complaint_number', complaintId);
       }
 
-      const { data: updateRows, error: supaErr } = await supaQuery.select();
+      const { data: _updateRows, error: supaErr } = await supaQuery.select();
       if (supaErr) {
         console.error('Supabase resolution update error:', supaErr);
       } else {
@@ -1741,7 +1741,7 @@ export async function assignTaskByDepartmentHead(
   headName: string,
   headDept: string,
   staffEmail?: string,
-  staffEmpId?: string
+  _staffEmpId?: string
 ): Promise<boolean> {
   // CROSS-DEPARTMENT SECURITY CHECK
   const normDept = (d: string) => {
@@ -1936,7 +1936,7 @@ export async function approveResolutionDepartmentHead(
   complaintId: string,
   headName: string,
   headId?: string,
-  deptId?: string
+  _deptId?: string
 ): Promise<boolean> {
   const nowIso = new Date().toISOString();
 

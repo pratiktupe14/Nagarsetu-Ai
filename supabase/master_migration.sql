@@ -4,9 +4,14 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 DO $$ BEGIN
-    CREATE TYPE app_role AS ENUM ('citizen', 'city_admin', 'service_staff', 'department_head');
+    CREATE TYPE app_role AS ENUM ('citizen', 'city_admin', 'service_staff', 'department_head', 'super_admin');
 EXCEPTION
-    WHEN duplicate_object THEN null;
+    WHEN duplicate_object THEN
+        BEGIN
+            ALTER TYPE app_role ADD VALUE IF NOT EXISTS 'super_admin';
+        EXCEPTION
+            WHEN duplicate_object THEN null;
+        END;
 END $$;
 
 DO $$ BEGIN
@@ -34,14 +39,15 @@ CREATE TABLE IF NOT EXISTS public.departments (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- Seed Initial 6 Municipal Departments
+-- Seed Initial 7 Municipal Departments
 INSERT INTO public.departments (name, code, description) VALUES
   ('Public Works Department (PWD)', 'PWD', 'Potholes, asphalt repairs, road damage, public infrastructure'),
   ('Sanitation & Waste Management', 'SAN', 'Garbage collection, overflowing dustbins, street sweeping, solid waste'),
   ('Water Supply & Sewerage Board', 'WTR', 'Water leakage, pipelines, water supply, sewage board'),
   ('Drainage & Sewage Department', 'DRN', 'Drainage blockage, sewage overflow, open drains, monsoon channels'),
   ('Electrical & Street Lighting', 'ELE', 'Streetlights, electrical poles, junction boxes, civic lighting'),
-  ('Traffic Management Department', 'TRF', 'Traffic signals, traffic infrastructure, road signage, junctions')
+  ('Traffic Management Department', 'TRF', 'Traffic signals, traffic infrastructure, road signage, junctions'),
+  ('Maintenance Department', 'MNT', 'General civic facility repairs, building maintenance, public park upkeep')
 ON CONFLICT (code) DO UPDATE SET
   name = EXCLUDED.name,
   description = EXCLUDED.description;
@@ -637,3 +643,166 @@ BEGIN
     END IF;
   END IF;
 END $$;
+
+-- ============================================================================
+-- 19. Additional Operational, Audit, Blockchain, and Compatibility Definitions
+-- ============================================================================
+
+-- Feedback Compatibility View
+CREATE OR REPLACE VIEW public.feedback AS
+SELECT 
+    id,
+    complaint_id,
+    rating,
+    comment,
+    created_at
+FROM public.complaint_feedback;
+
+-- Announcements Table
+CREATE TABLE IF NOT EXISTS public.announcements (
+    id SERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    priority TEXT DEFAULT 'Medium',
+    target_audience TEXT DEFAULT 'all_departments',
+    target_role TEXT,
+    department_id UUID REFERENCES public.departments(id),
+    department_name TEXT,
+    created_by TEXT DEFAULT 'City Admin',
+    posted_by TEXT DEFAULT 'City Admin',
+    created_by_role TEXT DEFAULT 'city_admin',
+    is_published INT DEFAULT 1,
+    published_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()),
+    expires_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()),
+    updated_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now())
+);
+
+ALTER TABLE public.announcements ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Announcements read policy" ON public.announcements;
+CREATE POLICY "Announcements read policy" ON public.announcements
+    FOR SELECT TO authenticated, anon
+    USING (is_published = 1);
+
+-- Announcement Reads Table
+CREATE TABLE IF NOT EXISTS public.announcement_reads (
+    id SERIAL PRIMARY KEY,
+    announcement_id INT NOT NULL REFERENCES public.announcements(id) ON DELETE CASCADE,
+    user_id TEXT NOT NULL,
+    read_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()),
+    UNIQUE(announcement_id, user_id)
+);
+
+ALTER TABLE public.announcement_reads ENABLE ROW LEVEL SECURITY;
+
+-- Recurring Issue Links Table
+CREATE TABLE IF NOT EXISTS public.recurring_issue_links (
+    id SERIAL PRIMARY KEY,
+    current_complaint_id UUID NOT NULL REFERENCES public.complaints(id) ON DELETE CASCADE,
+    previous_complaint_id UUID NOT NULL REFERENCES public.complaints(id) ON DELETE CASCADE,
+    status TEXT NOT NULL DEFAULT 'Potential',
+    distance_meters NUMERIC,
+    department_id UUID REFERENCES public.departments(id),
+    detected_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()),
+    reviewed_by TEXT,
+    reviewed_at TIMESTAMPTZ,
+    review_notes TEXT,
+    UNIQUE(current_complaint_id, previous_complaint_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_recurring_current ON public.recurring_issue_links(current_complaint_id);
+CREATE INDEX IF NOT EXISTS idx_recurring_previous ON public.recurring_issue_links(previous_complaint_id);
+
+ALTER TABLE public.recurring_issue_links ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Recurring issue links view policy" ON public.recurring_issue_links;
+CREATE POLICY "Recurring issue links view policy" ON public.recurring_issue_links
+    FOR SELECT TO authenticated
+    USING (true);
+
+-- Super Admin Audit Logs Table
+CREATE TABLE IF NOT EXISTS public.super_admin_audit_logs (
+    id SERIAL PRIMARY KEY,
+    admin_id TEXT NOT NULL,
+    admin_email TEXT NOT NULL,
+    action TEXT NOT NULL,
+    target_type TEXT NOT NULL,
+    target_id TEXT,
+    changes_json TEXT,
+    reason TEXT,
+    ip_address TEXT,
+    created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now())
+);
+
+CREATE INDEX IF NOT EXISTS idx_audit_admin ON public.super_admin_audit_logs(admin_id);
+CREATE INDEX IF NOT EXISTS idx_audit_target ON public.super_admin_audit_logs(target_type, target_id);
+CREATE INDEX IF NOT EXISTS idx_audit_created ON public.super_admin_audit_logs(created_at);
+
+ALTER TABLE public.super_admin_audit_logs ENABLE ROW LEVEL SECURITY;
+
+-- Complaint Evidence Versions Table
+CREATE TABLE IF NOT EXISTS public.complaint_evidence_versions (
+    id SERIAL PRIMARY KEY,
+    complaint_id UUID NOT NULL REFERENCES public.complaints(id) ON DELETE CASCADE,
+    version_number INT NOT NULL DEFAULT 1,
+    photo_before_url TEXT,
+    photo_after_url TEXT,
+    photo_front_url TEXT,
+    replacement_reason TEXT,
+    replaced_by TEXT,
+    created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now())
+);
+
+CREATE INDEX IF NOT EXISTS idx_evidence_complaint ON public.complaint_evidence_versions(complaint_id);
+
+ALTER TABLE public.complaint_evidence_versions ENABLE ROW LEVEL SECURITY;
+
+-- Blockchain Blocks Table
+CREATE TABLE IF NOT EXISTS public.blockchain_blocks (
+    id SERIAL PRIMARY KEY,
+    block_number BIGINT UNIQUE NOT NULL,
+    previous_block_hash TEXT NOT NULL,
+    block_hash TEXT NOT NULL,
+    merkle_root TEXT NOT NULL,
+    transaction_count INT NOT NULL DEFAULT 0,
+    validator_node TEXT NOT NULL DEFAULT 'NASHIK-MUNICIPAL-ORACLE-01',
+    validator_signature TEXT,
+    created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now())
+);
+
+CREATE INDEX IF NOT EXISTS idx_blockchain_blocks_number ON public.blockchain_blocks(block_number);
+
+-- Blockchain Transactions Table
+CREATE TABLE IF NOT EXISTS public.blockchain_transactions (
+    id SERIAL PRIMARY KEY,
+    tx_id TEXT UNIQUE NOT NULL,
+    block_number BIGINT REFERENCES public.blockchain_blocks(block_number),
+    entity_type TEXT NOT NULL,
+    entity_id TEXT NOT NULL,
+    event_type TEXT NOT NULL,
+    version INT NOT NULL DEFAULT 1,
+    commitment_hash TEXT NOT NULL,
+    previous_commitment_hash TEXT,
+    metadata_json TEXT,
+    status TEXT NOT NULL DEFAULT 'PENDING',
+    retry_count INT DEFAULT 0,
+    error_message TEXT,
+    created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now())
+);
+
+CREATE INDEX IF NOT EXISTS idx_blockchain_tx_entity ON public.blockchain_transactions(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_blockchain_tx_status ON public.blockchain_transactions(status);
+
+ALTER TABLE public.blockchain_blocks ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.blockchain_transactions ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Blockchain blocks public verify" ON public.blockchain_blocks;
+CREATE POLICY "Blockchain blocks public verify" ON public.blockchain_blocks
+    FOR SELECT TO authenticated, anon
+    USING (true);
+
+DROP POLICY IF EXISTS "Blockchain transactions public verify" ON public.blockchain_transactions;
+CREATE POLICY "Blockchain transactions public verify" ON public.blockchain_transactions
+    FOR SELECT TO authenticated, anon
+    USING (true);

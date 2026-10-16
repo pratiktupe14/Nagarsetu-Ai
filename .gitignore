@@ -29,22 +29,22 @@ dist-ssr
 .env
 *.env
 *.env*
-!.env.example
 .env.vercel
 backend/.env.vercel
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+!**/.env.example
+!.env.example
 
 # IDE & OS
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
-
 .vercel
-.env*
+
 .superpowers/
 .agents/
 scratch/

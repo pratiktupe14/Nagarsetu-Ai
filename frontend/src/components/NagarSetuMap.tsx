@@ -192,6 +192,21 @@ export function NagarSetuMap({
     (import.meta.env.VITE_GOOGLE_MAPS_BROWSER_API_KEY as string) ||
     '';
 
+  const validComplaints = useMemo(
+    () =>
+      complaints.filter(
+        (c) =>
+          c &&
+          c.latitude != null &&
+          c.longitude != null &&
+          !isNaN(Number(c.latitude)) &&
+          !isNaN(Number(c.longitude)) &&
+          Number(c.latitude) !== 0 &&
+          Number(c.longitude) !== 0
+      ),
+    [complaints]
+  );
+
   if (!apiKey || apiKey.trim() === '') {
     return (
       <div className="nagarsetu-map-fallback" style={{ height }}>
@@ -213,21 +228,6 @@ export function NagarSetuMap({
       lng: Number(event.detail.latLng.lng),
     });
   };
-
-  const validComplaints = useMemo(
-    () =>
-      complaints.filter(
-        (c) =>
-          c &&
-          c.latitude != null &&
-          c.longitude != null &&
-          !isNaN(Number(c.latitude)) &&
-          !isNaN(Number(c.longitude)) &&
-          Number(c.latitude) !== 0 &&
-          Number(c.longitude) !== 0
-      ),
-    [complaints]
-  );
 
   return (
     <APIProvider apiKey={apiKey}>

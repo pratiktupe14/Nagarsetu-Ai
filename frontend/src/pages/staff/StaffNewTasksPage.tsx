@@ -146,7 +146,7 @@ export const StaffNewTasksPage: React.FC = () => {
     loadData();
   }, [loadData]));
 
-  const now = new Date();
+  const now = useMemo(() => new Date(), []);
 
   // Filter ONLY new assignments
   const newAssignmentsListAll = useMemo(() => {

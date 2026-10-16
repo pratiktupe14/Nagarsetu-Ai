@@ -282,9 +282,9 @@ test('4. CASE 3: Clear Broken Pipe (burst-water-pipe.jpg) -> Broken Water Pipe -
   assert.strictEqual(aiData.title, 'Broken Water Pipe');
   assert.ok(aiData.confidence >= 0.80, 'Clear rupture should have high confidence');
 
-  // Submit and verify persistence
-  const uniqueLat = 19.9700 + (Math.random() * 0.05);
-  const uniqueLng = 73.7800 + (Math.random() * 0.05);
+  // Submit and verify persistence (use isolated coordinates outside duplicate window)
+  const uniqueLat = 19.3000 + (Math.random() * 0.05);
+  const uniqueLng = 73.1000 + (Math.random() * 0.05);
 
   const subRes = await fetch(`${BASE_URL}/api/complaints/submit`, {
     method: 'POST',
@@ -404,7 +404,7 @@ test('7. CASE 6: Ambiguous Image Safety (No false confident civic complaint)', a
 test('8. Security & Cross-Department Isolation for WTR Complaints', async () => {
   // Query a WTR complaint
   const wtrCompRes = await query(
-    `SELECT id FROM complaints WHERE department_id = ? ORDER BY id DESC LIMIT 1`,
+    `SELECT id FROM complaints WHERE department_id = ? AND (assigned_staff_id IS NULL OR assigned_staff_id != 'STF-001') ORDER BY id DESC LIMIT 1`,
     [WTR_CANONICAL_UUID]
   );
   assert.ok(wtrCompRes.rows && wtrCompRes.rows.length > 0);

@@ -113,10 +113,22 @@ router.put('/users/:id', validateInput(updateUserSchema), async (req, res) => {
   try {
     const { name, mobile, email, role, language_pref } = req.body;
     const sql = `
-      UPDATE users SET name = ?, mobile = ?, email = ?, role = ?, language_pref = ?
+      UPDATE users 
+      SET name = COALESCE(?, name), 
+          mobile = COALESCE(?, mobile), 
+          email = COALESCE(?, email), 
+          role = COALESCE(?, role), 
+          language_pref = COALESCE(?, language_pref)
       WHERE id = ?
     `;
-    await query(sql, [name, mobile, email, role, language_pref, req.params.id]);
+    await query(sql, [
+      name !== undefined ? name : null,
+      mobile !== undefined ? mobile : null,
+      email !== undefined ? email : null,
+      role !== undefined ? role : null,
+      language_pref !== undefined ? language_pref : null,
+      req.params.id
+    ]);
     return res.json({ message: 'User updated successfully' });
   } catch (err) {
     console.error('Update user error:', err);

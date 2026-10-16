@@ -20,6 +20,28 @@ const superAdminRoutes = require('./routes/superAdmin.routes');
 
 const app = express();
 
+// Configure Trust Proxy based on environment and hosting topology
+// Defaults:
+// - In production: 1 (single reverse-proxy hop e.g. Vercel, Render, AWS ALB, Cloudflare, Nginx)
+// - Configurable via TRUST_PROXY environment variable ('1', 'loopback', 'true', or IP list)
+// - In test mode: 'loopback' so localhost test suites can safely simulate upstream proxy hops
+const trustProxyEnv = process.env.TRUST_PROXY;
+if (trustProxyEnv) {
+  if (trustProxyEnv === 'true') {
+    app.set('trust proxy', true);
+  } else if (trustProxyEnv === 'false') {
+    app.set('trust proxy', false);
+  } else if (!isNaN(Number(trustProxyEnv))) {
+    app.set('trust proxy', Number(trustProxyEnv));
+  } else {
+    app.set('trust proxy', trustProxyEnv.includes(',') ? trustProxyEnv.split(',').map((s) => s.trim()) : trustProxyEnv);
+  }
+} else if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+} else if (process.env.NODE_ENV === 'test') {
+  app.set('trust proxy', 'loopback');
+}
+
 // Security Headers: Helmet (if installed)
 try {
   const helmet = require('helmet');

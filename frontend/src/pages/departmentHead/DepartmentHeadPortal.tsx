@@ -1119,7 +1119,7 @@ export const DepartmentHeadPortal: React.FC = () => {
 
       return true;
     });
-  }, [departmentComplaints, isMapView, mapLayerTab, isOverdue, overdueDurationFilter, isCompleted, reviewStatusTab, isInProgress, isAssignWorkspace, assignmentTab, isComplaints, statusFilter, priorityFilter, categoryFilter, staffFilter, slaFilter, searchQuery, now]);
+  }, [departmentComplaints, isMapView, mapLayerTab, isOverdue, overdueDurationFilter, isCompleted, reviewStatusTab, isInProgress, inProgressSection, isAssignWorkspace, assignmentTab, isComplaints, statusFilter, priorityFilter, categoryFilter, staffFilter, slaFilter, searchQuery, now]);
 
   // Split Map Complaints
   const { mapPlottableComplaints, mapNoLocationComplaints } = useMemo(() => {

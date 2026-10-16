@@ -35,14 +35,12 @@ function getSupabaseClient() {
     process.env.SUPABASE_ANON_KEY ||
     process.env.VITE_SUPABASE_ANON_KEY;
 
-  const fallbackUrl = 'https://ozeiymkbxtrqqdoxtmhm.supabase.co';
-  const fallbackKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96ZWl5bWtieHRycXFkb3h0bWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyMjk1MzEsImV4cCI6MjEwMjgwNTUzMX0.6nQemY46XsG89kK5f_ONpAvrmI_buXX-VlpgLRY_sqs';
-
-  const resolvedUrl = (url && !url.includes('placeholder')) ? url : fallbackUrl;
-  const resolvedKey = (key && !key.includes('placeholder')) ? key : fallbackKey;
+  if (!url || !key || url.includes('placeholder') || key.includes('placeholder')) {
+    return null;
+  }
 
   try {
-    supabaseClientInstance = createClient(resolvedUrl, resolvedKey, {
+    supabaseClientInstance = createClient(url.trim(), key.trim(), {
       auth: {
         persistSession: false,
         autoRefreshToken: false,
@@ -77,6 +75,7 @@ function generateToken(user) {
 const DEMO_USER_TOKENS = {
   'demo-token-citizen': {
     id: 'e2a4338c-5d49-4ae3-b766-40d99fb26f87',
+    legacy_id: 58,
     name: 'Pratik Dilip Tupe',
     mobile: '8788562103',
     email: 'citizen8788@nagarsetu.gov.in',
@@ -467,5 +466,6 @@ module.exports = {
   optionalAuthenticateToken,
   requireRole,
   normalizeRole,
-  getSupabaseClient
+  getSupabaseClient,
+  DEMO_USER_TOKENS
 };

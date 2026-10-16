@@ -141,7 +141,7 @@ export const StaffCompletedTasksPage: React.FC = () => {
     loadData();
   }, [loadData]));
 
-  const now = new Date();
+  const now = useMemo(() => new Date(), []);
 
   // Filter ONLY completed tasks
   const completedListAll = useMemo(() => {

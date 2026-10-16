@@ -3,8 +3,21 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const { query } = require('../config/db');
 const { generateToken, authenticateToken, getSupabaseClient } = require('../middleware/auth');
+const crypto = require('crypto');
 const validateInput = require('../middleware/validateInput');
 const { registerSchema, loginSchema, otpRequestSchema, otpVerifySchema } = require('../schemas/auth.schemas');
+
+// Ephemeral in-memory OTP store (mobile -> { otp, expiresAt, attempts })
+const otpStore = new Map();
+const otpCleanupTimer = setInterval(() => {
+  const now = Date.now();
+  for (const [key, record] of otpStore.entries()) {
+    if (record.expiresAt < now) {
+      otpStore.delete(key);
+    }
+  }
+}, 5 * 60 * 1000);
+if (otpCleanupTimer.unref) otpCleanupTimer.unref();
 
 // Register endpoint (Public registration strictly creates citizen accounts only)
 router.post('/register', validateInput(registerSchema), async (req, res) => {
@@ -218,10 +231,30 @@ router.post('/login', validateInput(loginSchema), async (req, res) => {
 // OTP Request
 router.post('/otp-request', validateInput(otpRequestSchema), (req, res) => {
   const { mobile } = req.body;
-  const isDev = process.env.NODE_ENV !== 'production';
-  const responseData = { message: 'OTP sent successfully to ' + mobile };
-  if (isDev) {
-    responseData.demoOtp = '123456';
+  const cleanMobile = String(mobile).trim();
+  const isProd = process.env.NODE_ENV === 'production';
+  const isTest = process.env.NODE_ENV === 'test';
+
+  if (isProd && !process.env.SMS_GATEWAY_API_KEY) {
+    return res.status(501).json({
+      error: 'Live SMS OTP gateway is not configured for production. Please log in using your registered mobile/email and password.'
+    });
+  }
+
+  // Generate a cryptographically secure 6-digit OTP
+  const generatedOtp = crypto.randomInt(100000, 1000000).toString();
+  otpStore.set(cleanMobile, {
+    otp: generatedOtp,
+    expiresAt: Date.now() + 5 * 60 * 1000, // 5 min TTL
+    attempts: 0
+  });
+
+  const responseData = { message: 'OTP sent successfully to ' + cleanMobile };
+  if (!isProd) {
+    if (isTest || process.env.EXPOSE_TEST_OTP === 'true') {
+      responseData.testOtp = generatedOtp;
+    }
+    console.log(`[AUTH DEV SMS SIMULATOR] Dynamic OTP for ${cleanMobile}: ${generatedOtp}`);
   }
   return res.json(responseData);
 });
@@ -230,36 +263,44 @@ router.post('/otp-request', validateInput(otpRequestSchema), (req, res) => {
 router.post('/otp-verify', validateInput(otpVerifySchema), async (req, res) => {
   try {
     const { mobile, otp } = req.body;
-    const isDev = process.env.NODE_ENV !== 'production';
+    const cleanMobile = String(mobile).trim();
+    const isProd = process.env.NODE_ENV === 'production';
 
-    if (!isDev) {
+    if (isProd && !process.env.SMS_GATEWAY_API_KEY) {
       return res.status(501).json({
         error: 'Live SMS OTP gateway is not configured for production. Please log in using your registered mobile/email and password.'
       });
     }
 
-    if (otp !== '123456') {
+    const record = otpStore.get(cleanMobile);
+    if (!record) {
+      return res.status(400).json({ error: 'No OTP requested or OTP has expired. Please request a new OTP.' });
+    }
+
+    if (Date.now() > record.expiresAt) {
+      otpStore.delete(cleanMobile);
+      return res.status(400).json({ error: 'OTP has expired. Please request a new OTP.' });
+    }
+
+    if (record.attempts >= 3) {
+      otpStore.delete(cleanMobile);
+      return res.status(429).json({ error: 'Too many invalid attempts. Please request a new OTP.' });
+    }
+
+    if (String(otp).trim() !== record.otp) {
+      record.attempts += 1;
       return res.status(400).json({ error: 'Invalid OTP code' });
     }
 
+    // OTP is valid - consume immediately to prevent replay attacks
+    otpStore.delete(cleanMobile);
+
     const sql = `SELECT * FROM users WHERE mobile = ?`;
-    const resUser = await query(sql, [mobile]);
-    
+    const resUser = await query(sql, [cleanMobile]);
+
     if (resUser.rows && resUser.rows.length > 0) {
       const user = resUser.rows[0];
       const userObj = { id: user.id, name: user.name, mobile: user.mobile, email: user.email, role: user.role, language_pref: user.language_pref };
-      const token = generateToken(userObj);
-      if (res.clearAuthAttempts) res.clearAuthAttempts();
-      return res.json({ message: 'OTP verified successfully', token, user: userObj });
-    } else if (String(mobile).trim() === '8788562103') {
-      const userObj = {
-        id: 'e2a4338c-5d49-4ae3-b766-40d99fb26f87',
-        name: 'Pratik Dilip Tupe',
-        mobile: '8788562103',
-        email: 'citizen8788@nagarsetu.gov.in',
-        role: 'citizen',
-        language_pref: 'en'
-      };
       const token = generateToken(userObj);
       if (res.clearAuthAttempts) res.clearAuthAttempts();
       return res.json({ message: 'OTP verified successfully', token, user: userObj });
@@ -439,7 +480,7 @@ const handleProfileUpdate = async (req, res) => {
       try {
         const ins = await query(
           'INSERT INTO users (name, mobile, email, password_hash, role, language_pref, address, residential_address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-          [updatedName, authUser.mobile || '8788562103', (authUser.email || '').toLowerCase() || null, 'oauth_or_demo_hash', 'citizen', updatedLang, updatedAddress, updatedAddress]
+          [updatedName, authUser.mobile || null, (authUser.email || '').toLowerCase() || null, 'oauth_or_demo_hash', 'citizen', updatedLang, updatedAddress, updatedAddress]
         );
         const newId = ins.rows && ins.rows[0] ? ins.rows[0].id : authUser.id;
         userRow = { id: newId, role: 'citizen', email: authUser.email, mobile: authUser.mobile };
@@ -505,7 +546,7 @@ router.post('/demo-token', (req, res) => {
   let userObj;
   if (role === 'citizen') {
     userObj = {
-      id: 'e2a4338c-5d49-4ae3-b766-40d99fb26f87',
+      id: 58,
       name: 'Pratik Dilip Tupe',
       mobile: '8788562103',
       email: 'citizen8788@nagarsetu.gov.in',

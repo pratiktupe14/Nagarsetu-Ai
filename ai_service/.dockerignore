@@ -1,12 +1,37 @@
+# Python & bytecode caches
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
 .venv/
 venv/
+env/
+
+# Testing & Coverage
 .pytest_cache/
 .coverage
 htmlcov/
-*.log
 tests/
 test_*.py
+test_*.jpg
+test_*.js
+
+# Local Training, Datasets & Scratch Files
 data/
+training/
+temp_extract/
+scratch/
+train_*.py
+runs/
+
+# Environment files & Local Overrides (Never package secrets into images)
+.env
+.env.*
+!.env.example
+
+# Deployment metadata not needed in container
+vercel.json
+pyproject.toml
+
+# Logs
+*.log

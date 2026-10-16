@@ -11,7 +11,7 @@ const { authenticateToken } = require('../middleware/auth');
  * GET /api/ai/health
  */
 router.get('/health', async (req, res) => {
-  const raw = (process.env.PYTHON_AI_URL || 'http://localhost:8000/analyze').trim().replace(/\/+$/, '');
+  const raw = (process.env.PYTHON_AI_URL || process.env.AI_SERVICE_URL || 'http://localhost:8000/analyze').trim().replace(/\/+$/, '');
   const baseUrl = raw.endsWith('/analyze') ? raw.slice(0, -'/analyze'.length) : raw;
   const baseHealthUrl = `${baseUrl}/health`;
 
@@ -22,8 +22,9 @@ router.get('/health', async (req, res) => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 2000);
     const headers = {};
-    if (process.env.AI_INTERNAL_API_KEY) {
-      headers['X-Internal-API-Key'] = process.env.AI_INTERNAL_API_KEY;
+    const apiKey = process.env.AI_INTERNAL_API_KEY || process.env.AI_SERVICE_API_KEY;
+    if (apiKey) {
+      headers['X-Internal-API-Key'] = apiKey;
     }
     const healthRes = await fetch(baseHealthUrl, { signal: controller.signal, headers });
     clearTimeout(timeoutId);

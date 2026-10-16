@@ -172,7 +172,7 @@ export const StaffTaskMapPage: React.FC = () => {
     loadTasks();
   }, [loadTasks]));
 
-  const now = new Date();
+  const now = useMemo(() => new Date(), []);
 
   // Metrics Bar
   const metrics = useMemo(() => {

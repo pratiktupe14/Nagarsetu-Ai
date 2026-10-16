@@ -238,7 +238,7 @@ export const StaffPortal: React.FC = () => {
     loadData();
   }, [loadData]));
 
-  const now = new Date();
+  const now = useMemo(() => new Date(), []);
 
   // Greeting Time of Day
   const greetingTime = useMemo(() => {

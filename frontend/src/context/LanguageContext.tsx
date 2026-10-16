@@ -52,17 +52,18 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   useEffect(() => {
     const savedLocal = localStorage.getItem('nagarsetu_lang') as SupportedLanguage;
     if (savedLocal && ['en', 'hi', 'mr'].includes(savedLocal)) {
-      if (savedLocal !== lang) {
-        setLang(savedLocal);
-      }
+      setLang((current) => (savedLocal !== current ? savedLocal : current));
       return;
     }
     if (user?.language_pref && ['en', 'hi', 'mr'].includes(user.language_pref)) {
       const userLang = user.language_pref as SupportedLanguage;
-      if (userLang !== lang) {
-        setLang(userLang);
-        localStorage.setItem('nagarsetu_lang', userLang);
-      }
+      setLang((current) => {
+        if (userLang !== current) {
+          localStorage.setItem('nagarsetu_lang', userLang);
+          return userLang;
+        }
+        return current;
+      });
     }
   }, [user?.id, user?.language_pref]);
 
