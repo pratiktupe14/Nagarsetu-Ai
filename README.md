@@ -19,7 +19,6 @@ The platform provides dedicated, role-specific portals for:
 - **Department Heads (HODs):** Review triage recommendations, allocate tasks to field crews, manage departmental workforce, and verify resolution evidence.
 - **Field Maintenance Staff:** Mobile-first dashboard for navigation, work status updates, and photographic "After" resolution evidence capture.
 - **City Administrators:** Executive macro-analytics, cross-department SLA timers, ward-level heatmaps, and staff directory oversight.
-- **Super Administrators (System Engineers):** Centralized health monitoring, audit log inspection, emergency complaint correction, and blockchain ledger integrity.
 
 ### Intended Core Lifecycle vs. Operational Reality
 
@@ -74,7 +73,6 @@ Every feature in NAGARSETU 3.1 is classified below based on current repository e
 | **Resolution Verification Gate** | Two-step closure requiring photographic "After" evidence and supervisory approval | **Implemented & Verified** | `POST /api/department/verify` and `POST /api/staff/task/:id/resolve`, tested in [`backend/tests/test_hod_verify.js`](file:///d:/NAGARSETU/NAGARSETU%203.1/backend/tests/test_hod_verify.js) |
 | **Duplicate Issue Clustering** | Haversine spatial radius check (100m) flagging duplicate complaints before submission | **Implemented & Verified** | [`backend/src/services/locationService.js`](file:///d:/NAGARSETU/NAGARSETU%203.1/backend/src/services/locationService.js), [`backend/tests/duplicate_detection_merge.test.js`](file:///d:/NAGARSETU/NAGARSETU%203.1/backend/tests/duplicate_detection_merge.test.js) |
 | **Multilingual UI (i18n)** | Trilingual support: English (`en`), Hindi (`hi`), and Marathi (`mr`) across all views | **Implemented & Verified** | [`frontend/src/context/LanguageContext.tsx`](file:///d:/NAGARSETU/NAGARSETU%203.1/frontend/src/context/LanguageContext.tsx), [`frontend/src/utils/i18n.ts`](file:///d:/NAGARSETU/NAGARSETU%203.1/frontend/src/utils/i18n.ts) |
-| **Developer Super Admin Console** | Emergency administrative oversight, system health diagnostics, and audit logs | **Implemented & Verified** | [`frontend/src/pages/developer/SuperAdminConsolePage.tsx`](file:///d:/NAGARSETU/NAGARSETU%203.1/frontend/src/pages/developer/SuperAdminConsolePage.tsx), [`backend/src/routes/superAdmin.routes.js`](file:///d:/NAGARSETU/NAGARSETU%203.1/backend/src/routes/superAdmin.routes.js) |
 | **Citizen Star-Rating Feedback** | 1 to 5-star ratings and textual feedback upon resolution | **Implemented & Verified** | `POST /api/complaints/:id/feedback`, tested in [`backend/tests/citizen_feedback_visibility.test.js`](file:///d:/NAGARSETU/NAGARSETU%203.1/backend/tests/citizen_feedback_visibility.test.js) |
 | **In-App Citizen Notifications** | In-app notification inbox on ticket status transitions | **Implemented & Verified** | [`backend/src/routes/notification.routes.js`](file:///d:/NAGARSETU/NAGARSETU%203.1/backend/src/routes/notification.routes.js), [`frontend/src/pages/citizen/CitizenNotificationsPage.tsx`](file:///d:/NAGARSETU/NAGARSETU%203.1/frontend/src/pages/citizen/CitizenNotificationsPage.tsx) |
 | **Cellular SMS Gateway** | Real-time SMS text dispatch on status transitions | **Implemented but Not Fully Verified** | Code structure in place; dev environment uses SMS console simulator; requires live `SMS_GATEWAY_API_KEY` for carrier delivery |
@@ -137,7 +135,7 @@ flowchart TD
         CitizenApp["Citizen Portal (React + Vite)"]
         StaffApp["Field Staff Portal"]
         DeptHeadApp["Department Head Portal"]
-        AdminApp["Admin & Super Admin Portal"]
+        AdminApp["City Administrator Portal"]
     end
 
     subgraph BackendLayer ["Application Layer (Node.js / Express API :5000)"]
@@ -287,7 +285,6 @@ NAGARSETU 3.1/
 │   │   ├── middleware/
 │   │   │   ├── auth.js          # JWT verification, Supabase claims, & RBAC
 │   │   │   ├── rateLimiter.js   # Exponential backoff & endpoint rate limiters
-│   │   │   ├── superAdminAuth.js# Developer Super Admin security gate
 │   │   │   └── upload.js        # Multer & magic-byte binary security validator
 │   │   ├── routes/              # Express API route modules
 │   │   │   ├── admin.routes.js
@@ -297,8 +294,7 @@ NAGARSETU 3.1/
 │   │   │   ├── department.routes.js
 │   │   │   ├── maps.routes.js
 │   │   │   ├── notification.routes.js
-│   │   │   ├── staff.routes.js
-│   │   │   └── superAdmin.routes.js
+│   │   │   └── staff.routes.js
 │   │   ├── schemas/             # Joi input validation schemas
 │   │   ├── scripts/             # Data seeds (7 Department Heads, 35 Service Staff)
 │   │   └── services/            # Business logic (aiService, locationService, riskMatrix)
@@ -313,7 +309,6 @@ NAGARSETU 3.1/
 │   │   │   ├── admin/           # City Admin dashboard, analytics, heatmaps
 │   │   │   ├── citizen/         # Issue reporting, tracking, notification inbox
 │   │   │   ├── departmentHead/  # Staff management, task assignment, verification
-│   │   │   ├── developer/       # Super Admin system control console
 │   │   │   └── staff/           # Mobile task dashboard, GPS navigation, resolution upload
 │   │   ├── services/            # Client-side API abstractions
 │   │   └── utils/               # i18n translation dictionaries (en, hi, mr)
@@ -485,7 +480,6 @@ The local development seed script pre-populates credentialed test accounts acros
 | **Traffic Head** | `rohan.deshmukh@nagarsetu.gov.in` (`+91 9822000006`) | `password123` | Signal Failures, Zebra Crossing & Road Signs |
 | **Maintenance Head** | `kunal.kulkarni@nagarsetu.gov.in` (`+91 9822000007`) | `password123` | Public Parks, Civic Property Hazards |
 | **PWD Field Staff** | `9822010001` (Amit Patil - `PWD-STF-001`) | `password123` | Field Task List, Google Maps Routing, Resolution Photo Upload |
-| **Super Admin (Dev)** | Accessible via `/developer/super-admin` | Enforced via `.env` | System Health, Audit History Diffs, Emergency Corrections |
 
 ### Test Execution & Verified Results
 
@@ -525,7 +519,7 @@ NAGARSETU 3.1 implements defense-in-depth protections across all layers:
    * Fixed 8-hour token expiration with automatic expiration rejection (`TokenExpiredError` handled).
    * Password storage hashed using `bcryptjs` with salt work factor 10.
 2. **Role-Based Access Control (RBAC):**
-   * Multi-level role normalization (`citizen`, `city_admin`, `department_head`, `service_staff`, `super_admin`).
+   * Multi-level role normalization (`citizen`, `city_admin`, `department_head`, `service_staff`).
    * Authoritative database role resolution ensures clients cannot escalate privileges by tampering with token payload claims.
    * Cross-department isolation guarantees that department heads and field crews can only view and update tasks matching their assigned `department_id`.
 3. **OTP Lifecycle Security:**
@@ -546,10 +540,6 @@ NAGARSETU 3.1 implements defense-in-depth protections across all layers:
    * Maximum upload size strictly capped at 10 MB.
    * Allowed MIME types restricted to JPEG, PNG, WebP, and AVIF.
    * **Magic Byte Binary Inspection:** Checks initial binary signatures (`\xff\xd8\xff` for JPEG, `\x89PNG` for PNG, `RIFF...WEBP` for WebP) to prevent malicious executable files masked with image extensions.
-7. **Developer Super Admin Security:**
-   * Dedicated HTTP Basic / Bearer authentication gate.
-   * All mutating actions logged in `audit_logs` with before-and-after JSON diffs.
-   * Destructive actions require explicit textual confirmation tokens.
 
 ---
 
