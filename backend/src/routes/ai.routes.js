@@ -22,7 +22,7 @@ router.get('/health', async (req, res) => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 2000);
     const headers = {};
-    const apiKey = process.env.AI_INTERNAL_API_KEY || process.env.AI_SERVICE_API_KEY;
+    const apiKey = process.env.AI_INTERNAL_API_KEY || process.env.AI_SERVICE_API_KEY || process.env.INTERNAL_AI_SECRET || process.env.AI_SECRET_KEY;
     if (apiKey) {
       headers['X-Internal-API-Key'] = apiKey;
     }

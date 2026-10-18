@@ -1,8 +1,44 @@
+# Dependencies & VCS
 node_modules
+**/node_modules
 .git
 .github
+
+# AI Microservice (Containerized for Render / Cloud Run; exceeds Vercel 500MB function limit)
+ai_service
+
+# Testing, local fixtures & caches
 tests
 backend/tests
+ai_service/tests
+.pytest_cache
+**/__pycache__
+*.pyc
+
+# Local runtime data, databases & uploads
 *.sqlite
-backend/nagarsetu.sqlite*
+*.sqlite-journal
+backend/*.sqlite*
+backend/uploads
+
+# Training artifacts & temporary caches
+runs
+**/runs
+scratch
+ai_service/temp_extract
+ai_service/scratch
+
+# Development, architecture & offline tools
+blockchain
+supabase
+docs
+.agents
+.superpowers
+.gsd
+
+# Logs & environment overrides
 *.log
+.env
+.env.*
+!.env.example
+

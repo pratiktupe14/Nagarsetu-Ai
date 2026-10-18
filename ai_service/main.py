@@ -56,10 +56,18 @@ app.add_middleware(
 
 
 async def verify_internal_api_key(x_internal_api_key: Optional[str] = Header(None, alias="X-Internal-API-Key")):
-    expected_key = os.getenv("AI_INTERNAL_API_KEY")
+    expected_key = (
+        os.getenv("AI_INTERNAL_API_KEY")
+        or os.getenv("INTERNAL_AI_SECRET")
+        or os.getenv("AI_SECRET_KEY")
+        or os.getenv("AI_SERVICE_API_KEY")
+    )
     is_prod = os.getenv("ENVIRONMENT") == "production" or os.getenv("NODE_ENV") == "production"
     if is_prod and not expected_key:
-        raise HTTPException(status_code=500, detail="Server security misconfiguration: AI_INTERNAL_API_KEY must be set in production")
+        raise HTTPException(
+            status_code=500,
+            detail="Server security misconfiguration: AI_INTERNAL_API_KEY / INTERNAL_AI_SECRET must be set in production"
+        )
     if not expected_key:
         return True
     if not x_internal_api_key or not secrets.compare_digest(x_internal_api_key, expected_key):

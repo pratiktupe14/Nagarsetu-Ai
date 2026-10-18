@@ -21,7 +21,7 @@ async function postToPythonService(endpoint, body) {
     const url = `${baseUrl}${cleanEndpoint}`;
 
     const headers = { 'Content-Type': 'application/json' };
-    const apiKey = process.env.AI_INTERNAL_API_KEY || process.env.AI_SERVICE_API_KEY;
+    const apiKey = process.env.AI_INTERNAL_API_KEY || process.env.AI_SERVICE_API_KEY || process.env.INTERNAL_AI_SECRET || process.env.AI_SECRET_KEY;
     if (apiKey) {
       headers['X-Internal-API-Key'] = apiKey;
     }

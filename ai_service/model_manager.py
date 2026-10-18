@@ -24,6 +24,49 @@ _drainage_meta = None
 _models_loaded = False
 
 
+import torch
+import torch.nn as nn
+import torchvision.models as models
+
+
+class WaterPipeClassifier(nn.Module):
+    """
+    Lightweight, high-accuracy transfer-learning model based on MobileNetV3-Small
+    for real-time civic pipe condition classification.
+    """
+    def __init__(self, num_classes=3, pretrained=False):
+        super(WaterPipeClassifier, self).__init__()
+        if pretrained:
+            weights = models.MobileNet_V3_Small_Weights.DEFAULT
+            self.backbone = models.mobilenet_v3_small(weights=weights)
+        else:
+            self.backbone = models.mobilenet_v3_small(weights=None)
+        in_features = self.backbone.classifier[3].in_features
+        self.backbone.classifier[3] = nn.Linear(in_features, num_classes)
+
+    def forward(self, x):
+        return self.backbone(x)
+
+
+class DrainageClassifier(nn.Module):
+    """
+    Lightweight, high-accuracy transfer-learning model based on MobileNetV3-Small
+    for real-time civic drainage condition classification.
+    """
+    def __init__(self, num_classes=3, pretrained=False):
+        super(DrainageClassifier, self).__init__()
+        if pretrained:
+            weights = models.MobileNet_V3_Small_Weights.DEFAULT
+            self.backbone = models.mobilenet_v3_small(weights=weights)
+        else:
+            self.backbone = models.mobilenet_v3_small(weights=None)
+        in_features = self.backbone.classifier[3].in_features
+        self.backbone.classifier[3] = nn.Linear(in_features, num_classes)
+
+    def forward(self, x):
+        return self.backbone(x)
+
+
 def load_models():
     """
     Loads YOLOv8 and water pipe models once at startup.
@@ -65,8 +108,6 @@ def load_models():
     print("[AI] Loading water_pipe_model.pt")
     if os.path.exists(WATER_PIPE_MODEL_PATH):
         try:
-            import torch
-            from ai_service.train_pipe_model import WaterPipeClassifier
             checkpoint = torch.load(WATER_PIPE_MODEL_PATH, map_location="cpu")
             num_cls = checkpoint.get("num_classes", 3)
             pipe_mod = WaterPipeClassifier(num_classes=num_cls)
@@ -86,8 +127,6 @@ def load_models():
     print("[AI] Loading drainage_model.pt")
     if os.path.exists(DRAINAGE_MODEL_PATH):
         try:
-            import torch
-            from ai_service.train_drainage_model import DrainageClassifier
             checkpoint = torch.load(DRAINAGE_MODEL_PATH, map_location="cpu")
             num_cls = checkpoint.get("num_classes", 3)
             drain_mod = DrainageClassifier(num_classes=num_cls)

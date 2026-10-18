@@ -23,6 +23,12 @@ temp_extract/
 scratch/
 train_*.py
 runs/
+model/*_v*.pt
+model/*.baseline.pt
+model/garbage_waste_model_v2.pt
+model/road_damage_model_v2.pt
+model/road_damage_model_v3.pt
+
 
 # Environment files & Local Overrides (Never package secrets into images)
 .env

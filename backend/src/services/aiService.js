@@ -116,7 +116,7 @@ async function callLocalAiService(fileBuffer, mimeType, originalName, domain = n
 
   try {
     const headers = {};
-    const apiKey = process.env.AI_INTERNAL_API_KEY || process.env.AI_SERVICE_API_KEY;
+    const apiKey = process.env.AI_INTERNAL_API_KEY || process.env.AI_SERVICE_API_KEY || process.env.INTERNAL_AI_SECRET || process.env.AI_SECRET_KEY;
     if (apiKey) {
       headers['X-Internal-API-Key'] = apiKey;
     }
