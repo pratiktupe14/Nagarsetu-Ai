@@ -1,16 +1,27 @@
 const { createClient } = require('@supabase/supabase-js');
 
 function getValidSupabaseConfig() {
-  const envUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || process.env.PUBLIC_SUPABASE_URL;
-  const envKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+  const envUrl = (
+    process.env.SUPABASE_URL ||
+    process.env.VITE_SUPABASE_URL ||
+    process.env.PUBLIC_SUPABASE_URL ||
+    ''
+  ).trim();
 
-  const validUrl = (envUrl && !envUrl.includes('your-supabase') && !envUrl.includes('placeholder') && !envUrl.includes('example'))
+  const envKey = (
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_ANON_KEY ||
+    process.env.VITE_SUPABASE_ANON_KEY ||
+    ''
+  ).trim();
+
+  const validUrl = (envUrl && !envUrl.includes('your-supabase') && !envUrl.includes('your-project') && !envUrl.includes('placeholder') && !envUrl.includes('example'))
     ? envUrl
-    : 'https://ozeiymkbxtrqqdoxtmhm.supabase.co';
+    : '';
 
-  const validKey = (envKey && !envKey.includes('your_supabase') && !envKey.includes('placeholder') && !envKey.includes('here') && envKey.length > 50)
+  const validKey = (envKey && !envKey.includes('your_supabase') && !envKey.includes('your-supabase') && !envKey.includes('your_service_role') && !envKey.includes('placeholder') && !envKey.includes('here') && envKey.length > 20)
     ? envKey
-    : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96ZWl5bWtieHRycXFkb3h0bWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyMjk1MzEsImV4cCI6MjEwMjgwNTUzMX0.6nQemY46XsG89kK5f_ONpAvrmI_buXX-VlpgLRY_sqs';
+    : '';
 
   return { url: validUrl, key: validKey };
 }
@@ -18,16 +29,18 @@ function getValidSupabaseConfig() {
 const { url: supabaseUrl, key: supabaseKey } = getValidSupabaseConfig();
 
 let supabase = null;
-try {
-  supabase = createClient(supabaseUrl, supabaseKey, {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false,
-      detectSessionInUrl: false
-    }
-  });
-} catch (e) {
-  console.warn('[SUPABASE STORAGE] Initialization note:', e.message);
+if (supabaseUrl && supabaseKey) {
+  try {
+    supabase = createClient(supabaseUrl, supabaseKey, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false
+      }
+    });
+  } catch (e) {
+    console.warn('[SUPABASE STORAGE] Initialization note:', e.message);
+  }
 }
 
 /**
