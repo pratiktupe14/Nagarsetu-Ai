@@ -67,7 +67,7 @@ jobs:
 
       - name: Run AI Unit & Endpoint Tests
         run: |
-          pytest ai_service/tests/test_pipe_ai.py ai_service/tests/test_clean_road_verification.py -v || true
+          pytest ai_service/tests/test_pipe_ai.py ai_service/tests/test_clean_road_verification.py -v
         env:
           PYTHONPATH: .
           AI_INTERNAL_API_KEY: ci_test_internal_ai_key_2026

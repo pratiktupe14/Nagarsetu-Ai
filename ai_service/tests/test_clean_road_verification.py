@@ -93,11 +93,15 @@ class TestCleanRoadAIVerification(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         load_models()
+        fixtures_dir = os.path.join(os.path.dirname(__file__), "fixtures")
+        fixture_pothole = os.path.join(fixtures_dir, "real_pothole.jpg")
         cls.uploads_dir = os.path.join(os.path.dirname(__file__), "..", "..", "backend", "uploads")
         cls.real_pothole_path = os.path.join(cls.uploads_dir, "060423ab-81c3-4f4a-a6ab-0449404db247.jpg")
         
-        # Verify pothole image exists
-        if not os.path.exists(cls.real_pothole_path):
+        # Verify pothole image exists (priority: tracked fixture -> backend uploads)
+        if os.path.exists(fixture_pothole):
+            cls.real_pothole_path = fixture_pothole
+        elif not os.path.exists(cls.real_pothole_path):
             cls.real_pothole_path = os.path.join(cls.uploads_dir, "test-pothole.jpg")
         cls.assertTrue(os.path.exists(cls.real_pothole_path), "Pothole test image must exist")
 
