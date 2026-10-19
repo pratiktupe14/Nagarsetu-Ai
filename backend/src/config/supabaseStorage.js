@@ -1,31 +1,33 @@
 const { createClient } = require('@supabase/supabase-js');
 
-const supabaseUrl =
-  process.env.SUPABASE_URL ||
-  process.env.VITE_SUPABASE_URL ||
-  process.env.PUBLIC_SUPABASE_URL ||
-  '';
+function getValidSupabaseConfig() {
+  const envUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || process.env.PUBLIC_SUPABASE_URL;
+  const envKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
 
-const supabaseKey =
-  process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  process.env.SUPABASE_ANON_KEY ||
-  process.env.VITE_SUPABASE_ANON_KEY ||
-  '';
+  const validUrl = (envUrl && !envUrl.includes('your-supabase') && !envUrl.includes('placeholder') && !envUrl.includes('example'))
+    ? envUrl
+    : 'https://ozeiymkbxtrqqdoxtmhm.supabase.co';
+
+  const validKey = (envKey && !envKey.includes('your_supabase') && !envKey.includes('placeholder') && !envKey.includes('here') && envKey.length > 50)
+    ? envKey
+    : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96ZWl5bWtieHRycXFkb3h0bWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyMjk1MzEsImV4cCI6MjEwMjgwNTUzMX0.6nQemY46XsG89kK5f_ONpAvrmI_buXX-VlpgLRY_sqs';
+
+  return { url: validUrl, key: validKey };
+}
+
+const { url: supabaseUrl, key: supabaseKey } = getValidSupabaseConfig();
 
 let supabase = null;
-
-if (supabaseUrl && supabaseKey && !supabaseUrl.includes('placeholder')) {
-  try {
-    supabase = createClient(supabaseUrl, supabaseKey, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-        detectSessionInUrl: false
-      }
-    });
-  } catch (e) {
-    console.warn('[SUPABASE STORAGE] Initialization note:', e.message);
-  }
+try {
+  supabase = createClient(supabaseUrl, supabaseKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false
+    }
+  });
+} catch (e) {
+  console.warn('[SUPABASE STORAGE] Initialization note:', e.message);
 }
 
 /**

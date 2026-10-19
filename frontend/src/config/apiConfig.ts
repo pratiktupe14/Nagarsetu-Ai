@@ -5,14 +5,30 @@
 export const getApiUrl = (): string => {
   const isBrowser = typeof window !== 'undefined';
   const isLocalhost = isBrowser && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  const envUrl = (import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || '').trim().replace(/\/$/, '');
+  const rawEnvUrl = (import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || '').trim();
 
-  // In production browser environments, ignore any localhost URL and use same-origin relative /api
+  // Normalize protocol & strip trailing slash and optional trailing /api
+  let envUrl = rawEnvUrl;
+  if (envUrl && !envUrl.startsWith('http://') && !envUrl.startsWith('https://')) {
+    envUrl = `https://${envUrl}`;
+  }
+  envUrl = envUrl.replace(/\/+$/, '').replace(/\/api$/, '');
+
+  // In production browser environments (Vercel):
   if (isBrowser && !isLocalhost) {
-    if (!envUrl || envUrl.includes('localhost') || envUrl.includes('127.0.0.1')) {
-      return '';
+    // If an invalid localhost URL is provided, ignore it
+    if (envUrl && (envUrl.includes('localhost') || envUrl.includes('127.0.0.1'))) {
+      envUrl = '';
     }
-    return envUrl;
+    // Return verified production backend if envUrl is set
+    if (envUrl) {
+      return envUrl;
+    }
+    // Verified production fallback when running on Vercel frontend
+    if (window.location.hostname.includes('vercel.app')) {
+      return 'https://backend-teal-omega-46.vercel.app';
+    }
+    return '';
   }
 
   // Local development

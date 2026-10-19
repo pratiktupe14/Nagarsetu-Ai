@@ -64,9 +64,26 @@ function resolveAllowedOrigins() {
       .filter(Boolean)
       .forEach((s) => list.push(s));
   }
-  if (isDev) {
-    list.push('http://localhost:3000', 'http://localhost:5173', 'http://localhost:4173', 'http://127.0.0.1:3000', 'http://127.0.0.1:5173', 'http://127.0.0.1:4173');
-  }
+  // Authorized production and preview frontends
+  const prodFrontendOrigins = [
+    'https://nagarsetu-ai-pi.vercel.app',
+    'https://nagarsetu-ai.vercel.app'
+  ];
+  prodFrontendOrigins.forEach((o) => {
+    if (!list.includes(o)) list.push(o);
+  });
+  // Authorized local development origins (allows localhost to connect to production API)
+  const devOrigins = [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'http://localhost:4173',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:4173'
+  ];
+  devOrigins.forEach((o) => {
+    if (!list.includes(o)) list.push(o);
+  });
   return list;
 }
 
@@ -80,7 +97,12 @@ app.use(cors({
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
-    if (isDev && (/^http:\/\/localhost:\d+$/.test(origin) || /^http:\/\/127\.0\.0\.1:\d+$/.test(origin) || /^http:\/\/\[::1\]:\d+$/.test(origin) || origin.includes('localhost') || origin.includes('127.0.0.1') || origin.includes('[::1]'))) {
+    // Allow local development ports
+    if (/^http:\/\/localhost:\d+$/.test(origin) || /^http:\/\/127\.0\.0\.1:\d+$/.test(origin) || /^http:\/\/\[::1\]:\d+$/.test(origin)) {
+      return callback(null, true);
+    }
+    // Allow official Vercel preview/production deployments of nagarsetu-ai
+    if (/^https:\/\/nagarsetu-ai(-[a-z0-9-]+)?\.vercel\.app$/.test(origin)) {
       return callback(null, true);
     }
     if (isDev) {
