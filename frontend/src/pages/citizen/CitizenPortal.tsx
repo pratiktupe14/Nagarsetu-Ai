@@ -35,7 +35,7 @@ export const CitizenPortal: React.FC = () => {
   const [maintenanceWorks, setMaintenanceWorks] = useState<MaintenanceWork[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [activeFilter, setActiveFilter] = useState<'All' | 'Pending' | 'In Progress' | 'Resolved' | 'Reopened'>('All');
+  const [activeFilter, setActiveFilter] = useState<'All' | 'Pending' | 'In Progress' | 'Resolved' | 'Reopened' | 'Rejected'>('All');
   const [offlineDraftsCount, setOfflineDraftsCount] = useState(0);
 
   const loadComplaints = useCallback(async (opts?: boolean | React.MouseEvent) => {
@@ -44,10 +44,7 @@ export const CitizenPortal: React.FC = () => {
     setErrorMsg(null);
     try {
       const [list, anns, works] = await Promise.all([
-        getCitizenComplaints(user?.id || '').catch((e) => {
-          console.warn('CitizenPortal getCitizenComplaints caught:', e);
-          return [];
-        }),
+        getCitizenComplaints(user?.id || ''),
         getOfficialAnnouncements().catch((e) => {
           console.warn('CitizenPortal getOfficialAnnouncements caught:', e);
           return [];
@@ -62,6 +59,7 @@ export const CitizenPortal: React.FC = () => {
       setMaintenanceWorks(Array.isArray(works) ? works.slice(0, 3) : []);
     } catch (e: any) {
       console.error('Error in CitizenPortal loadComplaints:', e);
+      setErrorMsg(e?.message || 'Unable to load complaints. Please check your network connection and try again.');
       setComplaints([]);
       setAnnouncements([]);
       setMaintenanceWorks([]);
@@ -85,21 +83,30 @@ export const CitizenPortal: React.FC = () => {
     loadComplaints(false);
   }, [loadComplaints]));
 
-  // Defensive array checks
+  // Centralized status normalization to ensure mutually exclusive, exhaustive categories
+  const normalizeStatus = (status?: string): 'Pending' | 'In Progress' | 'Resolved' | 'Reopened' | 'Rejected' => {
+    const s = String(status || '').trim().toLowerCase();
+    if (['submitted', 'verified', 'approved', 'pending'].includes(s)) return 'Pending';
+    if (['department assigned', 'staff assigned', 'in progress', 'accepted', 'on the way', 'investigation'].includes(s)) return 'In Progress';
+    if (['resolved', 'resolution submitted'].includes(s)) return 'Resolved';
+    if (['reopened'].includes(s)) return 'Reopened';
+    if (['rejected'].includes(s)) return 'Rejected';
+    return 'Pending';
+  };
+
+  // Defensive array checks & authoritative metric calculations
   const safeComplaints = Array.isArray(complaints) ? complaints : [];
-  const activeCount = safeComplaints.filter((c) => c && c.status !== 'Resolved' && c.status !== 'Rejected').length;
-  const pendingCount = safeComplaints.filter((c) => c && (c.status === 'Submitted' || c.status === 'Verified' || c.status === 'Approved')).length;
-  const inProgressCount = safeComplaints.filter((c) => c && (c.status === 'Department Assigned' || c.status === 'Staff Assigned' || c.status === 'In Progress' || c.status === 'Accepted' || c.status === 'On the Way')).length;
-  const resolvedCount = safeComplaints.filter((c) => c && c.status === 'Resolved').length;
+  const totalCount = safeComplaints.length;
+  const pendingCount = safeComplaints.filter((c) => c && normalizeStatus(c.status) === 'Pending').length;
+  const inProgressCount = safeComplaints.filter((c) => c && normalizeStatus(c.status) === 'In Progress').length;
+  const resolvedCount = safeComplaints.filter((c) => c && normalizeStatus(c.status) === 'Resolved').length;
+  const reopenedCount = safeComplaints.filter((c) => c && normalizeStatus(c.status) === 'Reopened').length;
+  const rejectedCount = safeComplaints.filter((c) => c && normalizeStatus(c.status) === 'Rejected').length;
 
   const filteredComplaints = safeComplaints.filter((c) => {
     if (!c) return false;
     if (activeFilter === 'All') return true;
-    if (activeFilter === 'Pending') return c.status === 'Submitted' || c.status === 'Verified' || c.status === 'Approved';
-    if (activeFilter === 'In Progress') return c.status === 'Department Assigned' || c.status === 'Staff Assigned' || c.status === 'In Progress' || c.status === 'Accepted' || c.status === 'On the Way';
-    if (activeFilter === 'Resolved') return c.status === 'Resolved';
-    if (activeFilter === 'Reopened') return c.status === 'Reopened';
-    return true;
+    return normalizeStatus(c.status) === activeFilter;
   });
 
   // 1. ERROR STATE
@@ -223,27 +230,81 @@ export const CitizenPortal: React.FC = () => {
         </div>
 
         {/* METRICS GRID */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
           
-          <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-1">
-            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('total')}</span>
-            <div className="text-3xl font-extrabold text-gray-900 font-mono">{activeCount}</div>
-          </div>
+          <button
+            onClick={() => setActiveFilter('All')}
+            className={`p-5 rounded-2xl border text-left transition-all ${
+              activeFilter === 'All'
+                ? 'bg-gray-50 border-gray-400 ring-2 ring-gray-400/30 shadow-md'
+                : 'bg-white border-gray-200 shadow-sm hover:border-gray-300'
+            }`}
+          >
+            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider block">{t('total')}</span>
+            <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 font-mono mt-1">{totalCount}</div>
+          </button>
 
-          <div className="bg-white p-5 rounded-2xl border border-blue-200 shadow-sm space-y-1">
-            <span className="text-xs font-semibold text-blue-700 uppercase tracking-wider">{t('pending')}</span>
-            <div className="text-3xl font-extrabold text-blue-700 font-mono">{pendingCount}</div>
-          </div>
+          <button
+            onClick={() => setActiveFilter('Pending')}
+            className={`p-5 rounded-2xl border text-left transition-all ${
+              activeFilter === 'Pending'
+                ? 'bg-blue-50/50 border-blue-400 ring-2 ring-blue-400/30 shadow-md'
+                : 'bg-white border-blue-200 shadow-sm hover:border-blue-300'
+            }`}
+          >
+            <span className="text-xs font-semibold text-blue-700 uppercase tracking-wider block">{t('pending')}</span>
+            <div className="text-2xl sm:text-3xl font-extrabold text-blue-700 font-mono mt-1">{pendingCount}</div>
+          </button>
 
-          <div className="bg-white p-5 rounded-2xl border border-amber-200 shadow-sm space-y-1">
-            <span className="text-xs font-semibold text-amber-800 uppercase tracking-wider">{t('inProgress')}</span>
-            <div className="text-3xl font-extrabold text-amber-800 font-mono">{inProgressCount}</div>
-          </div>
+          <button
+            onClick={() => setActiveFilter('In Progress')}
+            className={`p-5 rounded-2xl border text-left transition-all ${
+              activeFilter === 'In Progress'
+                ? 'bg-amber-50/50 border-amber-400 ring-2 ring-amber-400/30 shadow-md'
+                : 'bg-white border-amber-200 shadow-sm hover:border-amber-300'
+            }`}
+          >
+            <span className="text-xs font-semibold text-amber-800 uppercase tracking-wider block">{t('inProgress')}</span>
+            <div className="text-2xl sm:text-3xl font-extrabold text-amber-800 font-mono mt-1">{inProgressCount}</div>
+          </button>
 
-          <div className="bg-white p-5 rounded-2xl border border-emerald-200 shadow-sm space-y-1">
-            <span className="text-xs font-semibold text-emerald-800 uppercase tracking-wider">{t('resolved')}</span>
-            <div className="text-3xl font-extrabold text-emerald-800 font-mono">{resolvedCount}</div>
-          </div>
+          <button
+            onClick={() => setActiveFilter('Resolved')}
+            className={`p-5 rounded-2xl border text-left transition-all ${
+              activeFilter === 'Resolved'
+                ? 'bg-emerald-50/50 border-emerald-400 ring-2 ring-emerald-400/30 shadow-md'
+                : 'bg-white border-emerald-200 shadow-sm hover:border-emerald-300'
+            }`}
+          >
+            <span className="text-xs font-semibold text-emerald-800 uppercase tracking-wider block">{t('resolved')}</span>
+            <div className="text-2xl sm:text-3xl font-extrabold text-emerald-800 font-mono mt-1">{resolvedCount}</div>
+          </button>
+
+          <button
+            onClick={() => setActiveFilter('Reopened')}
+            className={`p-5 rounded-2xl border text-left transition-all ${
+              activeFilter === 'Reopened'
+                ? 'bg-purple-50/50 border-purple-400 ring-2 ring-purple-400/30 shadow-md'
+                : 'bg-white border-purple-200 shadow-sm hover:border-purple-300'
+            }`}
+          >
+            <span className="text-xs font-semibold text-purple-800 uppercase tracking-wider block">{t('statusReopened')}</span>
+            <div className="text-2xl sm:text-3xl font-extrabold text-purple-800 font-mono mt-1">{reopenedCount}</div>
+          </button>
+
+          {rejectedCount > 0 && (
+            <button
+              onClick={() => setActiveFilter('Rejected')}
+              className={`p-5 rounded-2xl border text-left transition-all ${
+                activeFilter === 'Rejected'
+                  ? 'bg-rose-50/50 border-rose-400 ring-2 ring-rose-400/30 shadow-md'
+                  : 'bg-white border-rose-200 shadow-sm hover:border-rose-300'
+              }`}
+            >
+              <span className="text-xs font-semibold text-rose-800 uppercase tracking-wider block">{t('statusRejected')}</span>
+              <div className="text-2xl sm:text-3xl font-extrabold text-rose-800 font-mono mt-1">{rejectedCount}</div>
+            </button>
+          )}
 
         </div>
 
@@ -253,7 +314,10 @@ export const CitizenPortal: React.FC = () => {
             <h2 className="text-lg font-extrabold text-gray-900 font-outfit">{t('myComplaints')}</h2>
 
             <div className="flex items-center space-x-1 bg-white p-1 rounded-xl border border-gray-200 text-xs font-semibold">
-              {(['All', 'Pending', 'In Progress', 'Resolved', 'Reopened'] as const).map((tab) => (
+              {(rejectedCount > 0
+                ? (['All', 'Pending', 'In Progress', 'Resolved', 'Reopened', 'Rejected'] as const)
+                : (['All', 'Pending', 'In Progress', 'Resolved', 'Reopened'] as const)
+              ).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveFilter(tab)}
@@ -263,7 +327,7 @@ export const CitizenPortal: React.FC = () => {
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                   }`}
                 >
-                  {tab === 'All' ? t('all') : tab === 'Pending' ? t('pending') : tab === 'In Progress' ? t('inProgress') : tab === 'Resolved' ? t('resolved') : t('statusReopened')}
+                  {tab === 'All' ? t('all') : tab === 'Pending' ? t('pending') : tab === 'In Progress' ? t('inProgress') : tab === 'Resolved' ? t('resolved') : tab === 'Reopened' ? t('statusReopened') : t('statusRejected')}
                 </button>
               ))}
             </div>

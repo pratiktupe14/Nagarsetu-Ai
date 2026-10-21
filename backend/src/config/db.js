@@ -920,17 +920,110 @@ async function querySupabase(sql, params = []) {
         const { count, error } = await supabase.from('complaints').select('*', { count: 'exact', head: true });
         if (!error && count !== null) return { rows: [{ count }] };
       }
-      let queryBuilder = supabase.from('complaints').select('*');
-      if (upper.includes('WHERE (C.CITIZEN_ID =') || upper.includes('WHERE C.CITIZEN_ID =')) {
-        const citizenId = params[0];
-        queryBuilder = queryBuilder.eq('citizen_id', String(citizenId));
-      } else if (upper.includes('WHERE (C.DEPARTMENT_ID =') || upper.includes('WHERE C.DEPARTMENT_ID =')) {
-        const deptId = params[0];
-        queryBuilder = queryBuilder.eq('department_id', deptId);
+      let queryBuilder = supabase.from('complaints').select('*, departments(name)');
+
+      // A. Specific complaint by ID or complaint_number
+      if (upper.includes('WHERE C.ID =') || upper.includes('WHERE (C.ID =') || upper.includes('C.COMPLAINT_NUMBER =') || upper.includes('WHERE ID =')) {
+        const idParam = params[0];
+        if (idParam) {
+          queryBuilder = queryBuilder.or(`id.eq.${idParam},complaint_number.eq.${idParam}`);
+        } else {
+          return { rows: [] };
+        }
       }
+      // B. Citizen filtering (both c.citizen_id = ? and c.citizen_id IN (...))
+      else if (upper.includes('CITIZEN_ID =') || upper.includes('CITIZEN_ID IN') || upper.includes('C.CITIZEN_ID')) {
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+        const validUuids = [...new Set(params.map(String).filter(p => uuidRegex.test(p)))];
+        if (validUuids.length === 1) {
+          queryBuilder = queryBuilder.eq('citizen_id', validUuids[0]);
+        } else if (validUuids.length > 1) {
+          queryBuilder = queryBuilder.in('citizen_id', validUuids);
+        } else {
+          // FAIL CLOSED: A citizen filter was requested in the query, but no valid citizen UUID was provided or resolved.
+          // NEVER run an unfiltered query or return another citizen's records.
+          return { rows: [] };
+        }
+      }
+      // C. Department filtering
+      else if (upper.includes('DEPARTMENT_ID =') || upper.includes('DEPARTMENT_ID IN') || upper.includes('C.DEPARTMENT_ID')) {
+        const deptId = params.find(p => typeof p === 'string' && p.length > 0) || params[0];
+        if (deptId) {
+          queryBuilder = queryBuilder.eq('department_id', String(deptId));
+        } else {
+          return { rows: [] };
+        }
+      }
+
       const { data, error } = await queryBuilder.order('created_at', { ascending: false });
       if (!error && data) {
-        return { rows: data };
+        const formatted = data.map(row => ({
+          ...row,
+          department_name: row.departments?.name || row.department_name
+        }));
+        return { rows: formatted };
+      }
+    }
+
+    // 2b. Complaints status update
+    if (upper.startsWith('UPDATE COMPLAINTS')) {
+      if (upper.includes('SET STATUS =')) {
+        const statusParam = params[0];
+        const idParam = params[params.length - 1];
+        if (idParam) {
+          const updateData = { status: statusParam, updated_at: new Date().toISOString() };
+          const { data, error } = await supabase
+            .from('complaints')
+            .update(updateData)
+            .or(`id.eq.${idParam},complaint_number.eq.${idParam}`)
+            .select();
+          if (!error) {
+            return { rows: data || [], rowCount: (data && data.length) ? data.length : 1 };
+          }
+        }
+      }
+    }
+
+    // 2c. Complaints insert
+    if (upper.startsWith('INSERT INTO COMPLAINTS')) {
+      const match = trimmed.match(/INSERT\s+INTO\s+complaints\s*\(([\s\S]+?)\)\s*VALUES\s*\(([\s\S]+?)\)/i);
+      if (match) {
+        const columns = match[1].split(',').map(c => c.trim().toLowerCase());
+        const SUPABASE_COMPLAINT_COLS = new Set([
+          'id', 'complaint_number', 'citizen_id', 'photo_before_url', 'photo_after_url',
+          'category', 'title', 'description', 'priority', 'status', 'department_id',
+          'latitude', 'longitude', 'location_source', 'location_address', 'duplicate_of_id',
+          'support_count', 'created_at', 'updated_at', 'assigned_staff_id', 'assigned_staff_name',
+          'assigned_staff_email', 'assigned_by', 'assigned_by_name', 'sla_deadline',
+          'work_performed', 'materials_used', 'additional_notes', 'verified_by', 'verified_by_name',
+          'verified_at', 'rework_reason', 'admin_rejection_reason', 'ai_category', 'ai_specific_issue',
+          'ai_confidence', 'ai_severity', 'ai_urgency', 'ai_evidence', 'ai_model', 'ai_analyzed_at',
+          'needs_manual_verification'
+        ]);
+        const record = {};
+        columns.forEach((col, idx) => {
+          if (SUPABASE_COMPLAINT_COLS.has(col)) {
+            record[col] = params[idx];
+          }
+        });
+        const { data, error } = await supabase.from('complaints').insert([record]).select();
+        if (error) {
+          console.warn('[SUPABASE COMPLAINTS INSERT WARN]', error.message, error.details);
+        }
+        if (!error && data && data.length > 0) {
+          return { rows: data, rowCount: data.length };
+        }
+      }
+    }
+
+    // 2d. Complaints delete
+    if (upper.startsWith('DELETE FROM COMPLAINTS')) {
+      const idParam = params[0];
+      if (idParam) {
+        const { data, error } = await supabase.from('complaints').delete().eq('id', idParam).select();
+        if (!error) {
+          return { rows: data || [], rowCount: (data && data.length) ? data.length : 1 };
+        }
       }
     }
 
@@ -963,7 +1056,17 @@ async function querySupabase(sql, params = []) {
 
 // Universal query runner wrapper
 async function query(sql, params = []) {
-  if (useSqlite) {
+  const currentDbType = (process.env.DB_TYPE || DB_TYPE || '').toLowerCase();
+
+  // If DB_TYPE is explicitly supabase and pgPool is not connected, use Supabase REST adapter directly
+  if (currentDbType === 'supabase' && !pgPool) {
+    const supaRes = await querySupabase(sql, params);
+    if (supaRes) {
+      return supaRes;
+    }
+  }
+
+  if (useSqlite || (currentDbType === 'sqlite' && !pgPool)) {
     if (!sqliteDb) {
       return runMemQuery(sql, params);
     }

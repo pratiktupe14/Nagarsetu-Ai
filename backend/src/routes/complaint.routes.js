@@ -38,6 +38,9 @@ async function resolveAuthorizedCitizenIds(user) {
     ids.add(rawId);
     ids.add(Number(rawId));
   }
+  if (user.supabase_uid) {
+    ids.add(String(user.supabase_uid));
+  }
 
   if (mobile || email) {
     try {
@@ -63,6 +66,26 @@ async function resolveAuthorizedCitizenIds(user) {
               ids.add(String(dt.legacy_id));
               ids.add(Number(dt.legacy_id));
             }
+          }
+        }
+      }
+    } catch (e) {}
+
+    // Resolve authoritative Supabase profile UUID
+    try {
+      const { supabase } = require('../config/supabaseStorage');
+      if (supabase) {
+        const filters = [];
+        if (mobile) {
+          const rawDigits = mobile.replace(/\D/g, '');
+          const norm = rawDigits.length >= 10 ? rawDigits.slice(-10) : rawDigits;
+          filters.push(`mobile.eq.${mobile}`, `mobile.eq.${norm}`);
+        }
+        if (email) filters.push(`email.ilike.${email}`);
+        if (filters.length > 0) {
+          const { data: prof } = await supabase.from('profiles').select('id').or(filters.join(',')).maybeSingle();
+          if (prof && prof.id) {
+            ids.add(String(prof.id));
           }
         }
       }

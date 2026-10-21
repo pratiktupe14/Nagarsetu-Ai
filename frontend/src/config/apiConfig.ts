@@ -24,10 +24,7 @@ export const getApiUrl = (): string => {
     if (envUrl) {
       return envUrl;
     }
-    // Verified production fallback when running on Vercel frontend
-    if (window.location.hostname.includes('vercel.app')) {
-      return 'https://backend-teal-omega-46.vercel.app';
-    }
+    // Unified full-stack deployment routes /api directly to same-origin serverless functions
     return '';
   }
 

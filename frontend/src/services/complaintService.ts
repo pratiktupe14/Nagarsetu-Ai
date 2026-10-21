@@ -471,8 +471,15 @@ export async function getCitizenComplaints(citizenId: string): Promise<Complaint
         const rawList = Array.isArray(data) ? data : (data && Array.isArray(data.complaints) ? data.complaints : []);
         const cleanList = (rawList as Complaint[]).filter((c) => !isDemoComplaint(c));
         return cleanList.map(normalizeComplaint);
+      } else if (res.status === 401 || res.status === 403) {
+        throw new AuthError('Authentication required or session expired. Please log in.');
+      } else if (res.status >= 500) {
+        throw new HttpError(res.status, `Server error (${res.status}): Failed to retrieve citizen complaints.`);
       }
     } catch (bErr: any) {
+      if (bErr instanceof AuthError || bErr instanceof HttpError) {
+        throw bErr;
+      }
       console.warn('Express backend getCitizenComplaints error:', bErr);
     }
   }
