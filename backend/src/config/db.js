@@ -1067,9 +1067,13 @@ async function query(sql, params = []) {
   }
 
   if (useSqlite || (currentDbType === 'sqlite' && !pgPool)) {
+    if (!sqliteDb && process.env.NODE_ENV !== 'production') {
+      await new Promise(r => setupSqlite(r, r));
+    }
     if (!sqliteDb) {
       return runMemQuery(sql, params);
     }
+    useSqlite = true;
     return new Promise((resolve, reject) => {
       let finalParams = params;
       let sqliteSql = sql;

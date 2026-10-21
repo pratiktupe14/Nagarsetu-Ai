@@ -61,12 +61,20 @@ async function main() {
     console.log('[CI TEST RUNNER] External Backend API already active on port 5000.');
   }
 
-  // 4. Start Mock Python AI microservice on port 8000 if not already running
+  // 4. Start Mock Python AI microservice on port 8000 (or alternate port if 8000 is occupied)
   let mockAiServer = null;
   let aiRunning = false;
+  let aiPort = 8000;
   try {
     const res = await fetch('http://127.0.0.1:8000/health', { signal: AbortSignal.timeout(400) });
-    if (res.ok) aiRunning = true;
+    if (res.ok) {
+      const data = await res.json().catch(() => ({}));
+      if (data.reachable === true && data.ready === true) {
+        aiRunning = true;
+      } else {
+        aiPort = 8008;
+      }
+    }
   } catch {}
 
   if (!aiRunning) {
@@ -265,9 +273,10 @@ async function main() {
       res.end();
     });
 
-    await new Promise((resolve) => mockAiServer.listen(8000, '0.0.0.0', resolve));
-    console.log('[CI TEST RUNNER] Mock Python AI microservice listening on port 8000.');
+    await new Promise((resolve) => mockAiServer.listen(aiPort, '0.0.0.0', resolve));
+    console.log(`[CI TEST RUNNER] Mock Python AI microservice listening on port ${aiPort}.`);
   }
+  process.env.PYTHON_AI_URL = `http://127.0.0.1:${aiPort}/analyze`;
 
   // 5. Execute Node native test runner
   console.log('[CI TEST RUNNER] Starting backend tests...');
@@ -280,7 +289,7 @@ async function main() {
       DB_TYPE: 'sqlite',
       TEST_DB_PATH: sharedTestDbPath,
       TEST_BASE_URL: 'http://127.0.0.1:5000',
-      PYTHON_AI_URL: 'http://127.0.0.1:8000/analyze'
+      PYTHON_AI_URL: `http://127.0.0.1:${aiPort}/analyze`
     }
   });
 

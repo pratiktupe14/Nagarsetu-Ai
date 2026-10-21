@@ -1,9 +1,9 @@
 const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../../../.env') });
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
-require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 process.env.DB_TYPE = 'supabase';
-const { query } = require('../src/config/db');
+const { query } = require('../config/db');
 
 async function testComplaintLifecycle() {
   console.log('--- CONTROLLED LIFECYCLE VERIFICATION ON AUTHORITATIVE SUPABASE ---');
